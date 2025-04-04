@@ -1,0 +1,15 @@
+{
+    "projectName": "ContextMapperDsl",
+    "languages": [{
+        "id": "context-mapper-dsl",
+        "grammar": "src/language/context-mapper-dsl.langium",
+        "fileExtensions": [".cml"],
+        "textMate": {
+            "out": "syntaxes/context-mapper-dsl.tmLanguage.json"
+        },
+        "monarch": {
+            "out": "src/syntaxes/context-mapper-dsl.monarch.ts"
+        }
+    }],
+    "out": "src/language/generated"
+}
