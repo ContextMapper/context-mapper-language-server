@@ -49,3 +49,9 @@ jobs:
 
       - name: Bundle
         run: yarn bundle
+
+      - name: Upload language server artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cml-language-server
+          path: ./cml-ls/
