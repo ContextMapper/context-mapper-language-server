@@ -1,44 +1,47 @@
-import {inject, type Module} from 'langium';
+import { inject, type Module } from 'langium'
 import {
-    createDefaultModule,
-    createDefaultSharedModule,
-    type DefaultSharedModuleContext,
-    type LangiumServices,
-    type LangiumSharedServices,
-    type PartialLangiumServices
-} from 'langium/lsp';
-import {ContextMapperDslGeneratedModule, ContextMapperDslGeneratedSharedModule} from './generated/module.js';
-import {ContextMapperDslValidator, registerValidationChecks} from './context-mapper-dsl-validator.js';
-import {ContextMapperDslSemanticTokenProvider} from "./semantictokens/ContextMapperDslSemanticTokenProvider.js";
+  createDefaultModule,
+  createDefaultSharedModule,
+  type DefaultSharedModuleContext,
+  type LangiumServices,
+  type LangiumSharedServices,
+  type PartialLangiumServices
+} from 'langium/lsp'
+import { ContextMapperDslGeneratedModule, ContextMapperDslGeneratedSharedModule } from './generated/module.js'
+import { ContextMapperDslValidator, registerValidationChecks } from './context-mapper-dsl-validator.js'
+import { ContextMapperDslSemanticTokenProvider } from './semantictokens/ContextMapperDslSemanticTokenProvider.js'
 
 /**
  * Declaration of custom services - add your own service classes here.
  */
 export type ContextMapperDslAddedServices = {
-    validation: {
-        ContextMapperDslValidator: ContextMapperDslValidator
-    }
-}
+  validation: {
+    ContextMapperDslValidator: ContextMapperDslValidator
+  }
+};
 
 /**
  * Union of Langium default services and your custom services - use this as constructor parameter
  * of custom service classes.
  */
-export type ContextMapperDslServices = LangiumServices & ContextMapperDslAddedServices
+export type ContextMapperDslServices = LangiumServices & ContextMapperDslAddedServices;
 
 /**
  * Dependency injection module that overrides Langium default services and contributes the
  * declared custom services. The Langium defaults can be partially specified to override only
  * selected services, while the custom services must be fully specified.
  */
-export const ContextMapperDslModule: Module<ContextMapperDslServices, PartialLangiumServices & ContextMapperDslAddedServices> = {
-    validation: {
-        ContextMapperDslValidator: () => new ContextMapperDslValidator()
-    },
-    lsp: {
-        SemanticTokenProvider: (services) => new ContextMapperDslSemanticTokenProvider(services)
-    }
-};
+
+type ModuleType = PartialLangiumServices & ContextMapperDslAddedServices;
+
+export const ContextMapperDslModule: Module<ContextMapperDslServices, ModuleType> = {
+  validation: {
+    ContextMapperDslValidator: () => new ContextMapperDslValidator()
+  },
+  lsp: {
+    SemanticTokenProvider: (services) => new ContextMapperDslSemanticTokenProvider(services)
+  }
+}
 
 /**
  * Create the full set of services required by Langium.
@@ -55,25 +58,25 @@ export const ContextMapperDslModule: Module<ContextMapperDslServices, PartialLan
  * @param context Optional module context with the LSP connection
  * @returns An object wrapping the shared services and the language-specific services
  */
-export function createContextMapperDslServices(context: DefaultSharedModuleContext): {
-    shared: LangiumSharedServices,
-    ContextMapperDsl: ContextMapperDslServices
+export function createContextMapperDslServices (context: DefaultSharedModuleContext): {
+  shared: LangiumSharedServices,
+  ContextMapperDsl: ContextMapperDslServices
 } {
-    const shared = inject(
-        createDefaultSharedModule(context),
-        ContextMapperDslGeneratedSharedModule
-    );
-    const ContextMapperDsl = inject(
-        createDefaultModule({shared}),
-        ContextMapperDslGeneratedModule,
-        ContextMapperDslModule
-    );
-    shared.ServiceRegistry.register(ContextMapperDsl);
-    registerValidationChecks(ContextMapperDsl);
-    if (!context.connection) {
-        // We don't run inside a language server
-        // Therefore, initialize the configuration provider instantly
-        shared.workspace.ConfigurationProvider.initialized({});
-    }
-    return {shared, ContextMapperDsl};
+  const shared = inject(
+    createDefaultSharedModule(context),
+    ContextMapperDslGeneratedSharedModule
+  )
+  const ContextMapperDsl = inject(
+    createDefaultModule({ shared }),
+    ContextMapperDslGeneratedModule,
+    ContextMapperDslModule
+  )
+  shared.ServiceRegistry.register(ContextMapperDsl)
+  registerValidationChecks(ContextMapperDsl)
+  if (!context.connection) {
+    // We don't run inside a language server
+    // Therefore, initialize the configuration provider instantly
+    shared.workspace.ConfigurationProvider.initialized({})
+  }
+  return { shared, ContextMapperDsl }
 }
