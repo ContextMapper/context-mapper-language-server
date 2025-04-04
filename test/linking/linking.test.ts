@@ -1,53 +1,49 @@
-import { afterEach, beforeAll, describe, expect, test } from "vitest";
-import { EmptyFileSystem, type LangiumDocument } from "langium";
-import { expandToString as s } from "langium/generate";
-import { clearDocuments, parseHelper } from "langium/test";
-import { createContextMapperDslServices } from "../../src/language/context-mapper-dsl-module.js";
-import { Model, isModel } from "../../src/language/generated/ast.js";
+import { afterEach, beforeAll, describe, expect, test } from 'vitest'
+import { EmptyFileSystem, type LangiumDocument } from 'langium'
+import { clearDocuments, parseHelper } from 'langium/test'
+import { createContextMapperDslServices } from '../../src/language/context-mapper-dsl-module.js'
+import { ContextMappingModel, isSharedKernel, SharedKernel } from '../../src/language/generated/ast.js'
+import { checkDocumentValid } from '../TestHelper.js'
 
-let services: ReturnType<typeof createContextMapperDslServices>;
-let parse:    ReturnType<typeof parseHelper<Model>>;
-let document: LangiumDocument<Model> | undefined;
+let services: ReturnType<typeof createContextMapperDslServices>
+let parse: ReturnType<typeof parseHelper<ContextMappingModel>>
+let document: LangiumDocument<ContextMappingModel> | undefined
 
 beforeAll(async () => {
-    services = createContextMapperDslServices(EmptyFileSystem);
-    parse = parseHelper<Model>(services.ContextMapperDsl);
+  services = createContextMapperDslServices(EmptyFileSystem)
+  parse = parseHelper<ContextMappingModel>(services.ContextMapperDsl)
 
-    // activate the following if your linking test requires elements from a built-in library, for example
-    // await services.shared.workspace.WorkspaceManager.initializeWorkspace([]);
-});
+  // activate the following if your linking test requires elements from a built-in library, for example
+  // await services.shared.workspace.WorkspaceManager.initializeWorkspace([]);
+})
 
 afterEach(async () => {
-    document && clearDocuments(services.shared, [ document ]);
-});
+  document && clearDocuments(services.shared, [document])
+})
 
 describe('Linking tests', () => {
+  test('linking of greetings', async () => {
+    document = await parse(`
+            ContextMap {
+                TestContext [SK] <-> [SK] FirstContext
+            }
+            BoundedContext FirstContext
+            BoundedContext TestContext
+        `)
 
-    test('linking of greetings', async () => {
-        document = await parse(`
-            person Langium
-            Hello Langium!
-        `);
+    const errors = checkDocumentValid(document)
+    expect(errors == null).toBeTruthy()
 
-        expect(
-            // here we first check for validity of the parsed document object by means of the reusable function
-            //  'checkDocumentValid()' to sort out (critical) typos first,
-            // and then evaluate the cross references we're interested in by checking
-            //  the referenced AST element as well as for a potential error message;
-            checkDocumentValid(document)
-                || document.parseResult.value.greetings.map(g => g.person.ref?.name || g.person.error?.message).join('\n')
-        ).toBe(s`
-            Langium
-        `);
-    });
-});
+    const referencedContexts: Array<string | undefined> = []
 
-function checkDocumentValid(document: LangiumDocument): string | undefined {
-    return document.parseResult.parserErrors.length && s`
-        Parser errors:
-          ${document.parseResult.parserErrors.map(e => e.message).join('\n  ')}
-    `
-        || document.parseResult.value === undefined && `ParseResult is 'undefined'.`
-        || !isModel(document.parseResult.value) && `Root AST object is a ${document.parseResult.value.$type}, expected a '${Model}'.`
-        || undefined;
-}
+    document.parseResult.value.map?.relationships.forEach(r => {
+      if (isSharedKernel(r)) {
+        referencedContexts.push((r as SharedKernel).participant1.ref?.name)
+        referencedContexts.push((r as SharedKernel).participant2.ref?.name)
+      }
+    })
+
+    expect(referencedContexts.length).toBe(2)
+    expect(referencedContexts).toEqual(['TestContext', 'FirstContext'])
+  })
+})

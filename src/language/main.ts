@@ -1,13 +1,14 @@
-import { startLanguageServer } from 'langium/lsp';
-import { NodeFileSystem } from 'langium/node';
-import { createConnection, ProposedFeatures } from 'vscode-languageserver/node.js';
-import { createContextMapperDslServices } from './context-mapper-dsl-module.js';
+import { startLanguageServer } from 'langium/lsp'
+import { NodeFileSystem } from 'langium/node'
+// eslint-disable-next-line import/extensions
+import { createConnection, ProposedFeatures } from 'vscode-languageserver/node.js'
+import { createContextMapperDslServices } from './context-mapper-dsl-module.js'
 
 // Create a connection to the client
-const connection = createConnection(ProposedFeatures.all);
+const connection = createConnection(ProposedFeatures.all)
 
 // Inject the shared services and language-specific services
-const { shared } = createContextMapperDslServices({ connection, ...NodeFileSystem });
+const { shared } = createContextMapperDslServices({ connection, ...NodeFileSystem })
 
 // Start the language server with the shared services
-startLanguageServer(shared);
+startLanguageServer(shared)

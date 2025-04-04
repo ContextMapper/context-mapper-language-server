@@ -56,3 +56,9 @@ jobs:
         with:
           name: cml-language-server
           path: ./cml-ls/
+
+      - name: Publish to GitHub Package Registry
+        if: github.event_name == 'release'  # Publish only on release creation
+        run: yarn publish --registry https://npm.pkg.github.com
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,22 +1,31 @@
 {
-    "name": "context-mapper-language-server",
+    "name": "@lstreckeisen/context-mapper-language-server",
     "description": "Langium language server for the ContextMapper DSL",
     "version": "0.0.1",
-    "files": [
-        "out",
-        "src"
-    ],
+    "license": "Apache-2.0",
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com"
+    },
     "type": "module",
+    "files": [
+        "./cml-ls/"
+    ],
+    "repository": {
+        "type": "url",
+        "url": "https://github.com/lstreckeisen/context-mapper-language-server.git"
+    },
+    "main": "./cml-ls/index.js",
     "scripts": {
         "build": "tsc -b tsconfig.src.json && node esbuild.mjs",
         "watch": "concurrently -n tsc,esbuild -c blue,yellow \"tsc -b tsconfig.src.json --watch\" \"node esbuild.mjs --watch\"",
-        "lint": "eslint src --ext ts",
+        "lint": "eslint src test --ext ts",
+        "lint:fix": "eslint src test --ext ts --fix",
         "langium:generate": "langium generate",
         "langium:generate:production": "langium generate --mode=production",
         "langium:watch": "langium generate --watch",
-        "bundle:language-server": "npx ncc build out/main.cjs -o cml-ls",
+        "bundle:language-server": "npx ncc build dist/main.js -o cml-ls",
         "test": "vitest run",
-        "clean": "rm -rf src/language/generated && rm -rf cml-ls/ && rm -rf out/"
+        "clean": "rm -rf src/language/generated && rm -rf cml-ls/ && rm -rf dist/"
     },
     "dependencies": {
         "langium": "~3.4.0",
@@ -25,14 +34,18 @@
     },
     "devDependencies": {
         "@types/node": "^18.0.0",
-        "@typescript-eslint/parser": "~7.3.1",
         "@typescript-eslint/eslint-plugin": "~7.3.1",
-        "eslint": "~8.57.0",
-        "langium-cli": "~3.4.0",
-        "typescript": "~5.1.6",
+        "@typescript-eslint/parser": "~7.3.1",
+        "@vercel/ncc": "^0.38.3",
         "concurrently": "~8.2.1",
         "esbuild": "~0.20.2",
-        "vitest": "~1.4.0",
-        "@vercel/ncc": "^0.38.3"
+        "eslint": "~8.57.0",
+        "eslint-config-standard": "^17.1.0",
+        "eslint-plugin-import": "^2.31.0",
+        "eslint-plugin-n": "^17.17.0",
+        "eslint-plugin-promise": "^7.2.1",
+        "langium-cli": "~3.4.0",
+        "typescript": "~5.1.6",
+        "vitest": "~1.4.0"
     }
 }

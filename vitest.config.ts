@@ -16,7 +16,7 @@ export default defineConfig({
             interopDefault: true
         },
         include: ['**/*.test.ts'],
-        reporters: ['junit'],
+        reporters: ['junit','verbose'],
         outputFile: 'out/test-results.xml'
     }
 });
