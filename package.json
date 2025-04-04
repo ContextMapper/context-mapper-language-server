@@ -1,6 +1,6 @@
 {
-    "name": "ContextMapper DSL",
-    "description": "Please enter a brief description here",
+    "name": "context-mapper-language-server",
+    "description": "Langium language server for the ContextMapper DSL",
     "version": "0.0.1",
     "files": [
         "out",
@@ -14,25 +14,14 @@
         "langium:generate": "langium generate",
         "langium:generate:production": "langium generate --mode=production",
         "langium:watch": "langium generate --watch",
-        "vscode:prepublish": "npm run build && npm run lint",
-        "build:web": "npm run build",
-        "bundle": "vite build",
-        "bundle:serve": "http-server ./dist --port 5175",
-        "dev": "vite",
-        "dev:debug": "vite --debug --force",
-        "serve": "npm run dev",
-        "test": "vitest run"
+        "bundle:language-server": "npx ncc build out/main.cjs -o cml-ls",
+        "test": "vitest run",
+        "clean": "rm -rf src/language/generated && rm -rf cml-ls/ && rm -rf out/"
     },
     "dependencies": {
         "langium": "~3.4.0",
-        "vscode-languageclient": "~9.0.1",
         "vscode-languageserver": "~9.0.1",
-        "@codingame/monaco-vscode-editor-service-override": "~3.2.3",
-        "@codingame/monaco-vscode-keybindings-service-override": "~3.2.3",
-        "monaco-editor": "npm:@codingame/monaco-vscode-editor-api@~3.2.3",
-        "monaco-editor-wrapper": "~4.0.2",
-        "monaco-languageclient": "~8.1.1",
-        "vscode": "npm:@codingame/monaco-vscode-api@~3.2.3"
+        "vscode-languageserver-types": "~3.17.5"
     },
     "devDependencies": {
         "@types/node": "^18.0.0",
@@ -41,47 +30,9 @@
         "eslint": "~8.57.0",
         "langium-cli": "~3.4.0",
         "typescript": "~5.1.6",
-        "@types/vscode": "~1.67.0",
         "concurrently": "~8.2.1",
         "esbuild": "~0.20.2",
-        "@codingame/esbuild-import-meta-url-plugin": "~1.0.2",
-        "vite": "~5.2.7",
-        "http-server": "~14.1.1",
-        "vitest": "~1.4.0"
-    },
-    "volta": {
-        "node": "18.19.1",
-        "npm": "10.2.4"
-    },
-    "displayName": "ContextMapper DSL",
-    "engines": {
-        "vscode": "^1.67.0"
-    },
-    "categories": [
-        "Programming Languages"
-    ],
-    "contributes": {
-        "languages": [
-            {
-                "id": "context-mapper-dsl",
-                "aliases": [
-                    "ContextMapper DSL",
-                    "context-mapper-dsl"
-                ],
-                "extensions": [".cml"],
-                "configuration": "./language-configuration.json"
-            }
-        ],
-        "grammars": [
-            {
-                "language": "context-mapper-dsl",
-                "scopeName": "source.context-mapper-dsl",
-                "path": "syntaxes/context-mapper-dsl.tmLanguage.json"
-            }
-        ]
-    },
-    "activationEvents": [
-        "onLanguage:context-mapper-dsl"
-    ],
-    "main": "./out/extension/main.cjs"
+        "vitest": "~1.4.0",
+        "@vercel/ncc": "^0.38.3"
+    }
 }

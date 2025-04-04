@@ -6,9 +6,6 @@
         "fileExtensions": [".cml"],
         "textMate": {
             "out": "syntaxes/context-mapper-dsl.tmLanguage.json"
-        },
-        "monarch": {
-            "out": "src/syntaxes/context-mapper-dsl.monarch.ts"
         }
     }],
     "out": "src/language/generated"
