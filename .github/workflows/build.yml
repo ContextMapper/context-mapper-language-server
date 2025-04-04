@@ -49,7 +49,7 @@ jobs:
         run: yarn build
 
       - name: Bundle
-        run: yarn bundle
+        run: yarn bundle:language-server
 
       - name: Upload language server artifact
         uses: actions/upload-artifact@v4
