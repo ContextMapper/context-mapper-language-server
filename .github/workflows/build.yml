@@ -1,4 +1,4 @@
-name: ContextMapper DSL Build
+name: CML language server build
 on:
   push:
     branches:
