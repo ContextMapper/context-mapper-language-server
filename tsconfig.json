@@ -8,7 +8,7 @@
             "WebWorker"
         ],
         "sourceMap": true,
-        "outDir": "out",
+        "outDir": "dist",
         "strict": true,
         "noUnusedLocals": true,
         "noImplicitReturns": true,

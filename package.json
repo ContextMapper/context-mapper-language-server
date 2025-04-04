@@ -1,12 +1,20 @@
 {
-    "name": "context-mapper-language-server",
+    "name": "@lstreckeisen/context-mapper-language-server",
     "description": "Langium language server for the ContextMapper DSL",
     "version": "0.0.1",
-    "files": [
-        "out",
-        "src"
-    ],
+    "license": "Apache-2.0",
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com"
+    },
     "type": "module",
+    "files": [
+        "./cml-ls/"
+    ],
+    "repository": {
+        "type": "url",
+        "url": "https://github.com/lstreckeisen/context-mapper-language-server.git"
+    },
+    "main": "./cml-ls/index.js",
     "scripts": {
         "build": "tsc -b tsconfig.src.json && node esbuild.mjs",
         "watch": "concurrently -n tsc,esbuild -c blue,yellow \"tsc -b tsconfig.src.json --watch\" \"node esbuild.mjs --watch\"",
@@ -15,9 +23,9 @@
         "langium:generate": "langium generate",
         "langium:generate:production": "langium generate --mode=production",
         "langium:watch": "langium generate --watch",
-        "bundle:language-server": "npx ncc build out/main.cjs -o cml-ls",
+        "bundle:language-server": "npx ncc build dist/main.js -o cml-ls",
         "test": "vitest run",
-        "clean": "rm -rf src/language/generated && rm -rf cml-ls/ && rm -rf out/"
+        "clean": "rm -rf src/language/generated && rm -rf cml-ls/ && rm -rf dist/"
     },
     "dependencies": {
         "langium": "~3.4.0",

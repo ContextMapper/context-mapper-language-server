@@ -4,7 +4,9 @@
 !.vscode/tasks.json
 node_modules/
 out/
+dist/
 src/language/generated/
 syntaxes/
 .idea
 .DS_Store
+cml-ls/
