@@ -1,7 +1,15 @@
-import { type Module, inject } from 'langium';
-import { createDefaultModule, createDefaultSharedModule, type DefaultSharedModuleContext, type LangiumServices, type LangiumSharedServices, type PartialLangiumServices } from 'langium/lsp';
-import { ContextMapperDslGeneratedModule, ContextMapperDslGeneratedSharedModule } from './generated/module.js';
-import { ContextMapperDslValidator, registerValidationChecks } from './context-mapper-dsl-validator.js';
+import {inject, type Module} from 'langium';
+import {
+    createDefaultModule,
+    createDefaultSharedModule,
+    type DefaultSharedModuleContext,
+    type LangiumServices,
+    type LangiumSharedServices,
+    type PartialLangiumServices
+} from 'langium/lsp';
+import {ContextMapperDslGeneratedModule, ContextMapperDslGeneratedSharedModule} from './generated/module.js';
+import {ContextMapperDslValidator, registerValidationChecks} from './context-mapper-dsl-validator.js';
+import {ContextMapperDslSemanticTokenProvider} from "./semantictokens/ContextMapperDslSemanticTokenProvider.js";
 
 /**
  * Declaration of custom services - add your own service classes here.
@@ -26,6 +34,9 @@ export type ContextMapperDslServices = LangiumServices & ContextMapperDslAddedSe
 export const ContextMapperDslModule: Module<ContextMapperDslServices, PartialLangiumServices & ContextMapperDslAddedServices> = {
     validation: {
         ContextMapperDslValidator: () => new ContextMapperDslValidator()
+    },
+    lsp: {
+        SemanticTokenProvider: (services) => new ContextMapperDslSemanticTokenProvider(services)
     }
 };
 
@@ -53,7 +64,7 @@ export function createContextMapperDslServices(context: DefaultSharedModuleConte
         ContextMapperDslGeneratedSharedModule
     );
     const ContextMapperDsl = inject(
-        createDefaultModule({ shared }),
+        createDefaultModule({shared}),
         ContextMapperDslGeneratedModule,
         ContextMapperDslModule
     );
@@ -64,5 +75,5 @@ export function createContextMapperDslServices(context: DefaultSharedModuleConte
         // Therefore, initialize the configuration provider instantly
         shared.workspace.ConfigurationProvider.initialized({});
     }
-    return { shared, ContextMapperDsl };
+    return {shared, ContextMapperDsl};
 }
