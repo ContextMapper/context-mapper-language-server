@@ -1,9 +1,8 @@
 import { afterEach, beforeAll, describe, expect, test } from 'vitest'
 import { EmptyFileSystem, type LangiumDocument } from 'langium'
-import { expandToString as s } from 'langium/generate'
 import { clearDocuments, parseHelper } from 'langium/test'
 import { createContextMapperDslServices } from '../../src/language/context-mapper-dsl-module.js'
-import { ContextMappingModel } from '../../src/language/generated/ast.js'
+import { ContextMappingModel, isSharedKernel, SharedKernel } from '../../src/language/generated/ast.js'
 import { checkDocumentValid } from '../TestHelper.js'
 
 let services: ReturnType<typeof createContextMapperDslServices>
@@ -26,22 +25,25 @@ describe('Linking tests', () => {
   test('linking of greetings', async () => {
     document = await parse(`
             ContextMap {
-                TestContext [SK] <-> FirstContext
+                TestContext [SK] <-> [SK] FirstContext
             }
             BoundedContext FirstContext
             BoundedContext TestContext
         `)
 
-    expect(
-      // here we first check for validity of the parsed document object by means of the reusable function
-      //  'checkDocumentValid()' to sort out (critical) typos first,
-      // and then evaluate the cross references we're interested in by checking
-      //  the referenced AST element as well as for a potential error message;
-      checkDocumentValid(document) ||
-                document.parseResult.value.map?.boundedContexts.map(b => b.ref?.name || b.error?.message).join('\n')
-    ).toBe(s`
-            TestContext
-            FirstContext
-        `)
+    const errors = checkDocumentValid(document)
+    expect(errors == null).toBeTruthy()
+
+    const referencedContexts: Array<string | undefined> = []
+
+    document.parseResult.value.map?.relationships.forEach(r => {
+      if (isSharedKernel(r)) {
+        referencedContexts.push((r as SharedKernel).participant1.ref?.name)
+        referencedContexts.push((r as SharedKernel).participant2.ref?.name)
+      }
+    })
+
+    expect(referencedContexts.length).toBe(2)
+    expect(referencedContexts).toEqual(['TestContext', 'FirstContext'])
   })
 })

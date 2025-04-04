@@ -23,15 +23,12 @@ describe('Validating', () => {
   test('check no errors', async () => {
     document = await parse(`
             BoundedContext Test
-        `)
+    `)
 
-    expect(
-      // here we first check for validity of the parsed document object by means of the reusable function
-      //  'checkDocumentValid()' to sort out (critical) typos first,
-      // and then evaluate the diagnostics by converting them into human readable strings;
-      // note that 'toHaveLength()' works for arrays and strings alike ;-)
-      checkDocumentValid(document) || document?.diagnostics?.map(diagnosticToString)?.join('\n')
-    ).toHaveLength(0)
+    const errors = checkDocumentValid(document)
+    expect(errors == null).toBeTruthy()
+
+    expect(document?.diagnostics?.map(diagnosticToString)).toHaveLength(0)
   })
 })
 

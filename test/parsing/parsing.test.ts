@@ -1,6 +1,5 @@
 import { beforeAll, describe, expect, test } from 'vitest'
 import { EmptyFileSystem, type LangiumDocument } from 'langium'
-import { expandToString as s } from 'langium/generate'
 import { parseHelper } from 'langium/test'
 import { createContextMapperDslServices } from '../../src/language/context-mapper-dsl-module.js'
 import { ContextMappingModel } from '../../src/language/generated/ast.js'
@@ -22,23 +21,12 @@ describe('Parsing tests', () => {
   test('parse simple model', async () => {
     document = await parse(`
             BoundedContext FirstContext
-        `)
+    `)
 
-    // check for absence of parser errors the classic way:
-    //  deactivated, find a much more human readable way below!
-    // expect(document.parseResult.parserErrors).toHaveLength(0)
+    const errors = checkDocumentValid(document)
+    expect(errors == null).toBeTruthy()
 
-    expect(
-      // here we use a (tagged) template expression to create a human readable representation
-      //  of the AST part we are interested in and that is to be compared to our expectation
-      // prior to the tagged template expression we check for validity of the parsed document object
-      //  by means of the reusable function 'checkDocumentValid()' to sort out (critical) typos first
-      checkDocumentValid(document) || s`
-                BoundedContext:
-                  ${document.parseResult.value?.boundedContexts?.map(b => b.name)?.join('\n  ')}
-            `
-    ).toBe(s`
-            BoundedContext FirstContext
-        `)
+    expect(document.parseResult.value?.boundedContexts?.map(b => b.name))
+      .toEqual(['FirstContext'])
   })
 })
