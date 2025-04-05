@@ -47,5 +47,6 @@
         "langium-cli": "~3.4.0",
         "typescript": "~5.1.6",
         "vitest": "~1.4.0"
-    }
+    },
+    "packageManager": "yarn@4.8.1"
 }
