@@ -68,6 +68,7 @@ jobs:
           sed -i -e 's/<TOKEN>/${{ secrets.GITHUB_TOKEN }}/g' cml-ls/.yarnrc.yml
           cp -r .yarn cml-ls/.yarn
           touch cml-ls/yarn.lock
+          cd cml-ls && yarn install
 
       - name: Publish to GitHub Package Registry
         if: github.event_name == 'release'  # Publish only on release creation
