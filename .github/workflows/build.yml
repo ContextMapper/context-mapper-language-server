@@ -61,6 +61,7 @@ jobs:
           path: ./cml-ls/
 
       - name: Prepare publication
+        if: github.event_name == 'release'  # Publish only on release creation
         run: |
           cp cml-ls.package.json cml-ls/package.json
           cp .yarnrc.yml cml-ls/.yarnrc.yml
