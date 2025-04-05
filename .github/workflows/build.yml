@@ -60,11 +60,15 @@ jobs:
           name: cml-language-server
           path: ./cml-ls/
 
-      - name: Setup .npmrc
-        run: echo "@lstreckeisen:registry=https://npm.pkg.github.com\n//npm.pkg.github.com/:_authToken=\${{ secrets.NPM_PUBLISH_TOKEN }}" > ~/.npmrc
-        working-directory: cml-ls
+      - name: Prepare publication
+        run: |
+          cp cml-ls.package.json cml-ls/package.json
+          cp .yarnrc.yml cml-ls/.yarnrc.yml
+          sed -i -e 's/<TOKEN>/${{ secrets.GITHUB_TOKEN }}/g' cml-ls/.yarnrc.yml
+          cp -r .yarn cml-ls/.yarn
+          touch cml-ls/yarn.lock
 
       - name: Publish to GitHub Package Registry
         if: github.event_name == 'release'  # Publish only on release creation
-        run: yarn publish --access public
+        run: yarn npm publish
         working-directory: cml-ls
