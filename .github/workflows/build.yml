@@ -52,7 +52,7 @@ jobs:
         run: yarn build
 
       - name: Bundle
-        run: yarn bundle:language-server && cp cml-ls.package.json cml-ls/package.json
+        run: yarn bundle:language-server
 
       - name: Upload language server artifact
         uses: actions/upload-artifact@v4
