@@ -506,7 +506,7 @@ __metadata:
     vscode-languageserver: "npm:~9.0.1"
     vscode-languageserver-types: "npm:~3.17.5"
   bin:
-    cml-language-server: cml-ls/index.js
+    cml-language-server: cml-ls/index.cjs
   languageName: unknown
   linkType: soft
 

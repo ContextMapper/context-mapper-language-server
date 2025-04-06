@@ -15,9 +15,9 @@
         "type": "url",
         "url": "https://github.com/lstreckeisen/context-mapper-language-server.git"
     },
-    "main": "cml-ls/index.js",
+    "main": "cml-ls/index.cjs",
     "bin": {
-        "cml-language-server": "cml-ls/index.js"
+        "cml-language-server": "cml-ls/index.cjs"
     },
     "scripts": {
         "build": "tsc -b tsconfig.src.json && node esbuild.mjs",
@@ -27,7 +27,7 @@
         "langium:generate": "langium generate",
         "langium:generate:production": "langium generate --mode=production",
         "langium:watch": "langium generate --watch",
-        "bundle:language-server": "npx ncc build dist/main.js -o cml-ls",
+        "bundle:language-server": "npx ncc build dist/main.cjs -o cml-ls",
         "test": "vitest run",
         "clean": "rm -rf src/language/generated && rm -rf cml-ls/ && rm -rf dist/"
     },
