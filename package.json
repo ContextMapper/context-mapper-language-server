@@ -8,13 +8,17 @@
     },
     "type": "module",
     "files": [
-        "."
+        "cml-ls/",
+        "README.md"
     ],
     "repository": {
         "type": "url",
         "url": "https://github.com/lstreckeisen/context-mapper-language-server.git"
     },
-    "main": "./cml-ls/index.js",
+    "main": "cml-ls/index.js",
+    "bin": {
+        "cml-language-server": "cml-ls/index.js"
+    },
     "scripts": {
         "build": "tsc -b tsconfig.src.json && node esbuild.mjs",
         "watch": "concurrently -n tsc,esbuild -c blue,yellow \"tsc -b tsconfig.src.json --watch\" \"node esbuild.mjs --watch\"",
