@@ -66,4 +66,4 @@ jobs:
 
       - name: Publish to GitHub Package Registry
         if: github.event_name == 'release'  # Publish only on release creation
-        run: yarn npm publish
+        run: yarn npm publish --access public
