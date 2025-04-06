@@ -20,7 +20,9 @@ const ctx = await esbuild.context({
     entryPoints: ['src/language/main.ts'],
     outdir: 'dist',
     bundle: true,
-    target: "ES2017",
+    target: "ESNext",
+    format: 'cjs',
+    outExtension: { '.js': '.cjs' },
     // VSCode's extension host is still using cjs, so we need to transform the code
     loader: { '.ts': 'ts' },
     platform: 'node',
