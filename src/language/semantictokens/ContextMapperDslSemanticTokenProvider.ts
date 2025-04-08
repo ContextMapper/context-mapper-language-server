@@ -1,16 +1,17 @@
 import { AstNode } from 'langium'
 import { AbstractSemanticTokenProvider, SemanticTokenAcceptor } from 'langium/lsp'
-import { SemanticTokenTypes } from 'vscode-languageserver-types'
-import { isContextMap } from '../generated/ast.js'
+import { isContextMap, isRelationship } from '../generated/ast.js'
+import { ContextMapSemanticTokenProvider } from './ContextMapSemanticTokenProvider.js'
 
 export class ContextMapperDslSemanticTokenProvider extends AbstractSemanticTokenProvider {
+  private contextMapTokenProvider = new ContextMapSemanticTokenProvider()
+
   protected override highlightElement (node: AstNode, acceptor: SemanticTokenAcceptor) {
     if (isContextMap(node)) {
-      acceptor({
-        node,
-        type: SemanticTokenTypes.keyword,
-        keyword: 'ContextMap'
-      })
+      this.contextMapTokenProvider.highlightContextMap(node, acceptor)
+    }
+    if (isRelationship(node)) {
+      this.contextMapTokenProvider.highlightRelationship(node, acceptor)
     }
   }
 }

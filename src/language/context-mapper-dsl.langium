@@ -81,7 +81,6 @@ Subdomain:
 ;
 
 Relationship:
-	(comment=ML_COMMENT | comment=SL_COMMENT)?
 	SymmetricRelationship | UpstreamDownstreamRelationship
 ;
 
