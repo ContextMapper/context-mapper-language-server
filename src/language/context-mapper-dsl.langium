@@ -12,7 +12,6 @@ terminal CLOSE: '}';
 
 entry ContextMappingModel:
 	(topComment=SL_COMMENT | topComment=ML_COMMENT)?
-	(imports+=Import)*
 	(map=ContextMap)?
 	(boundedContexts+=BoundedContext)*
 	(domains+=Domain)*
@@ -20,9 +19,6 @@ entry ContextMappingModel:
 	(stakeholders+=Stakeholders)*
 	(valueRegisters+=ValueRegister)*
 ;
-
-Import:
-	'import' importURI=STRING;
 
 ContextMap:
 	{infer ContextMap} // make sure there is always a context map
@@ -89,6 +85,7 @@ SymmetricRelationship:
 ;
 
 Partnership:
+    (comment=ML_COMMENT | comment=SL_COMMENT)?
 	(
 		(participant1=[BoundedContext] '[''P'']' '<->' '[''P'']' participant2=[BoundedContext]) |
 		('[''P'']' participant1=[BoundedContext] '<->' '[''P'']' participant2=[BoundedContext]) |
@@ -103,6 +100,7 @@ Partnership:
 ;
 
 SharedKernel:
+    (comment=ML_COMMENT | comment=SL_COMMENT)?
 	(
 		(participant1=[BoundedContext] '[''SK'']' '<->' '[''SK'']' participant2=[BoundedContext]) |
 		('[''SK'']' participant1=[BoundedContext] '<->' '[''SK'']' participant2=[BoundedContext]) |
@@ -120,6 +118,7 @@ SharedKernel:
 UpstreamDownstreamRelationship:
 	CustomerSupplierRelationship |
 	(
+	    (comment=ML_COMMENT | comment=SL_COMMENT)?
 		(
 			(upstream=[BoundedContext] (('[''U'']') | ('['('U'',')?(upstreamRoles+=UpstreamRole) ("," upstreamRoles+=UpstreamRole)*)']')? '->' (('[''D'']') | ('['('D'',')?(downstreamRoles+=DownstreamRole) ("," downstreamRoles+=DownstreamRole)*)']')? downstream=[BoundedContext]) |
 			(downstream=[BoundedContext] (('[''D'']') | ('['('D'',')?(downstreamRoles+=DownstreamRole) ("," downstreamRoles+=DownstreamRole)*)']')? '<-' (('[''U'']') | ('['('U'',')?(upstreamRoles+=UpstreamRole) ("," upstreamRoles+=UpstreamRole)*)']')? upstream=[BoundedContext]) |
@@ -138,6 +137,7 @@ UpstreamDownstreamRelationship:
 
 CustomerSupplierRelationship:
 	(
+	    (comment=ML_COMMENT | comment=SL_COMMENT)?
 		(
 			(upstream=[BoundedContext] '['('U'',')?'S'(','(upstreamRoles+=UpstreamRole) ("," upstreamRoles+=UpstreamRole)*)?']' '->' '['('D'',')?'C'(','(downstreamRoles+=DownstreamRole) ("," downstreamRoles+=DownstreamRole)*)?']' downstream=[BoundedContext]) |
 			(downstream=[BoundedContext] '['('D'',')?'C'(','(downstreamRoles+=DownstreamRole) ("," downstreamRoles+=DownstreamRole)*)?']' '<-' '['('U'',')?'S'(','(upstreamRoles+=UpstreamRole) ("," upstreamRoles+=UpstreamRole)*)?']' upstream=[BoundedContext]) |
