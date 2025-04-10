@@ -283,8 +283,6 @@ Value:
 	CLOSE)?
 ;
 
-// Q: table B.1  abbilden? if, how?
-
 ValueElicitation:
 	('Stakeholder'|'Stakeholders') stakeholder=[AbstractStakeholder] (OPEN
 		(

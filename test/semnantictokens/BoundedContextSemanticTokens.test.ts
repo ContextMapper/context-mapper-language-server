@@ -5,13 +5,7 @@ import { SemanticTokenProvider } from 'langium/lsp'
 import { clearDocuments, parseHelper } from 'langium/test'
 import { ContextMappingModel } from '../../src/language/generated/ast.js'
 import { SemanticTokensParams } from 'vscode-languageserver'
-
-/**
- * A Semantic Token data array consists of a sequence of integers.
- * One token corresponds to a sequence of 5 integers, representing: startLine, startChar, length, type, modifier
- */
-
-const TOKEN_DATA_LENGTH = 5
+import { assertSemanticToken, TOKEN_DATA_LENGTH } from './SemanticTokenTestHelper.js'
 
 let services: ReturnType<typeof createContextMapperDslServices>
 let parse: ReturnType<typeof parseHelper<ContextMappingModel>>
@@ -44,16 +38,22 @@ describe('BoundedContext semantic token test', () => {
     const firstToken = result.data.slice(0, 5)
     const secondToken = result.data.slice(5, 10)
 
-    expect(firstToken[0]).toEqual(0) // startLine
-    expect(firstToken[1]).toEqual(0) // startChar
-    expect(firstToken[2]).toEqual(14) // tokenLength
-    expect(firstToken[3]).toEqual(semanticTokenProvider.tokenTypes.keyword) // tokenType
-    expect(firstToken[4]).toEqual(0) // tokenModifier
+    assertSemanticToken(
+      firstToken,
+      0,
+      0,
+      14,
+      semanticTokenProvider.tokenTypes.keyword,
+      0
+    )
 
-    expect(secondToken[0]).toEqual(0) // startLine
-    expect(secondToken[1]).toEqual(15) // startChar
-    expect(secondToken[2]).toEqual(12) // tokenLength
-    expect(secondToken[3]).toEqual(semanticTokenProvider.tokenTypes.type) // tokenType
-    expect(secondToken[4]).toEqual(semanticTokenProvider.tokenModifiers.declaration) // tokenModifier
+    assertSemanticToken(
+      secondToken,
+      0,
+      15,
+      12,
+      semanticTokenProvider.tokenTypes.type,
+      semanticTokenProvider.tokenModifiers.declaration
+    )
   })
 })
