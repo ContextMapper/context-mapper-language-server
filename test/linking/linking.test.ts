@@ -18,7 +18,7 @@ beforeAll(async () => {
 })
 
 afterEach(async () => {
-  document && clearDocuments(services.shared, [document])
+  document && await clearDocuments(services.shared, [document])
 })
 
 describe('Linking tests', () => {
