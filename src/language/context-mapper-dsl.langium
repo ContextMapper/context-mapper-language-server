@@ -1,17 +1,18 @@
 grammar ContextMapperDsl
 
-hidden terminal WS: /\s+/;
 terminal ID: /[_a-zA-Z][\w_]*/;
 terminal STRING: /"(\\.|[^"\\])*"|'(\\.|[^'\\])*'/;
-
 terminal ML_COMMENT: /\/\*[\s\S]*?\*\//;
 terminal SL_COMMENT: /\/\/[^\n\r]*/;
 
 terminal OPEN: '{';
 terminal CLOSE: '}';
 
+hidden terminal WS: /\s+/;
+hidden terminal HIDDEN_ML_COMMENT: ML_COMMENT;
+hidden terminal HIDDEN_SL_COMMENT: SL_COMMENT;
+
 entry ContextMappingModel:
-	(topComment=SL_COMMENT | topComment=ML_COMMENT)?
 	(map=ContextMap)?
 	(boundedContexts+=BoundedContext)*
 	(domains+=Domain)*
@@ -32,7 +33,6 @@ ContextMap:
 ;
 
 BoundedContext:
-	(comment=ML_COMMENT | comment=SL_COMMENT)?
 	'BoundedContext' name=ID (
 		('implements' (implementedDomainParts+=[DomainPart]) ("," implementedDomainParts+=[DomainPart])*)?
 		('realizes' (realizedBoundedContexts+=[BoundedContext]) ("," realizedBoundedContexts+=[BoundedContext])*)?
@@ -85,7 +85,6 @@ SymmetricRelationship:
 ;
 
 Partnership:
-    (comment=ML_COMMENT | comment=SL_COMMENT)?
 	(
 		(participant1=[BoundedContext] '[''P'']' '<->' '[''P'']' participant2=[BoundedContext]) |
 		('[''P'']' participant1=[BoundedContext] '<->' '[''P'']' participant2=[BoundedContext]) |
@@ -100,7 +99,6 @@ Partnership:
 ;
 
 SharedKernel:
-    (comment=ML_COMMENT | comment=SL_COMMENT)?
 	(
 		(participant1=[BoundedContext] '[''SK'']' '<->' '[''SK'']' participant2=[BoundedContext]) |
 		('[''SK'']' participant1=[BoundedContext] '<->' '[''SK'']' participant2=[BoundedContext]) |
@@ -118,7 +116,6 @@ SharedKernel:
 UpstreamDownstreamRelationship:
 	CustomerSupplierRelationship |
 	(
-	    (comment=ML_COMMENT | comment=SL_COMMENT)?
 		(
 			(upstream=[BoundedContext] (('[''U'']') | ('['('U'',')?(upstreamRoles+=UpstreamRole) ("," upstreamRoles+=UpstreamRole)*)']')? '->' (('[''D'']') | ('['('D'',')?(downstreamRoles+=DownstreamRole) ("," downstreamRoles+=DownstreamRole)*)']')? downstream=[BoundedContext]) |
 			(downstream=[BoundedContext] (('[''D'']') | ('['('D'',')?(downstreamRoles+=DownstreamRole) ("," downstreamRoles+=DownstreamRole)*)']')? '<-' (('[''U'']') | ('['('U'',')?(upstreamRoles+=UpstreamRole) ("," upstreamRoles+=UpstreamRole)*)']')? upstream=[BoundedContext]) |
@@ -128,7 +125,7 @@ UpstreamDownstreamRelationship:
 		(':' name=ID)?
 		(OPEN (
 			('implementationTechnology' ('=')? implementationTechnology=STRING)?
-			(('exposedAggregates' ('=')? upstreamExposedAggregates+=[Aggregate]) ("," upstreamExposedAggregates+=[Aggregate])* (exposedAggregatesComment=SL_COMMENT)?)?
+			(('exposedAggregates' ('=')? upstreamExposedAggregates+=[Aggregate]) ("," upstreamExposedAggregates+=[Aggregate])* )?
 			('downstreamRights' ('=')? downstreamGovernanceRights=DownstreamGovernanceRights)?
 		)
 		CLOSE)?
@@ -137,7 +134,6 @@ UpstreamDownstreamRelationship:
 
 CustomerSupplierRelationship:
 	(
-	    (comment=ML_COMMENT | comment=SL_COMMENT)?
 		(
 			(upstream=[BoundedContext] '['('U'',')?'S'(','(upstreamRoles+=UpstreamRole) ("," upstreamRoles+=UpstreamRole)*)?']' '->' '['('D'',')?'C'(','(downstreamRoles+=DownstreamRole) ("," downstreamRoles+=DownstreamRole)*)?']' downstream=[BoundedContext]) |
 			(downstream=[BoundedContext] '['('D'',')?'C'(','(downstreamRoles+=DownstreamRole) ("," downstreamRoles+=DownstreamRole)*)?']' '<-' '['('U'',')?'S'(','(upstreamRoles+=UpstreamRole) ("," upstreamRoles+=UpstreamRole)*)?']' upstream=[BoundedContext]) |
@@ -147,7 +143,7 @@ CustomerSupplierRelationship:
 		(':' name=ID)?
 		(OPEN (
 			('implementationTechnology' ('=')? implementationTechnology=STRING)?
-			(('exposedAggregates' ('=')? upstreamExposedAggregates+=[Aggregate]) ("," upstreamExposedAggregates+=[Aggregate])* (exposedAggregatesComment=SL_COMMENT)?)?
+			(('exposedAggregates' ('=')? upstreamExposedAggregates+=[Aggregate]) ("," upstreamExposedAggregates+=[Aggregate])* )?
 			('downstreamRights' ('=')? downstreamGovernanceRights=DownstreamGovernanceRights)?
 		)
 		CLOSE)?
@@ -155,7 +151,6 @@ CustomerSupplierRelationship:
 ;
 
 Aggregate:
-	(comment=ML_COMMENT)?
   (doc=STRING)?
   "Aggregate" name=ID (OPEN
     (
@@ -209,7 +204,7 @@ NormalFeature:
 ;
 
 StoryFeature:
-	'I want to' verb=(UserActivityDefaultVerb | STRING) (entityArticle='a' | entityArticle='an' | entityArticle='the')? entity=STRING ((entityAttributesPreposition='with its' | entityAttributesPreposition='with their') entityAttributes+=STRING ("," entityAttributes+=STRING)*)? ((containerEntityPreposition='in' | containerEntityPreposition='for' | containerEntityPreposition='to')(containerEntityArticle='a' | containerEntityArticle='an')? containerEntity=STRING)?
+	'I want to' normalFeature=NormalFeature
 ;
 
 StoryValuation:
