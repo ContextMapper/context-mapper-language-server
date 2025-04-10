@@ -1,74 +1,41 @@
 import { SemanticTokenAcceptor } from 'langium/lsp'
-import { AstNode } from 'langium'
 import { SemanticTokenModifiers, SemanticTokenTypes } from 'vscode-languageserver-types'
-import { ContextMap, isPartnership, isSharedKernel, Partnership, SymmetricRelationship } from '../generated/ast.js'
+import {
+  ContextMap, CustomerSupplierRelationship, isCustomerSupplierRelationship,
+  isPartnership,
+  isSharedKernel,
+  isSymmetricRelationship,
+  isUpstreamDownstreamRelationship, Partnership, Relationship, SharedKernel,
+  SymmetricRelationship,
+  UpstreamDownstreamRelationship
+} from '../generated/ast.js'
+import { highlightAttribute, highlightMemberAttribute, highlightTypeDeclaration } from './HighlightingHelper.js'
 export class ContextMapSemanticTokenProvider {
-  public highlightContextMap (node: AstNode, acceptor: SemanticTokenAcceptor) {
-    const contextMapNode = node as ContextMap
-    acceptor({
-      node,
-      type: SemanticTokenTypes.keyword,
-      keyword: 'ContextMap'
-    })
+  public highlightContextMap (node: ContextMap, acceptor: SemanticTokenAcceptor) {
+    highlightTypeDeclaration(node, acceptor, 'ContextMap', node.name != null)
 
-    if (contextMapNode.name) {
-      acceptor({
-        node,
-        type: SemanticTokenTypes.type,
-        modifier: SemanticTokenModifiers.declaration,
-        property: 'name'
-      })
+    if (node.type) {
+      highlightMemberAttribute(node, acceptor, ['type'], 'type')
     }
 
-    if (contextMapNode.type) {
-      acceptor({
-        node,
-        type: SemanticTokenTypes.keyword,
-        keyword: 'type'
-      })
-      acceptor({
-        node,
-        type: SemanticTokenTypes.parameter,
-        property: 'type'
-      })
+    if (node.state) {
+      highlightMemberAttribute(node, acceptor, ['state'], 'state')
     }
 
-    if (contextMapNode.state) {
-      acceptor({
-        node,
-        type: SemanticTokenTypes.keyword,
-        keyword: 'state'
-      })
-      acceptor({
-        node,
-        type: SemanticTokenTypes.parameter,
-        property: 'state'
-      })
-    }
-
-    if (contextMapNode.boundedContexts) {
-      acceptor({
-        node,
-        type: SemanticTokenTypes.keyword,
-        keyword: 'contains'
-      })
-      acceptor({
-        node,
-        type: SemanticTokenTypes.type,
-        property: 'boundedContexts'
-      })
+    if (node.boundedContexts.length > 0) {
+      highlightAttribute(node, acceptor, ['contains'], 'boundedContexts', true)
     }
   }
 
-  public highlightRelationship (node: AstNode, acceptor: SemanticTokenAcceptor) {
-    if (isPartnership(node)) {
-      this.highlightPartnership(node, acceptor)
+  public highlightRelationship (node: Relationship, acceptor: SemanticTokenAcceptor) {
+    if (isSymmetricRelationship(node)) {
+      this.highlightSymmetricRelationship(node, acceptor)
+    } else if (isUpstreamDownstreamRelationship(node)) {
+      this.highlightUpstreamDownstreamRelationship(node, acceptor)
     }
   }
 
-  private highlightSymmetricRelationship (node: AstNode, acceptor: SemanticTokenAcceptor) {
-    const symmetricRelationshipNode = node as SymmetricRelationship
-
+  private highlightSymmetricRelationship (node: SymmetricRelationship, acceptor: SemanticTokenAcceptor) {
     acceptor({
       node,
       type: SemanticTokenTypes.type,
@@ -80,12 +47,7 @@ export class ContextMapSemanticTokenProvider {
       property: 'participant2'
     })
 
-    if (symmetricRelationshipNode.name) {
-      acceptor({
-        node,
-        type: SemanticTokenTypes.operator,
-        keyword: ':'
-      })
+    if (node.name) {
       acceptor({
         node,
         type: SemanticTokenTypes.type,
@@ -94,16 +56,11 @@ export class ContextMapSemanticTokenProvider {
       })
     }
 
-    if (symmetricRelationshipNode.implementationTechnology) {
+    if (node.implementationTechnology) {
       acceptor({
         node,
         type: SemanticTokenTypes.keyword,
         keyword: 'implementationTechnology'
-      })
-      acceptor({
-        node,
-        type: SemanticTokenTypes.operator,
-        keyword: '='
       })
       acceptor({
         node,
@@ -119,11 +76,11 @@ export class ContextMapSemanticTokenProvider {
     }
   }
 
-  private highlightPartnership (node: AstNode, acceptor: SemanticTokenAcceptor) {
+  private highlightPartnership (node: Partnership, acceptor: SemanticTokenAcceptor) {
     acceptor({
       node,
       type: SemanticTokenTypes.keyword,
-      keyword: '[\'P\']'
+      keyword: 'P'
     })
     acceptor({
       node,
@@ -137,11 +94,11 @@ export class ContextMapSemanticTokenProvider {
     })
   }
 
-  private highlightSharedKernel (node: AstNode, acceptor: SemanticTokenAcceptor) {
+  private highlightSharedKernel (node: SharedKernel, acceptor: SemanticTokenAcceptor) {
     acceptor({
       node,
       type: SemanticTokenTypes.keyword,
-      keyword: '[\'SK\']'
+      keyword: 'SK'
     })
     acceptor({
       node,
@@ -152,6 +109,189 @@ export class ContextMapSemanticTokenProvider {
       node,
       type: SemanticTokenTypes.keyword,
       keyword: 'Shared-Kernel'
+    })
+  }
+
+  private highlightUpstreamDownstreamRelationship (node: UpstreamDownstreamRelationship, acceptor: SemanticTokenAcceptor) {
+    if (isCustomerSupplierRelationship(node)) {
+      this.highlightCustomerSupplierRelationship(node, acceptor)
+      return
+    }
+
+    if (node.name) {
+      acceptor({
+        node,
+        type: SemanticTokenTypes.type,
+        modifier: SemanticTokenModifiers.declaration,
+        property: 'name'
+      })
+    }
+
+    acceptor({
+      node,
+      type: SemanticTokenTypes.type,
+      property: 'downstream'
+    })
+    acceptor({
+      node,
+      type: SemanticTokenTypes.keyword,
+      keyword: 'D'
+    })
+
+    acceptor({
+      node,
+      type: SemanticTokenTypes.type,
+      property: 'upstream'
+    })
+    acceptor({
+      node,
+      type: SemanticTokenTypes.keyword,
+      keyword: 'U'
+    })
+
+    acceptor({
+      node,
+      type: SemanticTokenTypes.keyword,
+      keyword: 'Upstream-Downstream'
+    })
+    acceptor({
+      node,
+      type: SemanticTokenTypes.keyword,
+      keyword: 'Downstream-Upstream'
+    })
+    acceptor({
+      node,
+      type: SemanticTokenTypes.keyword,
+      keyword: '<-'
+    })
+    acceptor({
+      node,
+      type: SemanticTokenTypes.keyword,
+      keyword: '->'
+    })
+
+    if (node.downstreamRoles.length > 0) {
+      acceptor({
+        node,
+        type: SemanticTokenTypes.property,
+        property: 'downstreamRoles'
+      })
+    }
+
+    if (node.upstreamRoles.length > 0) {
+      acceptor({
+        node,
+        type: SemanticTokenTypes.property,
+        property: 'upstreamRoles'
+      })
+    }
+
+    if (node.implementationTechnology) {
+      acceptor({
+        node,
+        type: SemanticTokenTypes.keyword,
+        keyword: 'implementationTechnology'
+      })
+      acceptor({
+        node,
+        type: SemanticTokenTypes.property,
+        property: 'implementationTechnology'
+      })
+    }
+
+    if (node.upstreamExposedAggregates.length > 0) {
+      acceptor({
+        node,
+        type: SemanticTokenTypes.keyword,
+        keyword: 'exposedAggregates'
+      })
+      acceptor({
+        node,
+        type: SemanticTokenTypes.type,
+        property: 'upstreamExposedAggregates'
+      })
+    }
+
+    if (node.downstreamGovernanceRights) {
+      acceptor({
+        node,
+        type: SemanticTokenTypes.keyword,
+        keyword: 'downstreamRights'
+      })
+      acceptor({
+        node,
+        type: SemanticTokenTypes.property,
+        property: 'downstreamGovernanceRights'
+      })
+    }
+  }
+
+  public highlightCustomerSupplierRelationship (node: CustomerSupplierRelationship, acceptor: SemanticTokenAcceptor) {
+    acceptor({
+      node,
+      type: SemanticTokenTypes.type,
+      property: 'upstream'
+    })
+    acceptor({
+      node,
+      type: SemanticTokenTypes.keyword,
+      keyword: 'U'
+    })
+    if (node.upstreamRoles.length > 0) {
+      acceptor({
+        node,
+        type: SemanticTokenTypes.property,
+        property: 'upstreamRoles'
+      })
+    }
+    acceptor({
+      node,
+      type: SemanticTokenTypes.keyword,
+      keyword: '->'
+    })
+    acceptor({
+      node,
+      type: SemanticTokenTypes.keyword,
+      keyword: 'Supplier-Customer'
+    })
+
+    acceptor({
+      node,
+      type: SemanticTokenTypes.type,
+      property: 'downstream'
+    })
+    acceptor({
+      node,
+      type: SemanticTokenTypes.keyword,
+      keyword: 'D'
+    })
+    if (node.downstreamRoles.length > 0) {
+      acceptor({
+        node,
+        type: SemanticTokenTypes.property,
+        property: 'downstreamRoles'
+      })
+    }
+    acceptor({
+      node,
+      type: SemanticTokenTypes.keyword,
+      keyword: '<-'
+    })
+    acceptor({
+      node,
+      type: SemanticTokenTypes.keyword,
+      keyword: 'Customer-Supplier'
+    })
+
+    acceptor({
+      node,
+      type: SemanticTokenTypes.keyword,
+      keyword: 'C'
+    })
+    acceptor({
+      node,
+      type: SemanticTokenTypes.keyword,
+      keyword: 'S'
     })
   }
 }
