@@ -21,8 +21,8 @@ afterEach(async () => {
   document && await clearDocuments(services.shared, [document])
 })
 
-describe('Linking tests', () => {
-  test('linking of greetings', async () => {
+describe('Bounded context linking tests', () => {
+  test('linking of bounded contexts in context map', async () => {
     document = await parse(`
             ContextMap {
                 TestContext [SK] <-> [SK] FirstContext
@@ -36,7 +36,7 @@ describe('Linking tests', () => {
 
     const referencedContexts: Array<string | undefined> = []
 
-    document.parseResult.value.map?.relationships.forEach(r => {
+    document.parseResult.value.contextMaps[0].relationships.forEach(r => {
       if (isSharedKernel(r)) {
         referencedContexts.push((r as SharedKernel).participant1.ref?.name)
         referencedContexts.push((r as SharedKernel).participant2.ref?.name)
