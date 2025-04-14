@@ -2,37 +2,54 @@ import { AstNode } from 'langium'
 import { AbstractSemanticTokenProvider, SemanticTokenAcceptor } from 'langium/lsp'
 import {
   ContextMappingModel,
-  isAbstractStakeholder, isAction,
-  isAggregate,
-  isBoundedContext, isConsequence,
-  isContextMap,
-  isContextMappingModel,
-  isDomainPart,
-  isFeature,
-  isRelationship,
-  isStakeholders,
-  isStoryValuation,
-  isUserRequirement,
-  isValue,
-  isValueCluster,
-  isValueElicitation, isValueEpic, isValueNarrative,
-  isValueRegister, isValueWeigthing
+  isContextMappingModel
 } from '../generated/ast.js'
-import { ContextMapSemanticTokenProvider } from './ContextMapSemanticTokenProvider.js'
+import { ContextMapSemanticTokenProvider } from './contextMap/ContextMapSemanticTokenProvider.js'
 import { SemanticTokenTypes } from 'vscode-languageserver-types'
-import { BoundedContextSemanticTokenProvider } from './BoundedContextSemanticTokenProvider.js'
-import { DomainSemanticTokenProvider } from './DomainSemanticTokenProvider.js'
-import { AggregateSemanticTokenProvider } from './AggregateSemanticTokenProvider.js'
-import { RequirementsSemanticTokenProvider } from './RequirementsSemanticTokenProvider.js'
-import { ValueSemanticTokenProvider } from './ValueSemanticTokenProvider.js'
+import { BoundedContextSemanticTokenProvider } from './boundedContext/BoundedContextSemanticTokenProvider.js'
+import { DomainSemanticTokenProvider } from './domain/DomainSemanticTokenProvider.js'
+import { AggregateSemanticTokenProvider } from './boundedContext/AggregateSemanticTokenProvider.js'
+import { RequirementsSemanticTokenProvider } from './requirements/RequirementsSemanticTokenProvider.js'
+import { ValueSemanticTokenProvider } from './vdad/ValueSemanticTokenProvider.js'
+import { ContextMapperSemanticTokenProvider } from './ContextMapperSemanticTokenProvider.js'
+import { SculptorModuleSemanticTokenProvider } from './boundedContext/SculptorModuleSemanticTokenProvider.js'
+import { RelationshipSemanticTokenProvider } from './contextMap/RelationshipSemanticTokenProvider.js'
+import { FeatureSemanticTokenProvider } from './requirements/FeatureSemanticTokenProvider.js'
+import { StoryValuationSemanticTokenProvider } from './requirements/StoryValuationSemanticTokenProvider.js'
+import { AbstractStakeholderSemanticTokenProvider } from './vdad/AbstractStakeholderSemanticTokenProvider.js'
+import { ActionSemanticTokenProvider } from './vdad/ActionSemanticTokenProvider.js'
+import { ConsequenceSemanticTokenProvider } from './vdad/ConsequenceSemanticTokenProvider.js'
+import { StakeholderSemanticTokenProvider } from './vdad/StakeholderSemanticTokenProvider.js'
+import { ValueClusterSemanticTokenProvider } from './vdad/ValueClusterSemanticTokenProvider.js'
+import { ValueElicitationSemanticTokenProvider } from './vdad/ValueElicitationSemanticTokenProvider.js'
+import { ValueEpicSemanticTokenProvider } from './vdad/ValueEpicSemanticTokenProvider.js'
+import { ValueNarrativeSemanticTokenProvider } from './vdad/ValueNarrativeSemanticTokenProvider.js'
+import { ValueRegisterSemanticTokenProvider } from './vdad/ValueRegisterSemanticTokenProvider.js'
+import { ValueWeightingSemanticTokenProvider } from './vdad/ValueWeightingSemanticTokenProvider.js'
 
 export class ContextMapperDslSemanticTokenProvider extends AbstractSemanticTokenProvider {
-  private contextMapTokenProvider = new ContextMapSemanticTokenProvider()
-  private boundedContextTokenProvider = new BoundedContextSemanticTokenProvider()
-  private domainTokenProvider = new DomainSemanticTokenProvider()
-  private aggregateTokenProvider = new AggregateSemanticTokenProvider()
-  private requirementTokenProvider = new RequirementsSemanticTokenProvider()
-  private valueTokenProvider = new ValueSemanticTokenProvider()
+  private semanticTokenProviders: ContextMapperSemanticTokenProvider<AstNode>[] = [
+    new AggregateSemanticTokenProvider(),
+    new BoundedContextSemanticTokenProvider(),
+    new SculptorModuleSemanticTokenProvider(),
+    new ContextMapSemanticTokenProvider(),
+    new RelationshipSemanticTokenProvider(),
+    new DomainSemanticTokenProvider(),
+    new FeatureSemanticTokenProvider(),
+    new RequirementsSemanticTokenProvider(),
+    new StoryValuationSemanticTokenProvider(),
+    new AbstractStakeholderSemanticTokenProvider(),
+    new ActionSemanticTokenProvider(),
+    new ConsequenceSemanticTokenProvider(),
+    new StakeholderSemanticTokenProvider(),
+    new ValueClusterSemanticTokenProvider(),
+    new ValueElicitationSemanticTokenProvider(),
+    new ValueEpicSemanticTokenProvider(),
+    new ValueNarrativeSemanticTokenProvider(),
+    new ValueRegisterSemanticTokenProvider(),
+    new ValueSemanticTokenProvider(),
+    new ValueWeightingSemanticTokenProvider()
+  ]
 
   protected override highlightElement (node: AstNode, acceptor: SemanticTokenAcceptor) {
     if (isContextMappingModel(node)) {
@@ -42,45 +59,14 @@ export class ContextMapperDslSemanticTokenProvider extends AbstractSemanticToken
         this.highlightComments(/\/\*[\s\S]*?\*\//g, modelNode, acceptor)
         this.highlightComments(/\/\/[^\n\r]*/g, modelNode, acceptor)
       }
-    } else if (isContextMap(node)) {
-      this.contextMapTokenProvider.highlightContextMap(node, acceptor)
-    } else if (isRelationship(node)) {
-      this.contextMapTokenProvider.highlightRelationship(node, acceptor)
-    } else if (isBoundedContext(node)) {
-      this.boundedContextTokenProvider.highlightBoundedContext(node, acceptor)
-    } else if (isDomainPart(node)) {
-      this.domainTokenProvider.highlightDomainPart(node, acceptor)
-    } else if (isAggregate(node)) {
-      this.aggregateTokenProvider.highlightAggregate(node, acceptor)
-    } else if (isUserRequirement(node)) {
-      this.requirementTokenProvider.highlightUserRequirement(node, acceptor)
-    } else if (isFeature(node)) {
-      this.requirementTokenProvider.highlightFeature(node, acceptor)
-    } else if (isStoryValuation(node)) {
-      this.valueTokenProvider.highlightStoryValidation(node, acceptor)
-    } else if (isStakeholders(node)) {
-      this.valueTokenProvider.highlightStakeholders(node, acceptor)
-    } else if (isAbstractStakeholder(node)) {
-      this.valueTokenProvider.highlightAbstractStakeholder(node, acceptor)
-    } else if (isValueRegister(node)) {
-      this.valueTokenProvider.highlightValueRegister(node, acceptor)
-    } else if (isValueCluster(node)) {
-      this.valueTokenProvider.highlightValueCluster(node, acceptor)
-    } else if (isValue(node)) {
-      this.valueTokenProvider.highlightValue(node, acceptor)
-    } else if (isValueElicitation(node)) {
-      this.valueTokenProvider.highlightValueElicitation(node, acceptor)
-    } else if (isValueEpic(node)) {
-      this.valueTokenProvider.highlightValueEpic(node, acceptor)
-    } else if (isValueNarrative(node)) {
-      this.valueTokenProvider.highlightValueNarrative(node, acceptor)
-    } else if (isValueWeigthing(node)) {
-      this.valueTokenProvider.highlightValueWeighting(node, acceptor)
-    } else if (isConsequence(node)) {
-      this.valueTokenProvider.highlightConsequence(node, acceptor)
-    } else if (isAction(node)) {
-      this.valueTokenProvider.highlightAction(node, acceptor)
     } else {
+      for (const provider of this.semanticTokenProviders) {
+        if (provider.supports(node)) {
+          provider.highlight(node, acceptor)
+          return
+        }
+      }
+
       console.error('Uncaught node type', node.$type)
     }
   }

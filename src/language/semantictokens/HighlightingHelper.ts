@@ -42,27 +42,20 @@ export function highlightTypeDeclaration (node: AstNode, acceptor: SemanticToken
   }
 }
 
-export function highlightMemberAttribute (node: AstNode, acceptor: SemanticTokenAcceptor, keywords: string[], property: string, type: SemanticTokenTypes = SemanticTokenTypes.property, isArray: Boolean = false) {
+export function highlightMemberAttribute (node: AstNode, acceptor: SemanticTokenAcceptor, keywords: string[], property: string, type: SemanticTokenTypes = SemanticTokenTypes.property) {
   keywords.forEach(keyword => highlightKeyword(node, acceptor, keyword))
-  // TODO: equal token
   acceptor({
     node,
     type,
     property
   })
-  if (isArray) {
-    // TODO: delimiter token
-  }
 }
 
-export function highlightAttribute (node: AstNode, acceptor: SemanticTokenAcceptor, keywords: string[], property: string, isArray: Boolean = false, type: SemanticTokenTypes = SemanticTokenTypes.type) {
+export function highlightAttribute (node: AstNode, acceptor: SemanticTokenAcceptor, keywords: string[], property: string, type: SemanticTokenTypes = SemanticTokenTypes.type) {
   keywords.forEach(keyword => highlightKeyword(node, acceptor, keyword))
   acceptor({
     node,
     type,
     property
   })
-  if (isArray) {
-    // TODO: delimiter token
-  }
 }

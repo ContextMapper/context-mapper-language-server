@@ -1,10 +1,16 @@
-import { Aggregate, isUseCase, isUserRequirement, isUserStory } from '../generated/ast.js'
+import { Aggregate, isAggregate, isUseCase, isUserRequirement, isUserStory } from '../../generated/ast.js'
 import { SemanticTokenAcceptor } from 'langium/lsp'
 import { SemanticTokenTypes } from 'vscode-languageserver-types'
-import { highlightMemberAttribute, highlightString, highlightTypeDeclaration } from './HighlightingHelper.js'
+import { highlightMemberAttribute, highlightString, highlightTypeDeclaration } from '../HighlightingHelper.js'
+import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticTokenProvider.js'
+import { AstNode } from 'langium'
 
-export class AggregateSemanticTokenProvider {
-  public highlightAggregate (node: Aggregate, acceptor: SemanticTokenAcceptor) {
+export class AggregateSemanticTokenProvider implements ContextMapperSemanticTokenProvider<Aggregate> {
+  supports (node: AstNode): node is Aggregate {
+    return isAggregate(node)
+  }
+
+  highlight (node: Aggregate, acceptor: SemanticTokenAcceptor) {
     if (node.doc) {
       highlightString(node, acceptor, 'doc')
     }

@@ -1,10 +1,16 @@
-import { DomainPart, isDomain, isSubdomain, Subdomain } from '../generated/ast.js'
+import { DomainPart, isDomain, isDomainPart, isSubdomain, Subdomain } from '../../generated/ast.js'
 import { SemanticTokenAcceptor } from 'langium/lsp'
 import { SemanticTokenTypes } from 'vscode-languageserver-types'
-import { highlightAttribute, highlightMemberAttribute, highlightTypeDeclaration } from './HighlightingHelper.js'
+import { highlightAttribute, highlightMemberAttribute, highlightTypeDeclaration } from '../HighlightingHelper.js'
+import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticTokenProvider.js'
+import { AstNode } from 'langium'
 
-export class DomainSemanticTokenProvider {
-  public highlightDomainPart (node: DomainPart, acceptor: SemanticTokenAcceptor) {
+export class DomainSemanticTokenProvider implements ContextMapperSemanticTokenProvider<DomainPart> {
+  supports (node: AstNode): node is DomainPart {
+    return isDomainPart(node)
+  }
+
+  highlight (node: DomainPart, acceptor: SemanticTokenAcceptor) {
     let keyword = null
     if (isDomain(node)) {
       keyword = 'Domain'
@@ -24,9 +30,9 @@ export class DomainSemanticTokenProvider {
     }
   }
 
-  public highlightSubdomain (node: Subdomain, acceptor: SemanticTokenAcceptor) {
+  private highlightSubdomain (node: Subdomain, acceptor: SemanticTokenAcceptor) {
     if (node.supportedFeatures.length > 0) {
-      highlightAttribute(node, acceptor, ['supports'], 'supportedFeatures', true)
+      highlightAttribute(node, acceptor, ['supports'], 'supportedFeatures')
     }
 
     if (node.type) {

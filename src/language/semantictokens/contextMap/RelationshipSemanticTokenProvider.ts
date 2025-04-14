@@ -1,33 +1,22 @@
+import {
+  CustomerSupplierRelationship,
+  isCustomerSupplierRelationship,
+  isPartnership, isRelationship, isSharedKernel,
+  isSymmetricRelationship,
+  isUpstreamDownstreamRelationship, Partnership,
+  Relationship, SharedKernel,
+  SymmetricRelationship, UpstreamDownstreamRelationship
+} from '../../generated/ast.js'
 import { SemanticTokenAcceptor } from 'langium/lsp'
 import { SemanticTokenModifiers, SemanticTokenTypes } from 'vscode-languageserver-types'
-import {
-  ContextMap, CustomerSupplierRelationship, isCustomerSupplierRelationship,
-  isPartnership,
-  isSharedKernel,
-  isSymmetricRelationship,
-  isUpstreamDownstreamRelationship, Partnership, Relationship, SharedKernel,
-  SymmetricRelationship,
-  UpstreamDownstreamRelationship
-} from '../generated/ast.js'
-import { highlightAttribute, highlightMemberAttribute, highlightTypeDeclaration } from './HighlightingHelper.js'
-export class ContextMapSemanticTokenProvider {
-  public highlightContextMap (node: ContextMap, acceptor: SemanticTokenAcceptor) {
-    highlightTypeDeclaration(node, acceptor, 'ContextMap', node.name != null)
+import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticTokenProvider.js'
 
-    if (node.type) {
-      highlightMemberAttribute(node, acceptor, ['type'], 'type')
-    }
-
-    if (node.state) {
-      highlightMemberAttribute(node, acceptor, ['state'], 'state')
-    }
-
-    if (node.boundedContexts.length > 0) {
-      highlightAttribute(node, acceptor, ['contains'], 'boundedContexts', true)
-    }
+export class RelationshipSemanticTokenProvider implements ContextMapperSemanticTokenProvider<Relationship> {
+  supports (node: Relationship): node is Relationship {
+    return isRelationship(node)
   }
 
-  public highlightRelationship (node: Relationship, acceptor: SemanticTokenAcceptor) {
+  highlight (node: Relationship, acceptor: SemanticTokenAcceptor) {
     if (isSymmetricRelationship(node)) {
       this.highlightSymmetricRelationship(node, acceptor)
     } else if (isUpstreamDownstreamRelationship(node)) {
@@ -226,7 +215,7 @@ export class ContextMapSemanticTokenProvider {
     }
   }
 
-  public highlightCustomerSupplierRelationship (node: CustomerSupplierRelationship, acceptor: SemanticTokenAcceptor) {
+  highlightCustomerSupplierRelationship (node: CustomerSupplierRelationship, acceptor: SemanticTokenAcceptor) {
     acceptor({
       node,
       type: SemanticTokenTypes.type,
