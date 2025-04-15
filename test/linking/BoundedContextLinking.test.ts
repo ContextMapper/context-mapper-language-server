@@ -1,7 +1,7 @@
 import { afterEach, beforeAll, describe, expect, test } from 'vitest'
 import { EmptyFileSystem, type LangiumDocument } from 'langium'
 import { clearDocuments, parseHelper } from 'langium/test'
-import { createContextMapperDslServices } from '../../src/language/context-mapper-dsl-module.js'
+import { createContextMapperDslServices } from '../../src/language/ContextMapperDslModule.js'
 import { ContextMappingModel, isSharedKernel, SharedKernel } from '../../src/language/generated/ast.js'
 import { checkDocumentValid } from '../TestHelper.js'
 

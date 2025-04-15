@@ -1,6 +1,6 @@
 import type { ValidationChecks } from 'langium'
 import type { ContextMapperDslAstType } from './generated/ast.js'
-import type { ContextMapperDslServices } from './context-mapper-dsl-module.js'
+import type { ContextMapperDslServices } from './ContextMapperDslModule.js'
 import { ContextMappingModelValidator } from './validation/ContextMappingModelValidator.js'
 import { ValueValidator } from './validation/ValueValidator.js'
 

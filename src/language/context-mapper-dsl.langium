@@ -52,22 +52,6 @@ BoundedContext:
 		)
 	)
 	(
-		/*OPEN
-			(
-				domainVisionStatements += DomainVisionStatementField |
-				types += BoundedContextTypeField |
-				knowledgeLevels += KnowledgeLevelField |
-				implementationTechnologies += ImplementationTechnologyField |
-				businessModels += BusinessModelField |
-				evolutions += EvolutionField
-			)*
-			(
-				(
-					modules+=SculptorModule |
-					aggregates+=Aggregate
-				)* 
-			)
-		CLOSE*/
 		OPEN
 			(
 				('domainVisionStatement' ('=') domainVisionStatement=STRING) &
@@ -87,33 +71,6 @@ BoundedContext:
 		CLOSE
 	)?
 ;
-
-DomainVisionStatementField:
-	('domainVisionStatement' ('=') domainVisionStatement=STRING)
-;
-
-BoundedContextTypeField:
-	('type' ('=') type=BoundedContextType)
-;
-
-ResponsibilitiesField:
-	(('responsibilities' ('=')? responsibilities+=STRING) ("," responsibilities+=STRING)*)
-;
-
-KnowledgeLevelField:
-	('knowledgeLevel' ('=') knowledgeLevel=KnowledgeLevel)
-;
-
-ImplementationTechnologyField:
-	('implementationTechnology' ('=') implementationTechnology=STRING)
-;
-
-BusinessModelField:
-	('businessModel' ('=') businessModel=STRING)
-;
-
-EvolutionField:
-	('evolution' ('=') evolution=Evolution);
 
 DomainPart:
 	Domain | Subdomain

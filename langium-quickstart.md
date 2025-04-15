@@ -8,8 +8,8 @@ This folder contains all necessary files for your language extension.
  * `src/extension/main.ts` - the main code of the extension, which is responsible for launching a language server and client.
  * `src/language/context-mapper-dsl.langium` -  the grammar definition of your language.
  * `src/language/main.ts` - the entry point of the language server process.
- * `src/language/context-mapper-dsl-module.ts` - the dependency injection module of your language implementation. Use this to register overridden and added services.
- * `src/language/context-mapper-dsl-validator.ts` - an example validator. You should change it to reflect the semantics of your language.
+ * `src/language/ContextMapperDslModule.ts` - the dependency injection module of your language implementation. Use this to register overridden and added services.
+ * `src/language/ContextMapperDslValidator.ts` - an example validator. You should change it to reflect the semantics of your language.
  * `src/cli/main.ts` - the entry point of the command line interface (CLI) of your language.
  * `src/cli/generator.ts` - the code generator used by the CLI to write output files from DSL documents.
  * `src/cli/cli-util.ts` - utility code for the CLI.

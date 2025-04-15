@@ -8,7 +8,7 @@ import {
   type PartialLangiumServices
 } from 'langium/lsp'
 import { ContextMapperDslGeneratedModule, ContextMapperDslGeneratedSharedModule } from './generated/module.js'
-import { ContextMapperDslValidator, registerValidationChecks } from './context-mapper-dsl-validator.js'
+import { ContextMapperDslValidator, registerValidationChecks } from './ContextMapperDslValidator.js'
 import { ContextMapperDslSemanticTokenProvider } from './semantictokens/ContextMapperDslSemanticTokenProvider.js'
 
 /**

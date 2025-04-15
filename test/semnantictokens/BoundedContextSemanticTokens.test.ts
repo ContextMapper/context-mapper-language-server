@@ -1,5 +1,5 @@
 import { afterEach, beforeAll, describe, test } from 'vitest'
-import { createContextMapperDslServices } from '../../src/language/context-mapper-dsl-module.js'
+import { createContextMapperDslServices } from '../../src/language/ContextMapperDslModule.js'
 import { EmptyFileSystem, type LangiumDocument } from 'langium'
 import { SemanticTokenProvider } from 'langium/lsp'
 import { clearDocuments, parseHelper } from 'langium/test'

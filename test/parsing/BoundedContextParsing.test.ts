@@ -1,4 +1,4 @@
-import { createContextMapperDslServices } from '../../src/language/context-mapper-dsl-module.js'
+import { createContextMapperDslServices } from '../../src/language/ContextMapperDslModule.js'
 import { parseHelper } from 'langium/test'
 import { ContextMappingModel } from '../../src/language/generated/ast.js'
 import { EmptyFileSystem, LangiumDocument } from 'langium'
