@@ -36,8 +36,10 @@ ContextMap:
 	// {ContextMap} make sure there is always a context map
 	'ContextMap' (name=ID)?
 	OPEN
-		(('type' ('=')? type=ContextMapType)?
-		('state' ('=')? state=ContextMapState)?)
+		(
+			('type' ('=')? type=ContextMapType) &
+			('state' ('=')? state=ContextMapState)
+		)
 		('contains' boundedContexts+=[BoundedContext] ("," boundedContexts+=[BoundedContext])*)*
 		relationships+=Relationship*
 	CLOSE
