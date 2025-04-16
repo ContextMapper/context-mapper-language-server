@@ -1,15 +1,15 @@
 import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticTokenProvider.js'
-import { isValueWeigthing, ValueWeigthing } from '../../generated/ast.js'
+import { isValueWeighting, ValueWeighting } from '../../generated/ast.js'
 import { AstNode } from 'langium'
 import { SemanticTokenAcceptor } from 'langium/lsp'
 import { highlightKeyword, highlightString, highlightType, highlightTypeDeclaration } from '../HighlightingHelper.js'
 
-export class ValueWeightingSemanticTokenProvider implements ContextMapperSemanticTokenProvider<ValueWeigthing> {
-  supports (node: AstNode): node is ValueWeigthing {
-    return isValueWeigthing(node)
+export class ValueWeightingSemanticTokenProvider implements ContextMapperSemanticTokenProvider<ValueWeighting> {
+  supports (node: AstNode): node is ValueWeighting {
+    return isValueWeighting(node)
   }
 
-  highlight (node: ValueWeigthing, acceptor: SemanticTokenAcceptor) {
+  highlight (node: ValueWeighting, acceptor: SemanticTokenAcceptor) {
     highlightTypeDeclaration(node, acceptor, 'ValueWeighting')
 
     highlightKeyword(node, acceptor, 'In the context of the SOI,')
