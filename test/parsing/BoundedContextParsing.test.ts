@@ -3,6 +3,7 @@ import { parseHelper } from 'langium/test'
 import { ContextMappingModel } from '../../src/language/generated/ast.js'
 import { EmptyFileSystem, LangiumDocument } from 'langium'
 import { beforeAll, describe, test, expect } from 'vitest'
+import { parseValidInput } from './ParsingTestHelper.js'
 
 let services: ReturnType<typeof createContextMapperDslServices>
 let parse: ReturnType<typeof parseHelper<ContextMappingModel>>
@@ -15,11 +16,9 @@ beforeAll(async () => {
 
 describe('BoundedContext parsing tests', () => {
   test('parse BoundedContext without body', async () => {
-    document = await parse(`
-            BoundedContext FirstContext
+    document = await parseValidInput(parse, `
+      BoundedContext FirstContext
     `)
-
-    expect(document.parseResult.parserErrors.length).toEqual(0)
 
     const contextMappingModel = document.parseResult.value
     expect(contextMappingModel).not.toBeUndefined()
@@ -47,8 +46,12 @@ describe('BoundedContext parsing tests', () => {
   })
 
   test('parse BoundedContext with full body', async () => {
-    document = await parse(`
-      BoundedContext TestContext {
+    document = await parseValidInput(parse, `
+      BoundedContext TestContext
+        implements TestDomain, TestSubDomain
+        realizes ContextToRealize
+        refines ContextToRefine
+      {
         type = UNDEFINED
         responsibilities = "resp1", "resp2"
         knowledgeLevel = CONCRETE
@@ -57,17 +60,26 @@ describe('BoundedContext parsing tests', () => {
         evolution = GENESIS
         domainVisionStatement = "vision"
       }
+      
+      BoundedContext ContextToRefine
+      BoundedContext ContextToRealize
+      
+      Domain TestDomain
+      Domain AnotherDomain {
+        Subdomain TestSubDomain
+      }
     `)
-
-    expect(document.parseResult.parserErrors.length).toEqual(0)
 
     const contextMappingModel = document.parseResult.value
     expect(contextMappingModel).not.toBeUndefined()
-    expect(contextMappingModel.boundedContexts.length).toEqual(1)
+    expect(contextMappingModel.boundedContexts.length).toEqual(3)
 
     const boundedContext = contextMappingModel.boundedContexts[0]
     expect(boundedContext).not.toBeUndefined()
     expect(boundedContext.name).toEqual('TestContext')
+    expect(boundedContext.implementedDomainParts).toHaveLength(2)
+    expect(boundedContext.realizedBoundedContexts).toHaveLength(1)
+    expect(boundedContext.refinedBoundedContext).not.toBeUndefined()
     expect(boundedContext.domainVisionStatement).toEqual('vision')
     expect(boundedContext.type).toEqual('UNDEFINED')
     expect(boundedContext.implementationTechnology).toEqual('java')
@@ -78,16 +90,14 @@ describe('BoundedContext parsing tests', () => {
     expect(boundedContext.aggregates.length).toEqual(0)
   })
 
-  test('parse BoundedContext with body', async () => {
-    document = await parse(`
+  test('parse BoundedContext with partial body', async () => {
+    document = await parseValidInput(parse, `
       BoundedContext TestContext {
         type = FEATURE
         implementationTechnology = "c#"
         domainVisionStatement = "vision"
       }
     `)
-
-    expect(document.parseResult.parserErrors.length).toEqual(0)
 
     const contextMappingModel = document.parseResult.value
     expect(contextMappingModel).not.toBeUndefined()
