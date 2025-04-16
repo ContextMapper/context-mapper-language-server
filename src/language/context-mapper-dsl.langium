@@ -150,7 +150,7 @@ UpstreamDownstreamRelationship:
 		(OPEN 
 			(
 				('implementationTechnology' ('=')? implementationTechnology=STRING) &
-				(('exposedAggregates' ('=')? upstreamExposedAggregates+=[Aggregate]) ("," upstreamExposedAggregates+=[Aggregate])* (exposedAggregatesComment=SL_COMMENT)?) &
+				(('exposedAggregates' ('=')? upstreamExposedAggregates+=[Aggregate]) ("," upstreamExposedAggregates+=[Aggregate])*) &
 				('downstreamRights' ('=')? downstreamGovernanceRights=DownstreamGovernanceRights)
 			)
 		CLOSE)?
@@ -302,25 +302,22 @@ ValueRegister:
 			(values+=Value) |
 			(valueEpics+=ValueEpic) |
 			(valueNarratives+=ValueNarrative) |
-			(valueWeightings+=ValueWeigthing)
+			(valueWeightings+=ValueWeighting)
 		)*
 	CLOSE)?
 ;
 
 ValueCluster:
 	'ValueCluster' name=ID (OPEN
+		// required value first, then optional values
+		(('core' ('=')? coreValue7000=CoreValue) | ('core' ('=')? coreValue=STRING))
 		(
-			(('core' ('=')? coreValue7000=CoreValue) | ('core' ('=')? coreValue=STRING)) &
-			(
-				('demonstrator' ('=')? demonstrators+=STRING) |
-				('relatedValue' ('=')? relatedValues+=STRING) |
-				('opposingValue' ('=')? opposingValues+=STRING)
-			)*
-			(
-				(values+=Value) |
-				(elicitations+=ValueElicitation)
-			)*
-		)
+			('demonstrator' ('=')? demonstrators+=STRING) |
+			('relatedValue' ('=')? relatedValues+=STRING) |
+			('opposingValue' ('=')? opposingValues+=STRING) |
+			(values+=Value) |
+			(elicitations+=ValueElicitation)
+		)*
 	CLOSE)?
 ;
 
@@ -330,9 +327,9 @@ Value:
 			(coreValue+='isCore') |
 			('demonstrator' ('=')? demonstrators+=STRING) |
 			('relatedValue' ('=')? relatedValues+=STRING) |
-			('opposingValue' ('=')? opposingValues+=STRING)
+			('opposingValue' ('=')? opposingValues+=STRING) |
+			(elicitations+=ValueElicitation)
 		)*
-		(elicitations+=ValueElicitation)*
 	CLOSE)?
 ;
 
@@ -370,8 +367,8 @@ ValueNarrative:
 	CLOSE)
 ;
 
-ValueWeigthing:
-	'ValueWeigthing' name=ID (OPEN
+ValueWeighting:
+	'ValueWeighting' name=ID (OPEN
 		(
 			'In the context of the SOI,' 
     		'stakeholder' stakeholder=[AbstractStakeholder] 'values' value1=STRING 'more than' value2=STRING
