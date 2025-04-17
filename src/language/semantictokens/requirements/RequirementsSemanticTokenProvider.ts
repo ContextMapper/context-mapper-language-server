@@ -9,7 +9,7 @@ import { SemanticTokenAcceptor } from 'langium/lsp'
 import {
   highlightAttribute,
   highlightKeyword,
-  highlightMemberAttribute,
+  highlightField,
   highlightTypeDeclaration
 } from '../HighlightingHelper.js'
 import { SemanticTokenTypes } from 'vscode-languageserver-types'
@@ -33,11 +33,11 @@ export class RequirementsSemanticTokenProvider implements ContextMapperSemanticT
     highlightTypeDeclaration(node, acceptor, 'UseCase')
 
     if (node.role) {
-      highlightMemberAttribute(node, acceptor, ['actor'], 'role')
+      highlightField(node, acceptor, ['actor'], 'role')
     }
 
     if (node.secondaryActors.length > 0) {
-      highlightMemberAttribute(node, acceptor, ['secondaryActors'], 'secondaryActors', SemanticTokenTypes.string)
+      highlightField(node, acceptor, ['secondaryActors'], 'secondaryActors', SemanticTokenTypes.string)
     }
 
     if (node.features.length > 0) {
@@ -45,15 +45,15 @@ export class RequirementsSemanticTokenProvider implements ContextMapperSemanticT
     }
 
     if (node.benefit) {
-      highlightMemberAttribute(node, acceptor, ['benefit'], 'benefit', SemanticTokenTypes.string)
+      highlightField(node, acceptor, ['benefit'], 'benefit', SemanticTokenTypes.string)
     }
 
     if (node.scope) {
-      highlightMemberAttribute(node, acceptor, ['scope'], 'scope', SemanticTokenTypes.string)
+      highlightField(node, acceptor, ['scope'], 'scope', SemanticTokenTypes.string)
     }
 
     if (node.level) {
-      highlightMemberAttribute(node, acceptor, ['level'], 'level', SemanticTokenTypes.string)
+      highlightField(node, acceptor, ['level'], 'level', SemanticTokenTypes.string)
     }
   }
 
@@ -65,11 +65,11 @@ export class RequirementsSemanticTokenProvider implements ContextMapperSemanticT
     }
 
     if (node.role) {
-      highlightMemberAttribute(node, acceptor, ['As a', 'As an'], 'role', SemanticTokenTypes.string)
+      highlightField(node, acceptor, ['As a', 'As an'], 'role', SemanticTokenTypes.string)
     }
 
     if (node.benefit) {
-      highlightMemberAttribute(node, acceptor, ['so that'], 'benefit', SemanticTokenTypes.string)
+      highlightField(node, acceptor, ['so that'], 'benefit', SemanticTokenTypes.string)
     }
   }
 }

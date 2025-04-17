@@ -28,7 +28,7 @@ import { ValueRegisterSemanticTokenProvider } from './vdad/ValueRegisterSemantic
 import { ValueWeightingSemanticTokenProvider } from './vdad/ValueWeightingSemanticTokenProvider.js'
 
 export class ContextMapperDslSemanticTokenProvider extends AbstractSemanticTokenProvider {
-  private semanticTokenProviders: ContextMapperSemanticTokenProvider<AstNode>[] = [
+  private readonly semanticTokenProviders: ContextMapperSemanticTokenProvider<AstNode>[] = [
     new AggregateSemanticTokenProvider(),
     new BoundedContextSemanticTokenProvider(),
     new SculptorModuleSemanticTokenProvider(),
@@ -53,11 +53,9 @@ export class ContextMapperDslSemanticTokenProvider extends AbstractSemanticToken
 
   protected override highlightElement (node: AstNode, acceptor: SemanticTokenAcceptor) {
     if (isContextMappingModel(node)) {
-      const modelNode = node as ContextMappingModel
-
-      if (modelNode.$cstNode) {
-        this.highlightComments(/\/\*[\s\S]*?\*\//g, modelNode, acceptor)
-        this.highlightComments(/\/\/[^\n\r]*/g, modelNode, acceptor)
+      if (node.$cstNode) {
+        this.highlightComments(/\/\*[\s\S]*?\*\//g, node, acceptor)
+        this.highlightComments(/\/\/[^\n\r]*/g, node, acceptor)
       }
     } else {
       for (const provider of this.semanticTokenProviders) {
@@ -72,12 +70,15 @@ export class ContextMapperDslSemanticTokenProvider extends AbstractSemanticToken
   }
 
   private highlightComments (regex: RegExp, node: ContextMappingModel, acceptor: SemanticTokenAcceptor) {
-    const text = node.$document!!.textDocument.getText()
+    if (node.$document == null) {
+      throw new Error('Document not found')
+    }
+    const text = node.$document.textDocument.getText()
     for (const match of text.matchAll(regex)) {
-      if (match == null || match.index == null) {
+      if (match?.index == null) {
         continue
       }
-      const position = node.$document!!.textDocument.positionAt(match.index)
+      const position = node.$document.textDocument.positionAt(match.index)
       acceptor({
         type: SemanticTokenTypes.comment,
         line: position.line,

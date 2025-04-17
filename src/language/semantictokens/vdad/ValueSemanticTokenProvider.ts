@@ -5,7 +5,7 @@ import {
 import { SemanticTokenAcceptor } from 'langium/lsp'
 import {
   highlightKeyword,
-  highlightMemberAttribute,
+  highlightField,
   highlightTypeDeclaration
 } from '../HighlightingHelper.js'
 import { SemanticTokenTypes } from 'vscode-languageserver-types'
@@ -25,15 +25,15 @@ export class ValueSemanticTokenProvider implements ContextMapperSemanticTokenPro
     }
 
     if (node.demonstrators.length > 0) {
-      highlightMemberAttribute(node, acceptor, ['demonstrator'], 'demonstrators', SemanticTokenTypes.string)
+      highlightField(node, acceptor, ['demonstrator'], 'demonstrators', SemanticTokenTypes.string)
     }
 
     if (node.relatedValues.length > 0) {
-      highlightMemberAttribute(node, acceptor, ['relatedValue'], 'relatedValues', SemanticTokenTypes.string)
+      highlightField(node, acceptor, ['relatedValue'], 'relatedValues', SemanticTokenTypes.string)
     }
 
     if (node.opposingValues.length > 0) {
-      highlightMemberAttribute(node, acceptor, ['opposingValue'], 'opposingValues', SemanticTokenTypes.string)
+      highlightField(node, acceptor, ['opposingValue'], 'opposingValues', SemanticTokenTypes.string)
     }
   }
 }

@@ -2,7 +2,7 @@ import { afterEach, beforeAll, describe, expect, test } from 'vitest'
 import { EmptyFileSystem, type LangiumDocument } from 'langium'
 import { clearDocuments, parseHelper } from 'langium/test'
 import { createContextMapperDslServices } from '../../src/language/ContextMapperDslModule.js'
-import { ContextMappingModel, isSharedKernel, SharedKernel } from '../../src/language/generated/ast.js'
+import { ContextMappingModel, isSharedKernel } from '../../src/language/generated/ast.js'
 import { checkDocumentValid } from '../TestHelper.js'
 
 let services: ReturnType<typeof createContextMapperDslServices>
@@ -38,8 +38,8 @@ describe('Bounded context linking tests', () => {
 
     document.parseResult.value.contextMaps[0].relationships.forEach(r => {
       if (isSharedKernel(r)) {
-        referencedContexts.push((r as SharedKernel).participant1.ref?.name)
-        referencedContexts.push((r as SharedKernel).participant2.ref?.name)
+        referencedContexts.push(r.participant1.ref?.name)
+        referencedContexts.push(r.participant2.ref?.name)
       }
     })
 

@@ -8,7 +8,7 @@ import {
 } from '../../generated/ast.js'
 import { AstNode } from 'langium'
 import { SemanticTokenAcceptor } from 'langium/lsp'
-import { highlightMemberAttribute, highlightTypeDeclaration } from '../HighlightingHelper.js'
+import { highlightField, highlightTypeDeclaration } from '../HighlightingHelper.js'
 import { SemanticTokenTypes } from 'vscode-languageserver-types'
 
 export class AbstractStakeholderSemanticTokenProvider implements ContextMapperSemanticTokenProvider<AbstractStakeholder> {
@@ -28,15 +28,15 @@ export class AbstractStakeholderSemanticTokenProvider implements ContextMapperSe
     highlightTypeDeclaration(node, acceptor, 'Stakeholder')
 
     if (node.influence) {
-      highlightMemberAttribute(node, acceptor, ['influence'], 'influence')
+      highlightField(node, acceptor, ['influence'], 'influence')
     }
 
     if (node.interest) {
-      highlightMemberAttribute(node, acceptor, ['interest'], 'interest')
+      highlightField(node, acceptor, ['interest'], 'interest')
     }
 
     if (node.description) {
-      highlightMemberAttribute(node, acceptor, ['description'], 'description', SemanticTokenTypes.string)
+      highlightField(node, acceptor, ['description'], 'description', SemanticTokenTypes.string)
     }
   }
 

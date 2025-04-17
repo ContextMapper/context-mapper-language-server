@@ -3,7 +3,7 @@ import { isSculptorModule, SculptorModule } from '../../generated/ast.js'
 import { SemanticTokenAcceptor } from 'langium/lsp'
 import {
   highlightKeyword,
-  highlightMemberAttribute,
+  highlightField,
   highlightString,
   highlightTypeDeclaration
 } from '../HighlightingHelper.js'
@@ -26,11 +26,11 @@ export class SculptorModuleSemanticTokenProvider implements ContextMapperSemanti
     }
 
     if (node.basePackage) {
-      highlightMemberAttribute(node, acceptor, ['basePackage'], 'basePackage', SemanticTokenTypes.namespace)
+      highlightField(node, acceptor, ['basePackage'], 'basePackage', SemanticTokenTypes.namespace)
     }
 
     if (node.hint) {
-      highlightMemberAttribute(node, acceptor, ['hint'], 'hint', SemanticTokenTypes.string)
+      highlightField(node, acceptor, ['hint'], 'hint', SemanticTokenTypes.string)
     }
   }
 }

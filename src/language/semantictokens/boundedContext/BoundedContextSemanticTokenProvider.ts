@@ -3,7 +3,7 @@ import { BoundedContext, isBoundedContext } from '../../generated/ast.js'
 import { SemanticTokenTypes } from 'vscode-languageserver-types'
 import {
   highlightAttribute,
-  highlightMemberAttribute,
+  highlightField,
   highlightTypeDeclaration
 } from '../HighlightingHelper.js'
 import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticTokenProvider.js'
@@ -30,31 +30,31 @@ export class BoundedContextSemanticTokenProvider implements ContextMapperSemanti
     }
 
     if (node.domainVisionStatement) {
-      highlightMemberAttribute(node, acceptor, ['domainVisionStatement'], 'domainVisionStatement', SemanticTokenTypes.string)
+      highlightField(node, acceptor, ['domainVisionStatement'], 'domainVisionStatement', SemanticTokenTypes.string)
     }
 
     if (node.type) {
-      highlightMemberAttribute(node, acceptor, ['type'], 'type')
+      highlightField(node, acceptor, ['type'], 'type')
     }
 
     if (node.responsibilities) {
-      highlightMemberAttribute(node, acceptor, ['responsibilities'], 'responsibilities', SemanticTokenTypes.string)
+      highlightField(node, acceptor, ['responsibilities'], 'responsibilities', SemanticTokenTypes.string)
     }
 
     if (node.implementationTechnology) {
-      highlightMemberAttribute(node, acceptor, ['implementationTechnology'], 'implementationTechnology', SemanticTokenTypes.string)
+      highlightField(node, acceptor, ['implementationTechnology'], 'implementationTechnology', SemanticTokenTypes.string)
     }
 
     if (node.knowledgeLevel) {
-      highlightMemberAttribute(node, acceptor, ['knowledgeLevel'], 'knowledgeLevel')
+      highlightField(node, acceptor, ['knowledgeLevel'], 'knowledgeLevel')
     }
 
     if (node.businessModel) {
-      highlightMemberAttribute(node, acceptor, ['businessModel'], 'businessModel', SemanticTokenTypes.string)
+      highlightField(node, acceptor, ['businessModel'], 'businessModel', SemanticTokenTypes.string)
     }
 
     if (node.evolution) {
-      highlightMemberAttribute(node, acceptor, ['evolution'], 'evolution')
+      highlightField(node, acceptor, ['evolution'], 'evolution')
     }
   }
 }

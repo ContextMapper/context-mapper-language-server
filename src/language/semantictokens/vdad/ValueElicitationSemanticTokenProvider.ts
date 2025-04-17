@@ -2,7 +2,7 @@ import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticToke
 import { isValueElicitation, ValueElicitation } from '../../generated/ast.js'
 import { AstNode } from 'langium'
 import { SemanticTokenAcceptor } from 'langium/lsp'
-import { highlightKeyword, highlightMemberAttribute, highlightType } from '../HighlightingHelper.js'
+import { highlightKeyword, highlightField, highlightType } from '../HighlightingHelper.js'
 
 export class ValueElicitationSemanticTokenProvider implements ContextMapperSemanticTokenProvider<ValueElicitation> {
   supports (node: AstNode): node is ValueElicitation {
@@ -15,11 +15,11 @@ export class ValueElicitationSemanticTokenProvider implements ContextMapperSeman
     highlightType(node, acceptor, 'stakeholder')
 
     if (node.priority) {
-      highlightMemberAttribute(node, acceptor, ['priority'], 'priority')
+      highlightField(node, acceptor, ['priority'], 'priority')
     }
 
     if (node.impact) {
-      highlightMemberAttribute(node, acceptor, ['impact'], 'impact')
+      highlightField(node, acceptor, ['impact'], 'impact')
     }
 
     if (node.consequences.length > 0) {
