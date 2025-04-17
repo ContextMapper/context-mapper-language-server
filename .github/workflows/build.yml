@@ -21,7 +21,7 @@ jobs:
       - name: Prepare debian
         run: |
           apt update
-          apt install -y git wget unzip
+          apt install -y git
       # required since test report action uses git
       - name: Setup git
         run: |
@@ -50,11 +50,6 @@ jobs:
           name: Langium Test Results
           path: out/test-results.xml
           reporter: java-junit
-
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Build
         run: yarn build
