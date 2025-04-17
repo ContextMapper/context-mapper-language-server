@@ -18,14 +18,6 @@ export function highlightKeyword (node: AstNode, acceptor: SemanticTokenAcceptor
   })
 }
 
-export function highlightProperty (node: AstNode, acceptor: SemanticTokenAcceptor, property: string) {
-  acceptor({
-    node,
-    type: SemanticTokenTypes.property,
-    property
-  })
-}
-
 export function highlightType (node: AstNode, acceptor: SemanticTokenAcceptor, property: string, modifiers: string[] = []) {
   acceptor({
     node,
@@ -42,7 +34,7 @@ export function highlightTypeDeclaration (node: AstNode, acceptor: SemanticToken
   }
 }
 
-export function highlightMemberAttribute (node: AstNode, acceptor: SemanticTokenAcceptor, keywords: string[], property: string, type: SemanticTokenTypes = SemanticTokenTypes.property) {
+export function highlightMemberAttribute (node: AstNode, acceptor: SemanticTokenAcceptor, keywords: string[], property: string, type: SemanticTokenTypes = SemanticTokenTypes.enumMember) {
   keywords.forEach(keyword => highlightKeyword(node, acceptor, keyword))
   acceptor({
     node,
