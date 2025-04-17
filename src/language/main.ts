@@ -1,8 +1,7 @@
 import { startLanguageServer } from 'langium/lsp'
 import { NodeFileSystem } from 'langium/node'
-// eslint-disable-next-line import/extensions
 import { createConnection, ProposedFeatures } from 'vscode-languageserver/node.js'
-import { createContextMapperDslServices } from './context-mapper-dsl-module.js'
+import { createContextMapperDslServices } from './ContextMapperDslModule.js'
 
 // Create a connection to the client
 const connection = createConnection(ProposedFeatures.all)

@@ -1,57 +1,75 @@
 grammar ContextMapperDsl
 
-hidden terminal WS: /\s+/;
 terminal ID: /[_a-zA-Z][\w_]*/;
 terminal STRING: /"(\\.|[^"\\])*"|'(\\.|[^'\\])*'/;
-
 terminal ML_COMMENT: /\/\*[\s\S]*?\*\//;
 terminal SL_COMMENT: /\/\/[^\n\r]*/;
 
 terminal OPEN: '{';
 terminal CLOSE: '}';
 
+hidden terminal WS: /\s+/;
+hidden terminal HIDDEN_ML_COMMENT: ML_COMMENT;
+hidden terminal HIDDEN_SL_COMMENT: SL_COMMENT;
+
 entry ContextMappingModel:
-	(topComment=SL_COMMENT | topComment=ML_COMMENT)?
-	(imports+=Import)*
-	(map=ContextMap)?
-	(boundedContexts+=BoundedContext)*
-	(domains+=Domain)*
-	(userRequirements+=UserRequirement)*
-	(stakeholders+=Stakeholders)*
-	(valueRegisters+=ValueRegister)*
+	(
+		(contextMaps+=ContextMap) |
+		(boundedContexts+=BoundedContext) |
+		(domains+=Domain) |
+		(userRequirements+=UserRequirement) |
+		(stakeholders+=Stakeholders) |
+		(valueRegisters+=ValueRegister)
+	)*
 ;
 
-Import:
-	'import' importURI=STRING;
+/*
+ In Langium, elements in unordered groups are optional by default.
+ However, the usage of the ? cardinality is not allowed in unordered groups.
+ Therefore, to create a rule with optional, unordered elements, one needs to omit the ? operator and combine them with the & operator.
+ This behavior may change in the future.
+ Also, unordered groups may cause unreadable parsing errors. To resolve that, unordered groups can be replaced with a (A | B | C)* rule and enforce non-repetition of elements with a validator.
+ https://github.com/eclipse-langium/langium/discussions/1903
+ */
 
 ContextMap:
-	{infer ContextMap} // make sure there is always a context map
+	// {ContextMap} make sure there is always a context map
 	'ContextMap' (name=ID)?
 	OPEN
-		('type' ('=')? type=ContextMapType)?
-        ('state' ('=')? state=ContextMapState)?
+		(
+			('type' ('=')? type=ContextMapType) &
+			('state' ('=')? state=ContextMapState)
+		)
 		('contains' boundedContexts+=[BoundedContext] ("," boundedContexts+=[BoundedContext])*)*
 		relationships+=Relationship*
 	CLOSE
 ;
 
 BoundedContext:
-	(comment=ML_COMMENT | comment=SL_COMMENT)?
 	'BoundedContext' name=ID (
-		('implements' (implementedDomainParts+=[DomainPart]) ("," implementedDomainParts+=[DomainPart])*)?
-		('realizes' (realizedBoundedContexts+=[BoundedContext]) ("," realizedBoundedContexts+=[BoundedContext])*)?
-		('refines' refinedBoundedContext=[BoundedContext])?
+		(
+			('implements' (implementedDomainParts+=[DomainPart]) ("," implementedDomainParts+=[DomainPart])*) &
+			('realizes' (realizedBoundedContexts+=[BoundedContext]) ("," realizedBoundedContexts+=[BoundedContext])*) &
+			('refines' refinedBoundedContext=[BoundedContext])
+		)
 	)
 	(
 		OPEN
-			('domainVisionStatement' ('=')? domainVisionStatement=STRING)?
-			('type' ('=')? type=BoundedContextType)?
-			(('responsibilities' ('=')? responsibilities+=STRING) ("," responsibilities+=STRING)*)?
-			('implementationTechnology' ('=')? implementationTechnology=STRING)?
-			('knowledgeLevel' ('=')? knowledgeLevel=KnowledgeLevel)?
-			('businessModel' ('=')? businessModel=STRING)?
-            ('evolution' ('=')? evolution=Evolution)?
-			(aggregates+=Aggregate)*
+			(
+				('domainVisionStatement' ('=') domainVisionStatement=STRING) &
+				('type' ('=') type=BoundedContextType) &
+				(('responsibilities' ('=')? responsibilities+=STRING) ("," responsibilities+=STRING)*) &
+				('implementationTechnology' ('=') implementationTechnology=STRING) &
+				('knowledgeLevel' ('=') knowledgeLevel=KnowledgeLevel) &
+				('businessModel' ('=') businessModel=STRING) &
+				('evolution' ('=') evolution=Evolution)
+			)
+			(
+				(
+					modules+=SculptorModule |
+					aggregates+=Aggregate
+				)* 
+			)
 		CLOSE
 	)?
 ;
@@ -74,14 +92,15 @@ Subdomain:
 	'Subdomain' name=ID ('supports' (supportedFeatures+=[UserRequirement]) ("," supportedFeatures+=[UserRequirement])*)?
 	(
 		OPEN
-			(('type' ('=')? type=SubDomainType)?
-			('domainVisionStatement' ('=')? domainVisionStatement=STRING)?)
+			(
+				('type' ('=')? type=SubDomainType) &
+				('domainVisionStatement' ('=')? domainVisionStatement=STRING)
+			)
 		CLOSE
 	)?
 ;
 
 Relationship:
-	(comment=ML_COMMENT | comment=SL_COMMENT)?
 	SymmetricRelationship | UpstreamDownstreamRelationship
 ;
 
@@ -128,11 +147,12 @@ UpstreamDownstreamRelationship:
 			(downstream=[BoundedContext] ('['((downstreamRoles+=DownstreamRole) ("," downstreamRoles+=DownstreamRole)*)?']')?'Downstream-Upstream'('['((upstreamRoles+=UpstreamRole) ("," upstreamRoles+=UpstreamRole)*)?']')? upstream=[BoundedContext])
 		)
 		(':' name=ID)?
-		(OPEN (
-			('implementationTechnology' ('=')? implementationTechnology=STRING)?
-			(('exposedAggregates' ('=')? upstreamExposedAggregates+=[Aggregate]) ("," upstreamExposedAggregates+=[Aggregate])* (exposedAggregatesComment=SL_COMMENT)?)?
-			('downstreamRights' ('=')? downstreamGovernanceRights=DownstreamGovernanceRights)?
-		)
+		(OPEN 
+			(
+				('implementationTechnology' ('=')? implementationTechnology=STRING) &
+				(('exposedAggregates' ('=')? upstreamExposedAggregates+=[Aggregate]) ("," upstreamExposedAggregates+=[Aggregate])*) &
+				('downstreamRights' ('=')? downstreamGovernanceRights=DownstreamGovernanceRights)
+			)
 		CLOSE)?
 	)
 ;
@@ -146,36 +166,36 @@ CustomerSupplierRelationship:
 			(upstream=[BoundedContext] ('['((upstreamRoles+=UpstreamRole) ("," upstreamRoles+=UpstreamRole)*)?']')?'Supplier-Customer'('['((downstreamRoles+=DownstreamRole) ("," downstreamRoles+=DownstreamRole)*)?']')? downstream=[BoundedContext])
 		)
 		(':' name=ID)?
-		(OPEN (
-			('implementationTechnology' ('=')? implementationTechnology=STRING)?
-			(('exposedAggregates' ('=')? upstreamExposedAggregates+=[Aggregate]) ("," upstreamExposedAggregates+=[Aggregate])* (exposedAggregatesComment=SL_COMMENT)?)?
-			('downstreamRights' ('=')? downstreamGovernanceRights=DownstreamGovernanceRights)?
-		)
+		(OPEN 
+			(
+				('implementationTechnology' ('=')? implementationTechnology=STRING) &
+				(('exposedAggregates' ('=')? upstreamExposedAggregates+=[Aggregate]) ("," upstreamExposedAggregates+=[Aggregate])* (exposedAggregatesComment=SL_COMMENT)?) &
+				('downstreamRights' ('=')? downstreamGovernanceRights=DownstreamGovernanceRights)
+			)
 		CLOSE)?
 	)
 ;
 
 Aggregate:
-	(comment=ML_COMMENT)?
-  (doc=STRING)?
+	(doc=STRING)?
   "Aggregate" name=ID (OPEN
     (
-    	(('responsibilities' ('=')? responsibilities+=STRING) ("," responsibilities+=STRING)*)?
+    	(('responsibilities' ('=')? responsibilities+=STRING) ("," responsibilities+=STRING)*) &
     	(
     		(('useCases' ('=')? userRequirements+=[UseCase]) ("," userRequirements+=[UseCase])*) |
     		(('userStories' ('=')? userRequirements+=[UserStory]) ("," userRequirements+=[UserStory])*) |
     		((('features' | 'userRequirements') ('=')? userRequirements+=[UserRequirement]) ("," userRequirements+=[UserRequirement])*)
-    	)?
-    	('owner' ('=')? owner=[BoundedContext])?
-    	('knowledgeLevel' ('=')? knowledgeLevel=KnowledgeLevel)?
-    	(('likelihoodForChange' | 'structuralVolatility') ('=')? likelihoodForChange=Volatility)?
-    	('contentVolatility' ('=')? contentVolatility=Volatility)?
-    	('availabilityCriticality' ('=')? availabilityCriticality=Criticality)?
-    	('consistencyCriticality' ('=')? consistencyCriticality=Criticality)?
-    	('storageSimilarity' ('=')? storageSimilarity=Similarity)?
-    	('securityCriticality' ('=')? securityCriticality=Criticality)?
-    	('securityZone' ('=')? securityZone=STRING)?
-    	('securityAccessGroup' ('=')? securityAccessGroup=STRING)?
+    	) &
+    	('owner' ('=')? owner=[BoundedContext]) &
+    	('knowledgeLevel' ('=')? knowledgeLevel=KnowledgeLevel) &
+    	(('likelihoodForChange' | 'structuralVolatility') ('=')? likelihoodForChange=Volatility) &
+    	('contentVolatility' ('=')? contentVolatility=Volatility) &
+    	('availabilityCriticality' ('=')? availabilityCriticality=Criticality) &
+    	('consistencyCriticality' ('=')? consistencyCriticality=Criticality) &
+    	('storageSimilarity' ('=')? storageSimilarity=Similarity) &
+    	('securityCriticality' ('=')? securityCriticality=Criticality) &
+    	('securityZone' ('=')? securityZone=STRING) &
+    	('securityAccessGroup' ('=')? securityAccessGroup=STRING)
     )
   CLOSE)?
 ;
@@ -186,12 +206,14 @@ UserRequirement:
 
 UseCase:
 	'UseCase' name=ID (OPEN
-		(('actor' ('=')? role=STRING)?
-		('secondaryActors' ('=')? secondaryActors+=STRING ("," secondaryActors+=STRING)*)?
-		('interactions' ('=')? features+=Feature ("," features+=Feature)*)?
-		('benefit' ('=')? benefit=STRING)?
-		('scope' ('=')? scope=STRING)?
-		('level' ('=')? level=STRING)?)
+		(
+			('actor' ('=')? role=STRING) &
+			('secondaryActors' ('=')? secondaryActors+=STRING ("," secondaryActors+=STRING)*) &
+			('interactions' ('=')? features+=Feature ("," features+=Feature)*) &
+			('benefit' ('=')? benefit=STRING) &
+			('scope' ('=')? scope=STRING) &
+			('level' ('=')? level=STRING)
+		)
 	CLOSE)?
 ;
 
@@ -218,12 +240,33 @@ StoryValuation:
 	'accepting that' harmedValues+=STRING (',' harmedValues+=STRING)* ('is' | 'are') ('reduced' | 'harmed')
 ;
 
-terminal UserActivityDefaultVerb:
+UserActivityDefaultVerb returns string:
 	'create' | 'read' | 'update' | 'delete'
 ;
 
+SculptorModule:
+    (doc=STRING)?
+	'Module' name=ID  (
+		OPEN 
+			(
+				(external?='external') &
+				('basePackage' '=' basePackage=JavaIdentifier) &
+				('hint' '=' hint=STRING)
+			)
+			(
+				(aggregates+=Aggregate) 
+			)*
+		CLOSE 
+	)?  
+;
+
+JavaIdentifier returns string:
+    (ID ("." ID )* ) 
+;
+
 Stakeholders:
-	{infer Stakeholders} 'Stakeholders' ('of' (contexts+=[BoundedContext]) (',' contexts+=[BoundedContext])*)? (OPEN
+	// {Stakeholders}
+	'Stakeholders' ('of' (contexts+=[BoundedContext]) (',' contexts+=[BoundedContext])*)? (OPEN
 		(
 			(stakeholders+=AbstractStakeholder)*
 		)
@@ -237,7 +280,7 @@ AbstractStakeholder:
 StakeholderGroup:
 	'StakeholderGroup' name=ID (OPEN
 		(
-			(stakeholders+=Stakeholder)*
+			(stakeholders+=Stakeholder)*	
 		)
 	CLOSE)?
 ;
@@ -245,9 +288,9 @@ StakeholderGroup:
 Stakeholder:
 	'Stakeholder' name=ID (OPEN
 		(
-			('influence' ('=')? influence=INFLUENCE)?
-			('interest' ('=')? interest=INTEREST)?
-			('description' ('=')? description=STRING)?
+			('influence' ('=')? influence=INFLUENCE) &
+			('interest' ('=')? interest=INTEREST) &
+			('description' ('=')? description=STRING)
 		)
 	CLOSE)?
 ;
@@ -255,48 +298,47 @@ Stakeholder:
 ValueRegister:
 	'ValueRegister' name=ID ('for' context=[BoundedContext])? (OPEN
 		(
-			(valueClusters+=ValueCluster)*
-			(values+=Value)*
-			(valueEpics+=ValueEpic)*
-			(valueNarratives+=ValueNarrative)*
-			(valueWeightings+=ValueWeigthing)*
-		)
+			(valueClusters+=ValueCluster) |
+			(values+=Value) |
+			(valueEpics+=ValueEpic) |
+			(valueNarratives+=ValueNarrative) |
+			(valueWeightings+=ValueWeighting)
+		)*
 	CLOSE)?
 ;
 
 ValueCluster:
 	'ValueCluster' name=ID (OPEN
+		// required value first, then optional values
+		(('core' ('=')? coreValue7000=CoreValue) | ('core' ('=')? coreValue=STRING))
 		(
-			(('core' ('=')? coreValue7000=CoreValue) | ('core' ('=')? coreValue=STRING))
-			('demonstrator' ('=')? demonstrators+=STRING)*
-			('relatedValue' ('=')? relatedValues+=STRING)*
-			('opposingValue' ('=')? opposingValues+=STRING)*
-			(values+=Value)*
-			(elicitations+=ValueElicitation)*
-		)
+			('demonstrator' ('=')? demonstrators+=STRING) |
+			('relatedValue' ('=')? relatedValues+=STRING) |
+			('opposingValue' ('=')? opposingValues+=STRING) |
+			(values+=Value) |
+			(elicitations+=ValueElicitation)
+		)*
 	CLOSE)?
 ;
 
 Value:
 	'Value' name=ID (OPEN
 		(
-			(coreValue?='isCore')?
-			('demonstrator' ('=')? demonstrators+=STRING)*
-			('relatedValue' ('=')? relatedValues+=STRING)*
-			('opposingValue' ('=')? opposingValues+=STRING)*
-			(elicitations+=ValueElicitation)*
-		)
+			(coreValue+='isCore') |
+			('demonstrator' ('=')? demonstrators+=STRING) |
+			('relatedValue' ('=')? relatedValues+=STRING) |
+			('opposingValue' ('=')? opposingValues+=STRING) |
+			(elicitations+=ValueElicitation)
+		)*
 	CLOSE)?
 ;
-
-// Q: table B.1  abbilden? if, how?
 
 ValueElicitation:
 	('Stakeholder'|'Stakeholders') stakeholder=[AbstractStakeholder] (OPEN
 		(
-			('priority' ('=')? priority=PRIORITY)?
-			('impact' ('=')? impact=IMPACT)?
-			('consequences' (consequences+=Consequence)+)?
+			('priority' ('=')? priority=PRIORITY) &
+			('impact' ('=')? impact=IMPACT) &
+			('consequences' (consequences+=Consequence)+)
 		)
 	CLOSE)?
 ;
@@ -305,9 +347,11 @@ ValueElicitation:
 ValueEpic:
 	'ValueEpic' name=ID (OPEN
     	(
-    		'As a' stakeholder=[AbstractStakeholder] 'I value' value=STRING 'as demonstrated in'
-    		(('realization of' realizedValues+=STRING)+
-    		('reduction of' reducedValues+=STRING)+)
+    		'As a' stakeholder=[AbstractStakeholder] 'I value' value=STRING 'as demonstrated in' 
+    		(
+				('realization of' realizedValues+=STRING)+ & 
+    			('reduction of' reducedValues+=STRING)+
+			)	
     	)
 	CLOSE)?
 ;
@@ -317,19 +361,19 @@ ValueNarrative:
 		(
 			'When the SOI executes' feature=STRING ','
 	    	'stakeholders expect it to promote, protect or create' promotedValues=STRING ','
-	    	'possibly degrading or prohibiting' harmedValues=STRING
-	    	'with the following externally observable and/or internally auditable behavior:' preAndPostConditions=STRING
+	    	'possibly degrading or prohibiting' harmedValues=STRING 
+	    	'with the following externally observable and/or internally auditable behavior:' preAndPostConditions=STRING	
 		)
 	CLOSE)
 ;
 
-ValueWeigthing:
-	'ValueWeigthing' name=ID (OPEN
+ValueWeighting:
+	'ValueWeighting' name=ID (OPEN
 		(
-			'In the context of the SOI,'
+			'In the context of the SOI,' 
     		'stakeholder' stakeholder=[AbstractStakeholder] 'values' value1=STRING 'more than' value2=STRING
-    		'expecting benefits such as' benefits=STRING
-    		'running the risk of harms such as' harms=STRING
+    		'expecting benefits such as' benefits=STRING 
+    		'running the risk of harms such as' harms=STRING	
 		)
 	CLOSE)
 ;
@@ -343,71 +387,70 @@ Action:
 ;
 
 
-UpstreamRole:
-	PUBLISHED_LANGUAGE='PL' | OPEN_HOST_SERVICE='OHS'
+UpstreamRole returns string:
+	'PL'| 'OHS'
 ;
 
-DownstreamRole:
-	ANTICORRUPTION_LAYER='ACL' | CONFORMIST='CF'
+DownstreamRole returns string:
+	'ACL' | 'CF'
 ;
 
-ContextMapState:
-	UNDEFINED='UNDEFINED' | AS_IS='AS_IS' | TO_BE='TO_BE'
+ContextMapState returns string:
+	'UNDEFINED' | 'AS_IS' | 'TO_BE'
 ;
 
-ContextMapType:
-	UNDEFINED='UNDEFINED' | SYSTEM_LANDSCAPE='SYSTEM_LANDSCAPE' | ORGANIZATIONAL='ORGANIZATIONAL'
+ContextMapType returns string:
+	'UNDEFINED' | 'SYSTEM_LANDSCAPE' | 'ORGANIZATIONAL'
 ;
 
-BoundedContextType:
-	UNDEFINED='UNDEFINED' | FEATURE='FEATURE' | APPLICATION='APPLICATION' | SYSTEM='SYSTEM' | TEAM='TEAM'
+BoundedContextType returns string:
+	'UNDEFINED' | 'FEATURE' | 'APPLICATION' | 'SYSTEM' | 'TEAM'
 ;
 
-SubDomainType:
-	UNDEFINED='UNDEFINED' | CORE_DOMAIN='CORE_DOMAIN' | SUPPORTING_DOMAIN='SUPPORTING_DOMAIN' | GENERIC_SUBDOMAIN='GENERIC_SUBDOMAIN'
+SubDomainType returns string:
+	'UNDEFINED' | 'CORE_DOMAIN' | 'SUPPORTING_DOMAIN' | 'GENERIC_SUBDOMAIN'
 ;
 
-DownstreamGovernanceRights:
-	INFLUENCER='INFLUENCER' | OPINION_LEADER='OPINION_LEADER' | VETO_RIGHT='VETO_RIGHT' | DECISION_MAKER='DECISION_MAKER' | MONOPOLIST='MONOPOLIST'
+DownstreamGovernanceRights returns string:
+	'INFLUENCER' | 'OPINION_LEADER' | 'VETO_RIGHT' | 'DECISION_MAKER' | 'MONOPOLIST'
 ;
 
-KnowledgeLevel:
-	META='META' | CONCRETE='CONCRETE'
+KnowledgeLevel returns string:
+	"META" | "CONCRETE"
 ;
 
-Volatility:
-	UNDEFINED='UNDEFINED' | NORMAL='NORMAL'| RARELY='RARELY' | OFTEN='OFTEN'
+Volatility returns string:
+	'UNDEFINED' | 'NORMAL' | 'RARELY' | 'OFTEN'
 ;
 
-Criticality:
-	UNDEFINED='UNDEFINED' | NORMAL='NORMAL' | HIGH='HIGH' | LOW='LOW'
+Criticality returns string:
+	'UNDEFINED' | 'NORMAL' | 'HIGH' | 'LOW'
 ;
 
-Similarity:
-	UNDEFINED='UNDEFINED' | NORMAL='NORMAL' | HUGE='HUGE' | TINY='TINY'
+Similarity returns string:
+	'UNDEFINED' | 'NORMAL' | 'HUGE' | 'TINY'
 ;
 
-Evolution:
-	UNDEFINED='UNDEFINED' | GENESIS='GENESIS' | CUSTOM_BUILT='CUSTOM_BUILT' | PRODUCT='PRODUCT' | COMMODITY='COMMODITY'
+Evolution returns string:
+	'UNDEFINED' | 'GENESIS' | 'CUSTOM_BUILT' | 'PRODUCT' | 'COMMODITY'
 ;
 
-INFLUENCE:
-	UNDEFINED='UNDEFINED' | HIGH='HIGH' | MEDIUM='MEDIUM' | LOW='LOW'
+INFLUENCE returns string:
+	'UNDEFINED' | 'HIGH' | 'MEDIUM' | 'LOW'
 ;
 
-INTEREST:
-	UNDEFINED='UNDEFINED' | HIGH='HIGH' | MEDIUM='MEDIUM' | LOW='LOW'
+INTEREST returns string:
+	'UNDEFINED' | 'HIGH' | 'MEDIUM' | 'LOW'
 ;
 
-PRIORITY:
-	UNDEFINED='UNDEFINED' | HIGH='HIGH' | MEDIUM='MEDIUM' | LOW='LOW'
+PRIORITY returns string:
+	'UNDEFINED' | 'HIGH' | 'MEDIUM' | 'LOW'
 ;
 
-IMPACT:
-	UNDEFINED='UNDEFINED' | HIGH='HIGH' | MEDIUM='MEDIUM' | LOW='LOW'
+IMPACT returns string:
+	'UNDEFINED' | 'HIGH' | 'MEDIUM' | 'LOW'
 ;
 
-CoreValue:
-	UNDEFINED='UNDEFINED' | AUTONOMY='AUTONOMY' | CARE='CARE' | CONTROL='CONTROL' | FAIRNESS='FAIRNESS' | INCLUSIVENESS='INCLUSIVENESS' | INNOVATION='INNOVATION' | PERFECTION='PERFECTION' | PRIVACY='PRIVACY' | RESPECT='RESPECT' | SUSTAINABILITY='SUSTAINABILITY' | TRANSPARENCY='TRANSPARENCY' | TRUST='TRUST'
+CoreValue returns string:
+	'UNDEFINED' | 'AUTONOMY' | 'CARE' | 'CONTROL' | 'FAIRNESS' | 'INCLUSIVENESS' | 'INNOVATION' | 'PERFECTION' | 'PRIVACY' | 'RESPECT' | 'SUSTAINABILITY' | 'TRANSPARENCY' | 'TRUST'
 ;
-
