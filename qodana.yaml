@@ -5,3 +5,5 @@ profile:
 include:
   - name: CheckDependencyLicenses
   - name: Eslint
+bootstrap: |
+  yarn install
