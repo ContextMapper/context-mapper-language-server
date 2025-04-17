@@ -20,6 +20,9 @@ jobs:
     container:
       image: node:22-alpine
     steps:
+      - name: Prepare alpine
+        run: apk add --no-cache bash
+
       # required since test report action uses git
       - name: Setup git
         run: |
