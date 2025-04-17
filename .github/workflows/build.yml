@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - '**'
+  pull_request:
+    types: [ opened, synchronize, reopened ]
   release:
     types: [published]
 
@@ -47,6 +49,11 @@ jobs:
           name: Langium Test Results
           path: out/test-results.xml
           reporter: java-junit
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Build
         run: yarn build
