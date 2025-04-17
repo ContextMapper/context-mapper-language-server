@@ -2,7 +2,7 @@ import { createContextMapperDslServices } from '../../src/language/ContextMapper
 import { parseHelper } from 'langium/test'
 import { ContextMappingModel } from '../../src/language/generated/ast.js'
 import { EmptyFileSystem } from 'langium'
-import { beforeAll, describe, expect, test } from 'vitest'
+import { beforeAll, describe, test } from 'vitest'
 import fs from 'fs'
 import { parseValidInput } from './ParsingTestHelper.js'
 import path from 'node:path'
