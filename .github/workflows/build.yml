@@ -16,12 +16,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: node:22-alpine
+      image: node:22-slim
     steps:
+      - name: Prepare debian
+        run: |
+          apt update
+          apt install -y git wget unzip
       # required since test report action uses git
       - name: Setup git
         run: |
-          apk --no-cache add git
           REPO_NAME=$(echo "${GITHUB_REPOSITORY}" | cut -d'/' -f2)
           git config --global --add safe.directory "/__w/$REPO_NAME/$REPO_NAME"
 
@@ -47,6 +50,11 @@ jobs:
           name: Langium Test Results
           path: out/test-results.xml
           reporter: java-junit
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Build
         run: yarn build

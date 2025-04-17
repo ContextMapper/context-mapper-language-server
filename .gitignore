@@ -5,6 +5,7 @@
 node_modules/
 out/
 dist/
+coverage/
 src/language/generated/
 syntaxes/
 .idea
