@@ -4,3 +4,6 @@ profile:
   name: qodana.recommended
 include:
   - name: CheckDependencyLicenses
+  - name: Eslint
+bootstrap: |
+  yarn install

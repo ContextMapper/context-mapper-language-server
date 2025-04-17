@@ -20,12 +20,12 @@ export class ValueClusterSemanticTokenProvider implements ContextMapperSemanticT
       highlightField(node, acceptor, ['core'], 'coreValue7000')
     }
 
-    if (node.demonstrators.length > 0) {
-      highlightField(node, acceptor, ['demonstrator'], 'demonstrators', SemanticTokenTypes.string)
-    }
-
     if (node.relatedValues.length > 0) {
       highlightField(node, acceptor, ['relatedValue'], 'relatedValues', SemanticTokenTypes.string)
+    }
+
+    if (node.demonstrators.length > 0) {
+      highlightField(node, acceptor, ['demonstrator'], 'demonstrators', SemanticTokenTypes.string)
     }
 
     if (node.opposingValues.length > 0) {
