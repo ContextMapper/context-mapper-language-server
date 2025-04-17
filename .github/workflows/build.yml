@@ -21,7 +21,7 @@ jobs:
       # required since test report action uses git
       - name: Setup git
         run: |
-          sudo apt update && sudo apt install -y git
+          apt update && apt install -y git
           REPO_NAME=$(echo "${GITHUB_REPOSITORY}" | cut -d'/' -f2)
           git config --global --add safe.directory "/__w/$REPO_NAME/$REPO_NAME"
 
