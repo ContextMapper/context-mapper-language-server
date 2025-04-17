@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - '**'
-  pull_request:
-    types: [ opened, synchronize, reopened ]
   release:
     types: [published]
 
@@ -23,7 +21,7 @@ jobs:
       # required since test report action uses git
       - name: Setup git
         run: |
-          apt install git-all
+          apt update && apt install git
           REPO_NAME=$(echo "${GITHUB_REPOSITORY}" | cut -d'/' -f2)
           git config --global --add safe.directory "/__w/$REPO_NAME/$REPO_NAME"
 
