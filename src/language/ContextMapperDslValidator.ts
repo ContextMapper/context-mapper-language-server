@@ -15,8 +15,8 @@ export function registerValidationChecks (registry: ValidationRegistry, validato
 }
 
 export class ContextMapperDslValidator {
-  private contextMappingModelValidator = new ContextMappingModelValidator()
-  private valueValidator = new ValueValidator()
+  private readonly contextMappingModelValidator = new ContextMappingModelValidator()
+  private readonly valueValidator = new ValueValidator()
 
   checkContextMappingModel (model: ContextMappingModel, acceptor: ValidationAcceptor) {
     this.contextMappingModelValidator.validate(model, acceptor)
