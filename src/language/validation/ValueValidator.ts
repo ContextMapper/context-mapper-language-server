@@ -1,14 +1,8 @@
-import { AbstractContextMapperValidator } from './AbstractContextMapperValidator.js'
-import { ContextMapperDslAstType, Value } from '../generated/ast.js'
-import { ValidationAcceptor, ValidationChecks } from 'langium'
+import { ContextMapperValidator } from './ContextMapperValidator.js'
+import { Value } from '../generated/ast.js'
+import { ValidationAcceptor } from 'langium'
 
-export class ValueValidator implements AbstractContextMapperValidator<Value> {
-  getChecks (): ValidationChecks<ContextMapperDslAstType> {
-    return {
-      Value: this.validate
-    }
-  }
-
+export class ValueValidator implements ContextMapperValidator<Value> {
   validate (node: Value, acceptor: ValidationAcceptor): void {
     if (node.coreValue.length > 1) {
       acceptor('error', 'There must be zero or one isCore attribute', {

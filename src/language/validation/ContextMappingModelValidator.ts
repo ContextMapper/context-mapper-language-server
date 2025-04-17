@@ -1,14 +1,8 @@
-import type { ValidationAcceptor, ValidationChecks } from 'langium'
-import type { ContextMapperDslAstType, ContextMappingModel } from '../generated/ast.js'
-import { AbstractContextMapperValidator } from './AbstractContextMapperValidator.js'
+import type { ValidationAcceptor } from 'langium'
+import type { ContextMappingModel } from '../generated/ast.js'
+import { ContextMapperValidator } from './ContextMapperValidator.js'
 
-export class ContextMappingModelValidator implements AbstractContextMapperValidator<ContextMappingModel> {
-  getChecks (): ValidationChecks<ContextMapperDslAstType> {
-    return {
-      ContextMappingModel: this.validate
-    }
-  }
-
+export class ContextMappingModelValidator implements ContextMapperValidator<ContextMappingModel> {
   validate (model: ContextMappingModel, acceptor: ValidationAcceptor): void {
     checkForZeroOrOneContextMap(model, acceptor)
   }
