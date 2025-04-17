@@ -61,7 +61,7 @@ describe('BoundedContext semantic token test', () => {
     const tokens = extractSemanticTokens(result, expectedNumberOfTokens)
 
     assertSemanticToken(tokens[2], 1, 6, 4, semanticTokenProvider.tokenTypes.keyword, 0)
-    assertSemanticToken(tokens[3], 0, 7, 9, semanticTokenProvider.tokenTypes.property, 0)
+    assertSemanticToken(tokens[3], 0, 7, 9, semanticTokenProvider.tokenTypes.enumMember, 0)
 
     assertSemanticToken(tokens[4], 1, 6, 24, semanticTokenProvider.tokenTypes.keyword, 0)
     assertSemanticToken(tokens[5], 0, 27, 6, semanticTokenProvider.tokenTypes.string, 0)
@@ -77,10 +77,10 @@ describe('BoundedContext semantic token test', () => {
     assertSemanticToken(tokens[12], 0, 24, 6, semanticTokenProvider.tokenTypes.string, 0)
 
     assertSemanticToken(tokens[13], 1, 6, 14, semanticTokenProvider.tokenTypes.keyword, 0)
-    assertSemanticToken(tokens[14], 0, 17, 8, semanticTokenProvider.tokenTypes.property, 0)
+    assertSemanticToken(tokens[14], 0, 17, 8, semanticTokenProvider.tokenTypes.enumMember, 0)
 
     assertSemanticToken(tokens[15], 1, 6, 9, semanticTokenProvider.tokenTypes.keyword, 0)
-    assertSemanticToken(tokens[16], 0, 10, 7, semanticTokenProvider.tokenTypes.property, 0)
+    assertSemanticToken(tokens[16], 0, 10, 7, semanticTokenProvider.tokenTypes.enumMember, 0)
   })
 })
 
