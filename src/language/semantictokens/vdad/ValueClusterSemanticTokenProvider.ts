@@ -2,7 +2,7 @@ import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticToke
 import { isValueCluster, ValueCluster } from '../../generated/ast.js'
 import { AstNode } from 'langium'
 import { SemanticTokenAcceptor } from 'langium/lsp'
-import { highlightMemberAttribute, highlightTypeDeclaration } from '../HighlightingHelper.js'
+import { highlightField, highlightTypeDeclaration } from '../HighlightingHelper.js'
 import { SemanticTokenTypes } from 'vscode-languageserver-types'
 
 export class ValueClusterSemanticTokenProvider implements ContextMapperSemanticTokenProvider<ValueCluster> {
@@ -14,22 +14,22 @@ export class ValueClusterSemanticTokenProvider implements ContextMapperSemanticT
     highlightTypeDeclaration(node, acceptor, 'ValueCluster')
 
     if (node.coreValue) {
-      highlightMemberAttribute(node, acceptor, ['core'], 'coreValue')
+      highlightField(node, acceptor, ['core'], 'coreValue')
     }
     if (node.coreValue7000) {
-      highlightMemberAttribute(node, acceptor, ['core'], 'coreValue7000')
+      highlightField(node, acceptor, ['core'], 'coreValue7000')
     }
 
     if (node.demonstrators.length > 0) {
-      highlightMemberAttribute(node, acceptor, ['demonstrator'], 'demonstrators', SemanticTokenTypes.string)
+      highlightField(node, acceptor, ['demonstrator'], 'demonstrators', SemanticTokenTypes.string)
     }
 
     if (node.relatedValues.length > 0) {
-      highlightMemberAttribute(node, acceptor, ['relatedValue'], 'relatedValues', SemanticTokenTypes.string)
+      highlightField(node, acceptor, ['relatedValue'], 'relatedValues', SemanticTokenTypes.string)
     }
 
     if (node.opposingValues.length > 0) {
-      highlightMemberAttribute(node, acceptor, ['opposingValue'], 'opposingValues', SemanticTokenTypes.string)
+      highlightField(node, acceptor, ['opposingValue'], 'opposingValues', SemanticTokenTypes.string)
     }
   }
 }

@@ -18,14 +18,6 @@ export function highlightKeyword (node: AstNode, acceptor: SemanticTokenAcceptor
   })
 }
 
-export function highlightProperty (node: AstNode, acceptor: SemanticTokenAcceptor, property: string) {
-  acceptor({
-    node,
-    type: SemanticTokenTypes.property,
-    property
-  })
-}
-
 export function highlightType (node: AstNode, acceptor: SemanticTokenAcceptor, property: string, modifiers: string[] = []) {
   acceptor({
     node,
@@ -35,23 +27,22 @@ export function highlightType (node: AstNode, acceptor: SemanticTokenAcceptor, p
   })
 }
 
-export function highlightTypeDeclaration (node: AstNode, acceptor: SemanticTokenAcceptor, keyword: string, hasName: Boolean = true) {
+export function highlightTypeDeclaration (node: AstNode, acceptor: SemanticTokenAcceptor, keyword: string, hasName: boolean = true) {
   highlightKeyword(node, acceptor, keyword)
   if (hasName) {
     highlightType(node, acceptor, 'name', [SemanticTokenModifiers.declaration])
   }
 }
 
-export function highlightMemberAttribute (node: AstNode, acceptor: SemanticTokenAcceptor, keywords: string[], property: string, type: SemanticTokenTypes = SemanticTokenTypes.property) {
-  keywords.forEach(keyword => highlightKeyword(node, acceptor, keyword))
-  acceptor({
-    node,
-    type,
-    property
-  })
+export function highlightField (node: AstNode, acceptor: SemanticTokenAcceptor, keywords: string[], property: string, type: SemanticTokenTypes = SemanticTokenTypes.enumMember) {
+  highlightProperty(node, acceptor, keywords, property, type)
 }
 
 export function highlightAttribute (node: AstNode, acceptor: SemanticTokenAcceptor, keywords: string[], property: string, type: SemanticTokenTypes = SemanticTokenTypes.type) {
+  highlightProperty(node, acceptor, keywords, property, type)
+}
+
+function highlightProperty (node: AstNode, acceptor: SemanticTokenAcceptor, keywords: string[], property: string, type: SemanticTokenTypes) {
   keywords.forEach(keyword => highlightKeyword(node, acceptor, keyword))
   acceptor({
     node,

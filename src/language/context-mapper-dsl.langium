@@ -56,13 +56,13 @@ BoundedContext:
 	(
 		OPEN
 			(
-				('domainVisionStatement' ('=') domainVisionStatement=STRING) &
-				('type' ('=') type=BoundedContextType) &
+				('domainVisionStatement' ('=')? domainVisionStatement=STRING) &
+				('type' ('=')? type=BoundedContextType) &
 				(('responsibilities' ('=')? responsibilities+=STRING) ("," responsibilities+=STRING)*) &
-				('implementationTechnology' ('=') implementationTechnology=STRING) &
-				('knowledgeLevel' ('=') knowledgeLevel=KnowledgeLevel) &
-				('businessModel' ('=') businessModel=STRING) &
-				('evolution' ('=') evolution=Evolution)
+				('implementationTechnology' ('=')? implementationTechnology=STRING) &
+				('knowledgeLevel' ('=')? knowledgeLevel=KnowledgeLevel) &
+				('businessModel' ('=')? businessModel=STRING) &
+				('evolution' ('=')? evolution=Evolution)
 			)
 			(
 				(

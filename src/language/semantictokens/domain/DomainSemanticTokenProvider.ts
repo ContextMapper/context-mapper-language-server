@@ -1,7 +1,7 @@
 import { DomainPart, isDomain, isDomainPart, isSubdomain, Subdomain } from '../../generated/ast.js'
 import { SemanticTokenAcceptor } from 'langium/lsp'
 import { SemanticTokenTypes } from 'vscode-languageserver-types'
-import { highlightAttribute, highlightMemberAttribute, highlightTypeDeclaration } from '../HighlightingHelper.js'
+import { highlightAttribute, highlightField, highlightTypeDeclaration } from '../HighlightingHelper.js'
 import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticTokenProvider.js'
 import { AstNode } from 'langium'
 
@@ -22,7 +22,7 @@ export class DomainSemanticTokenProvider implements ContextMapperSemanticTokenPr
     }
 
     if (node.domainVisionStatement) {
-      highlightMemberAttribute(node, acceptor, ['domainVisionStatement'], 'domainVisionStatement', SemanticTokenTypes.string)
+      highlightField(node, acceptor, ['domainVisionStatement'], 'domainVisionStatement', SemanticTokenTypes.string)
     }
 
     if (isSubdomain(node)) {
@@ -36,7 +36,7 @@ export class DomainSemanticTokenProvider implements ContextMapperSemanticTokenPr
     }
 
     if (node.type) {
-      highlightMemberAttribute(node, acceptor, ['type'], 'type')
+      highlightField(node, acceptor, ['type'], 'type')
     }
   }
 }

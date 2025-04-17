@@ -3,7 +3,7 @@ import {
   ContextMap,
   isContextMap
 } from '../../generated/ast.js'
-import { highlightAttribute, highlightMemberAttribute, highlightTypeDeclaration } from '../HighlightingHelper.js'
+import { highlightAttribute, highlightField, highlightTypeDeclaration } from '../HighlightingHelper.js'
 import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticTokenProvider.js'
 import { AstNode } from 'langium'
 
@@ -16,11 +16,11 @@ export class ContextMapSemanticTokenProvider implements ContextMapperSemanticTok
     highlightTypeDeclaration(node, acceptor, 'ContextMap', node.name != null)
 
     if (node.type) {
-      highlightMemberAttribute(node, acceptor, ['type'], 'type')
+      highlightField(node, acceptor, ['type'], 'type')
     }
 
     if (node.state) {
-      highlightMemberAttribute(node, acceptor, ['state'], 'state')
+      highlightField(node, acceptor, ['state'], 'state')
     }
 
     if (node.boundedContexts.length > 0) {

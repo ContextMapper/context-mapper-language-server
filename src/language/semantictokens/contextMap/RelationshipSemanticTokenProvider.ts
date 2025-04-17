@@ -1,11 +1,16 @@
 import {
   CustomerSupplierRelationship,
   isCustomerSupplierRelationship,
-  isPartnership, isRelationship, isSharedKernel,
+  isPartnership,
+  isRelationship,
+  isSharedKernel,
   isSymmetricRelationship,
-  isUpstreamDownstreamRelationship, Partnership,
-  Relationship, SharedKernel,
-  SymmetricRelationship, UpstreamDownstreamRelationship
+  isUpstreamDownstreamRelationship,
+  Partnership,
+  Relationship,
+  SharedKernel,
+  SymmetricRelationship,
+  UpstreamDownstreamRelationship
 } from '../../generated/ast.js'
 import { SemanticTokenAcceptor } from 'langium/lsp'
 import { SemanticTokenModifiers, SemanticTokenTypes } from 'vscode-languageserver-types'
@@ -53,7 +58,7 @@ export class RelationshipSemanticTokenProvider implements ContextMapperSemanticT
       })
       acceptor({
         node,
-        type: SemanticTokenTypes.property,
+        type: SemanticTokenTypes.string,
         property: 'implementationTechnology'
       })
     }
@@ -73,7 +78,7 @@ export class RelationshipSemanticTokenProvider implements ContextMapperSemanticT
     })
     acceptor({
       node,
-      type: SemanticTokenTypes.keyword,
+      type: SemanticTokenTypes.operator,
       keyword: '<->'
     })
     acceptor({
@@ -91,7 +96,7 @@ export class RelationshipSemanticTokenProvider implements ContextMapperSemanticT
     })
     acceptor({
       node,
-      type: SemanticTokenTypes.keyword,
+      type: SemanticTokenTypes.operator,
       keyword: '<->'
     })
     acceptor({
@@ -150,19 +155,19 @@ export class RelationshipSemanticTokenProvider implements ContextMapperSemanticT
     })
     acceptor({
       node,
-      type: SemanticTokenTypes.keyword,
+      type: SemanticTokenTypes.operator,
       keyword: '<-'
     })
     acceptor({
       node,
-      type: SemanticTokenTypes.keyword,
+      type: SemanticTokenTypes.operator,
       keyword: '->'
     })
 
     if (node.downstreamRoles.length > 0) {
       acceptor({
         node,
-        type: SemanticTokenTypes.property,
+        type: SemanticTokenTypes.enumMember,
         property: 'downstreamRoles'
       })
     }
@@ -170,7 +175,7 @@ export class RelationshipSemanticTokenProvider implements ContextMapperSemanticT
     if (node.upstreamRoles.length > 0) {
       acceptor({
         node,
-        type: SemanticTokenTypes.property,
+        type: SemanticTokenTypes.keyword,
         property: 'upstreamRoles'
       })
     }
@@ -183,7 +188,7 @@ export class RelationshipSemanticTokenProvider implements ContextMapperSemanticT
       })
       acceptor({
         node,
-        type: SemanticTokenTypes.property,
+        type: SemanticTokenTypes.string,
         property: 'implementationTechnology'
       })
     }
@@ -209,7 +214,7 @@ export class RelationshipSemanticTokenProvider implements ContextMapperSemanticT
       })
       acceptor({
         node,
-        type: SemanticTokenTypes.property,
+        type: SemanticTokenTypes.enumMember,
         property: 'downstreamGovernanceRights'
       })
     }
@@ -229,13 +234,13 @@ export class RelationshipSemanticTokenProvider implements ContextMapperSemanticT
     if (node.upstreamRoles.length > 0) {
       acceptor({
         node,
-        type: SemanticTokenTypes.property,
+        type: SemanticTokenTypes.keyword,
         property: 'upstreamRoles'
       })
     }
     acceptor({
       node,
-      type: SemanticTokenTypes.keyword,
+      type: SemanticTokenTypes.operator,
       keyword: '->'
     })
     acceptor({
@@ -257,13 +262,13 @@ export class RelationshipSemanticTokenProvider implements ContextMapperSemanticT
     if (node.downstreamRoles.length > 0) {
       acceptor({
         node,
-        type: SemanticTokenTypes.property,
+        type: SemanticTokenTypes.keyword,
         property: 'downstreamRoles'
       })
     }
     acceptor({
       node,
-      type: SemanticTokenTypes.keyword,
+      type: SemanticTokenTypes.operator,
       keyword: '<-'
     })
     acceptor({

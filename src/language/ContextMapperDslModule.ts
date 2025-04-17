@@ -72,7 +72,7 @@ export function createContextMapperDslServices (context: DefaultSharedModuleCont
     ContextMapperDslModule
   )
   shared.ServiceRegistry.register(ContextMapperDsl)
-  registerValidationChecks(ContextMapperDsl)
+  registerValidationChecks(ContextMapperDsl.validation.ValidationRegistry, ContextMapperDsl.validation.ContextMapperDslValidator)
   if (!context.connection) {
     // We don't run inside a language server
     // Therefore, initialize the configuration provider instantly
