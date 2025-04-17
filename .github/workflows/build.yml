@@ -21,7 +21,7 @@ jobs:
       - name: Prepare debian
         run: |
           apt update
-          apt install -y git wget
+          apt install -y git wget unzip
       # required since test report action uses git
       - name: Setup git
         run: |
