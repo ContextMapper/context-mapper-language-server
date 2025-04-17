@@ -27,9 +27,11 @@ export function highlightType (node: AstNode, acceptor: SemanticTokenAcceptor, p
   })
 }
 
-export function highlightTypeDeclaration (node: AstNode, acceptor: SemanticTokenAcceptor, keyword: string) {
+export function highlightTypeDeclaration (node: AstNode, acceptor: SemanticTokenAcceptor, keyword: string, hasName: boolean = true) {
   highlightKeyword(node, acceptor, keyword)
-  highlightType(node, acceptor, 'name', [SemanticTokenModifiers.declaration])
+  if (hasName) {
+    highlightType(node, acceptor, 'name', [SemanticTokenModifiers.declaration])
+  }
 }
 
 export function highlightField (node: AstNode, acceptor: SemanticTokenAcceptor, keywords: string[], property: string, type: SemanticTokenTypes = SemanticTokenTypes.enumMember) {
