@@ -18,6 +18,14 @@ export function highlightKeyword (node: AstNode, acceptor: SemanticTokenAcceptor
   })
 }
 
+export function highlightOperator (node: AstNode, acceptor: SemanticTokenAcceptor, operator: string) {
+  acceptor({
+    node,
+    type: SemanticTokenTypes.operator,
+    keyword: operator
+  })
+}
+
 export function highlightType (node: AstNode, acceptor: SemanticTokenAcceptor, property: string, modifiers: string[] = []) {
   acceptor({
     node,

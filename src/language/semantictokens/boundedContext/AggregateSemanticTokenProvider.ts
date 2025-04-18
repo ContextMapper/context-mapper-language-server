@@ -53,10 +53,6 @@ export class AggregateSemanticTokenProvider implements ContextMapperSemanticToke
       highlightField(node, acceptor, ['storageSimilarity'], 'storageSimilarity')
     }
 
-    if (node.storageSimilarity) {
-      highlightField(node, acceptor, ['storageSimilarity'], 'storageSimilarity')
-    }
-
     if (node.securityCriticality) {
       highlightField(node, acceptor, ['securityCriticality'], 'securityCriticality')
     }
@@ -72,12 +68,13 @@ export class AggregateSemanticTokenProvider implements ContextMapperSemanticToke
 
   private highlightUserRequirements (node: Aggregate, acceptor: SemanticTokenAcceptor) {
     const keywords = []
-    if (isUseCase(node.userRequirements[0])) {
+    const requirement = node.userRequirements[0].ref
+    if (isUseCase(requirement)) {
       keywords.push('useCases')
-    } else if (isUserRequirement(node.userRequirements[0])) {
+    } else if (isUserRequirement(requirement)) {
       keywords.push('userRequirements')
       keywords.push('features')
-    } else if (isUserStory(node.userRequirements[0])) {
+    } else if (isUserStory(requirement)) {
       keywords.push('userStories')
     }
 
