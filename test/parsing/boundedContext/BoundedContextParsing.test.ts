@@ -1,9 +1,9 @@
-import { createContextMapperDslServices } from '../../src/language/ContextMapperDslModule.js'
+import { createContextMapperDslServices } from '../../../src/language/ContextMapperDslModule.js'
 import { parseHelper } from 'langium/test'
-import { ContextMappingModel } from '../../src/language/generated/ast.js'
+import { ContextMappingModel } from '../../../src/language/generated/ast.js'
 import { EmptyFileSystem, LangiumDocument } from 'langium'
 import { beforeAll, describe, test, expect } from 'vitest'
-import { parseValidInput } from './ParsingTestHelper.js'
+import { parseValidInput } from '../ParsingTestHelper.js'
 
 let services: ReturnType<typeof createContextMapperDslServices>
 let parse: ReturnType<typeof parseHelper<ContextMappingModel>>
