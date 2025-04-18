@@ -17,12 +17,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: node:22-slim
+      image: node:22-alpine
     steps:
       - name: Prepare debian
-        run: |
-          apt update
-          apt install -y git
+        run: apk add --update git docker openrc
       # required since test report action uses git
       - name: Setup git
         run: |
