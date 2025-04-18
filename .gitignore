@@ -5,7 +5,7 @@
 node_modules/
 out/
 dist/
-coverage/
+.qodana/
 src/language/generated/
 syntaxes/
 .idea
