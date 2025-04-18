@@ -9,6 +9,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['lcov'],
+      reportsDirectory: '.qodana/code-coverage',
       include: ['src'],
       exclude: ['**/generated']
     },
