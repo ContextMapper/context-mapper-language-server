@@ -82,6 +82,34 @@ describe('BoundedContext semantic token tests', () => {
     expectSemanticTokensToEqual(tokens[15], 1, 6, 9, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[16], 0, 10, 7, semanticTokenProvider.tokenTypes.enumMember, 0)
   })
+
+  test('check semantic tokens bounded context with attributes', async () => {
+    document = await parse(`
+      BoundedContext TestContext 
+        implements TestDomain
+        realizes OtherContext 
+        refines NextContext {
+      }
+      BoundedContext OtherContext
+      BoundedContext NextContext
+      Domain TestDomain
+    `)
+    const params = createSemanticTokenParams(document)
+    const result = await semanticTokenProvider.semanticHighlight(document, params)
+
+    const expectedNumberOfTokens = 14
+    expectSemanticTokensToHaveLength(result, expectedNumberOfTokens)
+    const tokens = extractSemanticTokens(result, expectedNumberOfTokens)
+
+    expectSemanticTokensToEqual(tokens[2], 1, 8, 10, semanticTokenProvider.tokenTypes.keyword, 0)
+    expectSemanticTokensToEqual(tokens[3], 0, 11, 10, semanticTokenProvider.tokenTypes.type, 0)
+
+    expectSemanticTokensToEqual(tokens[4], 1, 8, 8, semanticTokenProvider.tokenTypes.keyword, 0)
+    expectSemanticTokensToEqual(tokens[5], 0, 9, 12, semanticTokenProvider.tokenTypes.type, 0)
+
+    expectSemanticTokensToEqual(tokens[6], 1, 8, 7, semanticTokenProvider.tokenTypes.keyword, 0)
+    expectSemanticTokensToEqual(tokens[7], 0, 8, 11, semanticTokenProvider.tokenTypes.type, 0)
+  })
 })
 
 function expectEmptyBoundedContext (result: SemanticTokens) {

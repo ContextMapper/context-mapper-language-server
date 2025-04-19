@@ -20,7 +20,7 @@ beforeAll(async () => {
   parse = parseHelper<ContextMappingModel>(services.ContextMapperDsl)
 })
 
-describe('Value cluster parsing tests', () => {
+describe('Value register parsing tests', () => {
   test('parse value register without body', async () => {
     document = await parseValidInput(parse, `
       ValueRegister TestRegister

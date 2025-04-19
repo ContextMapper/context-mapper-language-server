@@ -71,7 +71,9 @@ describe('Aggregate parsing tests', () => {
     expect(aggregate.responsibilities[0]).toEqual('resp1')
     expect(aggregate.responsibilities[1]).toEqual('resp2')
     expect(aggregate.owner).not.toBeUndefined()
-    expect(aggregate.userRequirements).toHaveLength(1)
+    expect(aggregate.userRequirements).toHaveLength(0)
+    expect(aggregate.userStories).toHaveLength(0)
+    expect(aggregate.useCases).toHaveLength(1)
     expect(aggregate.knowledgeLevel).toEqual('META')
     expect(aggregate.contentVolatility).toEqual('RARELY')
     expect(aggregate.likelihoodForChange).toEqual('NORMAL')
@@ -109,7 +111,10 @@ describe('Aggregate parsing tests', () => {
 
     expect(document.parseResult.value.boundedContexts).toHaveLength(1)
     expect(document.parseResult.value.boundedContexts[0].aggregates).toHaveLength(1)
-    expect(document.parseResult.value.boundedContexts[0].aggregates[0].userRequirements).toHaveLength(1)
+    const aggregate = document.parseResult.value.boundedContexts[0].aggregates[0]
+    expect(aggregate.userStories).toHaveLength(1)
+    expect(aggregate.userRequirements).toHaveLength(0)
+    expect(aggregate.useCases).toHaveLength(0)
   })
 
   test('parse features', async () => {
@@ -125,7 +130,10 @@ describe('Aggregate parsing tests', () => {
 
     expect(document.parseResult.value.boundedContexts).toHaveLength(1)
     expect(document.parseResult.value.boundedContexts[0].aggregates).toHaveLength(1)
-    expect(document.parseResult.value.boundedContexts[0].aggregates[0].userRequirements).toHaveLength(2)
+    const aggregate = document.parseResult.value.boundedContexts[0].aggregates[0]
+    expect(aggregate.userStories).toHaveLength(0)
+    expect(aggregate.userRequirements).toHaveLength(2)
+    expect(aggregate.useCases).toHaveLength(0)
   })
 
   test('parse userRequirements', async () => {
@@ -150,6 +158,8 @@ function expectAggregateToBeEmpty (aggregate: Aggregate) {
   expect(aggregate.name).toEqual('TestAggregate')
   expect(aggregate.responsibilities).toHaveLength(0)
   expect(aggregate.userRequirements).toHaveLength(0)
+  expect(aggregate.useCases).toHaveLength(0)
+  expect(aggregate.userStories).toHaveLength(0)
   expect(aggregate.owner).toBeUndefined()
   expect(aggregate.knowledgeLevel).toBeUndefined()
   expect(aggregate.likelihoodForChange).toBeUndefined()
