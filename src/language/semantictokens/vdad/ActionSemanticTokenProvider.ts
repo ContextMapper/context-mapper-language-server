@@ -3,6 +3,7 @@ import { Action, isAction } from '../../generated/ast.js'
 import { AstNode } from 'langium'
 import { SemanticTokenAcceptor } from 'langium/lsp'
 import { highlightKeyword, highlightString } from '../HighlightingHelper.js'
+import { SemanticTokenTypes } from 'vscode-languageserver-types'
 
 export class ActionSemanticTokenProvider implements ContextMapperSemanticTokenProvider<Action> {
   supports (node: AstNode): node is Action {
@@ -15,7 +16,11 @@ export class ActionSemanticTokenProvider implements ContextMapperSemanticTokenPr
 
     const typeKeywords = ['ACT', 'MONITOR']
     if (typeKeywords.includes(node.type)) {
-      highlightKeyword(node, acceptor, node.type)
+      acceptor({
+        node,
+        type: SemanticTokenTypes.keyword,
+        property: 'type'
+      })
     } else {
       highlightString(node, acceptor, 'type')
     }

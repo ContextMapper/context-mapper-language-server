@@ -1,4 +1,4 @@
-import { Aggregate, isAggregate, isUseCase, isUserRequirement, isUserStory } from '../../generated/ast.js'
+import { Aggregate, isAggregate } from '../../generated/ast.js'
 import { SemanticTokenAcceptor } from 'langium/lsp'
 import { SemanticTokenTypes } from 'vscode-languageserver-types'
 import { highlightField, highlightString, highlightTypeDeclaration } from '../HighlightingHelper.js'
@@ -22,7 +22,15 @@ export class AggregateSemanticTokenProvider implements ContextMapperSemanticToke
     }
 
     if (node.userRequirements.length > 0) {
-      this.highlightUserRequirements(node, acceptor)
+      highlightField(node, acceptor, ['userRequirements', 'features'], 'userRequirements', SemanticTokenTypes.type)
+    }
+
+    if (node.useCases.length > 0) {
+      highlightField(node, acceptor, ['useCases'], 'useCases', SemanticTokenTypes.type)
+    }
+
+    if (node.userStories.length > 0) {
+      highlightField(node, acceptor, ['userStories'], 'userStories', SemanticTokenTypes.type)
     }
 
     if (node.owner) {
@@ -64,20 +72,5 @@ export class AggregateSemanticTokenProvider implements ContextMapperSemanticToke
     if (node.securityAccessGroup) {
       highlightField(node, acceptor, ['securityAccessGroup'], 'securityAccessGroup', SemanticTokenTypes.string)
     }
-  }
-
-  private highlightUserRequirements (node: Aggregate, acceptor: SemanticTokenAcceptor) {
-    const keywords = []
-    const requirement = node.userRequirements[0].ref
-    if (isUseCase(requirement)) {
-      keywords.push('useCases')
-    } else if (isUserRequirement(requirement)) {
-      keywords.push('userRequirements')
-      keywords.push('features')
-    } else if (isUserStory(requirement)) {
-      keywords.push('userStories')
-    }
-
-    highlightField(node, acceptor, keywords, 'userRequirements', SemanticTokenTypes.type)
   }
 }

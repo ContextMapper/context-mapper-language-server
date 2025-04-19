@@ -2,7 +2,7 @@ import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticToke
 import { isValueRegister, ValueRegister } from '../../generated/ast.js'
 import { AstNode } from 'langium'
 import { SemanticTokenAcceptor } from 'langium/lsp'
-import { highlightAttribute, highlightKeyword } from '../HighlightingHelper.js'
+import { highlightAttribute, highlightTypeDeclaration } from '../HighlightingHelper.js'
 
 export class ValueRegisterSemanticTokenProvider implements ContextMapperSemanticTokenProvider<ValueRegister> {
   supports (node: AstNode): node is ValueRegister {
@@ -10,10 +10,10 @@ export class ValueRegisterSemanticTokenProvider implements ContextMapperSemantic
   }
 
   highlight (node: ValueRegister, acceptor: SemanticTokenAcceptor) {
-    highlightKeyword(node, acceptor, 'ValueRegister')
+    highlightTypeDeclaration(node, acceptor, 'ValueRegister')
 
     if (node.context) {
-      highlightAttribute(node, acceptor, ['of'], 'context')
+      highlightAttribute(node, acceptor, ['for'], 'context')
     }
   }
 }
