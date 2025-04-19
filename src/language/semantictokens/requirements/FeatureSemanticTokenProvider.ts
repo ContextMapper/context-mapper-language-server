@@ -1,5 +1,11 @@
 import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticTokenProvider.js'
-import { Feature, isFeature, isNormalFeature, isStoryFeature, NormalFeature, StoryFeature } from '../../generated/ast.js'
+import {
+  Feature,
+  isFeature,
+  isStoryFeature,
+  isUserActivityDefaultVerb,
+  StoryFeature
+} from '../../generated/ast.js'
 import { AstNode } from 'langium'
 import { SemanticTokenAcceptor } from 'langium/lsp'
 import { highlightKeyword, highlightString } from '../HighlightingHelper.js'
@@ -10,15 +16,19 @@ export class FeatureSemanticTokenProvider implements ContextMapperSemanticTokenP
   }
 
   public highlight (node: Feature, acceptor: SemanticTokenAcceptor) {
-    if (isNormalFeature(node)) {
-      this.highlightNormalFeature(node, acceptor)
-    } else if (isStoryFeature(node)) {
+    if (isStoryFeature(node)) {
       this.highlightStoryFeature(node, acceptor)
     }
+
+    this.highlightNormalFeature(node, acceptor)
   }
 
-  private highlightNormalFeature (node: NormalFeature, acceptor: SemanticTokenAcceptor) {
-    highlightString(node, acceptor, 'verb')
+  private highlightNormalFeature (node: Feature, acceptor: SemanticTokenAcceptor) {
+    if (isUserActivityDefaultVerb(node.verb)) {
+      highlightKeyword(node, acceptor, node.verb)
+    } else {
+      highlightString(node, acceptor, 'verb')
+    }
 
     if (node.entityArticle) {
       highlightKeyword(node, acceptor, node.entityArticle)

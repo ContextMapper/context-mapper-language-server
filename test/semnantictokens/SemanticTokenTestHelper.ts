@@ -19,7 +19,7 @@ export function createSemanticTokenParams (document: LangiumDocument<ContextMapp
  * One token corresponds to a sequence of 5 integers, representing: deltaLine, deltaStart, length, type, modifier
  * Tokens are given in their relative position to each other. deltaLine and deltaStart specifies how many lines & chars the start of the two tokens are apart
  */
-export function assertSemanticToken (token: number[], startLine: number, startCharacter: number, length: number, tokenType: number, tokenModifiers: number) {
+export function expectSemanticTokensToEqual (token: number[], startLine: number, startCharacter: number, length: number, tokenType: number, tokenModifiers: number) {
   expect(token.length).toEqual(TOKEN_DATA_LENGTH)
 
   expect(token[0]).toEqual(startLine)
@@ -29,7 +29,7 @@ export function assertSemanticToken (token: number[], startLine: number, startCh
   expect(token[4]).toEqual(tokenModifiers)
 }
 
-export function assertSemanticTokenLength (result: SemanticTokens, expectedNumberOfTokens: number) {
+export function expectSemanticTokensToHaveLength (result: SemanticTokens, expectedNumberOfTokens: number) {
   expect(result).not.toBeNull()
   expect(result.data.length).toEqual(expectedNumberOfTokens * TOKEN_DATA_LENGTH)
 }

@@ -20,8 +20,7 @@ export class StoryValuationSemanticTokenProvider implements ContextMapperSemanti
     highlightKeyword(node, acceptor, 'accepting that')
     highlightString(node, acceptor, 'harmedValues')
 
-    highlightKeyword(node, acceptor, 'is')
-    highlightKeyword(node, acceptor, 'are')
+    // is/are already covered
     highlightKeyword(node, acceptor, 'reduced')
     highlightKeyword(node, acceptor, 'harmed')
   }

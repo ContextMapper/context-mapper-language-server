@@ -1,4 +1,4 @@
-import { createContextMapperDslServices } from '../../src/language/ContextMapperDslModule.js'
+import { createContextMapperDslServices } from '../../../src/language/ContextMapperDslModule.js'
 import { parseHelper } from 'langium/test'
 import {
   ContextMappingModel,
@@ -6,10 +6,10 @@ import {
   ValueElicitation,
   ValueEpic,
   ValueRegister
-} from '../../src/language/generated/ast.js'
+} from '../../../src/language/generated/ast.js'
 import { EmptyFileSystem, LangiumDocument } from 'langium'
 import { beforeAll, describe, expect, test } from 'vitest'
-import { parseInvalidInput, parseValidInput } from './ParsingTestHelper.js'
+import { parseInvalidInput, parseValidInput } from '../ParsingTestHelper.js'
 
 let services: ReturnType<typeof createContextMapperDslServices>
 let parse: ReturnType<typeof parseHelper<ContextMappingModel>>
@@ -20,7 +20,7 @@ beforeAll(async () => {
   parse = parseHelper<ContextMappingModel>(services.ContextMapperDsl)
 })
 
-describe('Value cluster parsing tests', () => {
+describe('Value register parsing tests', () => {
   test('parse value register without body', async () => {
     document = await parseValidInput(parse, `
       ValueRegister TestRegister

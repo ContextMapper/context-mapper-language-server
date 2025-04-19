@@ -1,14 +1,14 @@
-import { createContextMapperDslServices } from '../../src/language/ContextMapperDslModule.js'
+import { createContextMapperDslServices } from '../../../src/language/ContextMapperDslModule.js'
 import { parseHelper } from 'langium/test'
 import {
   ContextMappingModel,
   CustomerSupplierRelationship,
   Partnership,
   SharedKernel, UpstreamDownstreamRelationship
-} from '../../src/language/generated/ast.js'
+} from '../../../src/language/generated/ast.js'
 import { EmptyFileSystem, LangiumDocument } from 'langium'
 import { beforeAll, describe, expect, test } from 'vitest'
-import { parseValidInput } from './ParsingTestHelper.js'
+import { parseValidInput } from '../ParsingTestHelper.js'
 
 let services: ReturnType<typeof createContextMapperDslServices>
 let parse: ReturnType<typeof parseHelper<ContextMappingModel>>
@@ -112,7 +112,7 @@ describe('Relationship parsing tests', () => {
     expectRelationshipType(document, 'SharedKernel')
   })
 
-  test('parse Participant relationship properties', async () => {
+  test('parse Partnership relationship properties', async () => {
     document = await parseValidInput(parse, `
       ContextMap {
           TestContext [P] <-> [P] FirstContext : RelName {
@@ -133,7 +133,7 @@ describe('Relationship parsing tests', () => {
     expect(relationship.participant2).not.toBeUndefined()
   })
 
-  test('parse Participant relationship variation 1', async () => {
+  test('parse Partnership relationship variation 1', async () => {
     document = await parseValidInput(parse, `
       ContextMap {
           TestContext [P] <-> [P] FirstContext
@@ -145,7 +145,7 @@ describe('Relationship parsing tests', () => {
     expectRelationshipType(document, 'Partnership')
   })
 
-  test('parse Participant relationship variation 2', async () => {
+  test('parse Partnership relationship variation 2', async () => {
     document = await parseValidInput(parse, `
       ContextMap {
           [P] TestContext <-> [P] FirstContext
@@ -157,7 +157,7 @@ describe('Relationship parsing tests', () => {
     expectRelationshipType(document, 'Partnership')
   })
 
-  test('parse Participant relationship variation 3', async () => {
+  test('parse Partnership relationship variation 3', async () => {
     document = await parseValidInput(parse, `
       ContextMap {
           TestContext [P] <-> FirstContext [P]
@@ -169,7 +169,7 @@ describe('Relationship parsing tests', () => {
     expectRelationshipType(document, 'Partnership')
   })
 
-  test('parse Participant relationship variation 4', async () => {
+  test('parse Partnership relationship variation 4', async () => {
     document = await parseValidInput(parse, `
       ContextMap {
           [P] TestContext <-> FirstContext [P]
@@ -181,7 +181,7 @@ describe('Relationship parsing tests', () => {
     expectRelationshipType(document, 'Partnership')
   })
 
-  test('parse Participant relationship variation 5', async () => {
+  test('parse Partnership relationship variation 5', async () => {
     document = await parseValidInput(parse, `
       ContextMap {
           TestContext Partnership FirstContext

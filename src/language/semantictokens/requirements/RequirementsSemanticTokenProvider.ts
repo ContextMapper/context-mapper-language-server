@@ -33,7 +33,7 @@ export class RequirementsSemanticTokenProvider implements ContextMapperSemanticT
     highlightTypeDeclaration(node, acceptor, 'UseCase')
 
     if (node.role) {
-      highlightField(node, acceptor, ['actor'], 'role')
+      highlightField(node, acceptor, ['actor'], 'role', SemanticTokenTypes.string)
     }
 
     if (node.secondaryActors.length > 0) {

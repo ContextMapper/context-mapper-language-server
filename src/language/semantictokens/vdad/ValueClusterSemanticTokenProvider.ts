@@ -14,7 +14,7 @@ export class ValueClusterSemanticTokenProvider implements ContextMapperSemanticT
     highlightTypeDeclaration(node, acceptor, 'ValueCluster')
 
     if (node.coreValue) {
-      highlightField(node, acceptor, ['core'], 'coreValue')
+      highlightField(node, acceptor, ['core'], 'coreValue', SemanticTokenTypes.string)
     }
     if (node.coreValue7000) {
       highlightField(node, acceptor, ['core'], 'coreValue7000')
