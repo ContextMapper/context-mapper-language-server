@@ -182,8 +182,8 @@ Aggregate:
     (
     	(('responsibilities' ('=')? responsibilities+=STRING) ("," responsibilities+=STRING)*) &
     	(
-    		(('useCases' ('=')? userRequirements+=[UseCase]) ("," userRequirements+=[UseCase])*) |
-    		(('userStories' ('=')? userRequirements+=[UserStory]) ("," userRequirements+=[UserStory])*) |
+    		(('useCases' ('=')? useCases+=[UseCase]) ("," useCases+=[UseCase])*) |
+    		(('userStories' ('=')? userStories+=[UserStory]) ("," userStories+=[UserStory])*) |
     		((('features' | 'userRequirements') ('=')? userRequirements+=[UserRequirement]) ("," userRequirements+=[UserRequirement])*)
     	) &
     	('owner' ('=')? owner=[BoundedContext]) &
