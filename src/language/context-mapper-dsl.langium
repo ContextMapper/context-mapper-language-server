@@ -2,15 +2,13 @@ grammar ContextMapperDsl
 
 terminal ID: /[_a-zA-Z][\w_]*/;
 terminal STRING: /"(\\.|[^"\\])*"|'(\\.|[^'\\])*'/;
-terminal ML_COMMENT: /\/\*[\s\S]*?\*\//;
-terminal SL_COMMENT: /\/\/[^\n\r]*/;
 
 terminal OPEN: '{';
 terminal CLOSE: '}';
 
 hidden terminal WS: /\s+/;
-hidden terminal HIDDEN_ML_COMMENT: ML_COMMENT;
-hidden terminal HIDDEN_SL_COMMENT: SL_COMMENT;
+hidden terminal ML_COMMENT: /\/\*[\s\S]*?\*\//;
+hidden terminal SL_COMMENT: /\/\/[^\n\r]*/;
 
 entry ContextMappingModel:
 	(
@@ -169,7 +167,7 @@ CustomerSupplierRelationship:
 		(OPEN 
 			(
 				('implementationTechnology' ('=')? implementationTechnology=STRING) &
-				(('exposedAggregates' ('=')? upstreamExposedAggregates+=[Aggregate]) ("," upstreamExposedAggregates+=[Aggregate])* (exposedAggregatesComment=SL_COMMENT)?) &
+				(('exposedAggregates' ('=')? upstreamExposedAggregates+=[Aggregate]) ("," upstreamExposedAggregates+=[Aggregate])*) &
 				('downstreamRights' ('=')? downstreamGovernanceRights=DownstreamGovernanceRights)
 			)
 		CLOSE)?
