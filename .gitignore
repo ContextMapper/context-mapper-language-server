@@ -11,3 +11,4 @@ syntaxes/
 .idea
 .DS_Store
 cml-ls/
+docs/*.png

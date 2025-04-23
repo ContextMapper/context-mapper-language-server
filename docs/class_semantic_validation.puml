@@ -1,0 +1,27 @@
+@startuml
+abstract class ValidationRegistry {
++ register(ValidationChecks<T>, ThisParameterType)
+}
+
+class ContextMapperDslValidationRegistry {
+}
+
+class ContextMapperDslValidator {
++ checkContextMappingModel(ContextMappingModel, ValidationAcceptor)
++ checkValue(Value, ValidationAcceptor)
+}
+
+class ContextMapperValidationProviderRegistry {
++ get(AstNode): ContextMapperValidationProvider<AstNode>
+}
+
+interface ContextMapperValidationProvider {
++ supports(AstNode): boolean
++ validate(T, ValidationAcceptor)
+}
+
+ValidationRegistry <|-- ContextMapperDslValidationRegistry
+ContextMapperDslValidationRegistry --> ContextMapperDslValidator
+ContextMapperDslValidator --> ContextMapperValidationProviderRegistry
+ContextMapperValidationProviderRegistry o-- "0..*" ContextMapperValidationProvider
+@enduml
