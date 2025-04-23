@@ -8,8 +8,11 @@ import {
   type PartialLangiumServices
 } from 'langium/lsp'
 import { ContextMapperDslGeneratedModule, ContextMapperDslGeneratedSharedModule } from './generated/module.js'
-import { ContextMapperDslValidator, registerValidationChecks } from './ContextMapperDslValidator.js'
+import { ContextMapperDslValidator } from './validation/ContextMapperDslValidator.js'
 import { ContextMapperDslSemanticTokenProvider } from './semantictokens/ContextMapperDslSemanticTokenProvider.js'
+import { SemanticTokenProviderRegistry } from './semantictokens/SemanticTokenProviderRegistry.js'
+import { ContextMapperDslValidationRegistry } from './validation/ContextMapperDslValidationRegistry.js'
+import { ContextMapperValidationProviderRegistry } from './validation/ContextMapperValidationProviderRegistry.js'
 
 /**
  * Declaration of custom services - add your own service classes here.
@@ -34,12 +37,16 @@ export type ContextMapperDslServices = LangiumServices & ContextMapperDslAddedSe
 
 type ModuleType = PartialLangiumServices & ContextMapperDslAddedServices;
 
+const semanticTokenProviderRegistry = new SemanticTokenProviderRegistry()
+const validationProviderRegistry = new ContextMapperValidationProviderRegistry()
+
 export const ContextMapperDslModule: Module<ContextMapperDslServices, ModuleType> = {
   validation: {
-    ContextMapperDslValidator: () => new ContextMapperDslValidator()
+    ContextMapperDslValidator: () => new ContextMapperDslValidator(validationProviderRegistry),
+    ValidationRegistry: (services) => new ContextMapperDslValidationRegistry(services)
   },
   lsp: {
-    SemanticTokenProvider: (services) => new ContextMapperDslSemanticTokenProvider(services)
+    SemanticTokenProvider: (services) => new ContextMapperDslSemanticTokenProvider(services, semanticTokenProviderRegistry)
   }
 }
 
@@ -72,7 +79,6 @@ export function createContextMapperDslServices (context: DefaultSharedModuleCont
     ContextMapperDslModule
   )
   shared.ServiceRegistry.register(ContextMapperDsl)
-  registerValidationChecks(ContextMapperDsl.validation.ValidationRegistry, ContextMapperDsl.validation.ContextMapperDslValidator)
   if (!context.connection) {
     // We don't run inside a language server
     // Therefore, initialize the configuration provider instantly
