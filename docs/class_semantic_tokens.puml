@@ -1,0 +1,20 @@
+@startuml
+abstract class AbstractSemanticTokenProvider
+
+class ContextMapperDslSemanticTokenProvider {
+# highlightElement(AstNode, SemanticTokenAcceptor)
+}
+
+class SemanticTokenProviderRegistry {
++ get(AstNode): ContextMapperSemanticTokenProvider<AstNode>
+}
+
+interface ContextMapperSemanticTokenProvider {
++ supports(AstNode): boolean
++ highlight(T, SemanticTokenAcceptor)
+}
+
+AbstractSemanticTokenProvider <|-- ContextMapperDslSemanticTokenProvider
+ContextMapperDslSemanticTokenProvider --> SemanticTokenProviderRegistry
+SemanticTokenProviderRegistry o-- "0..*" ContextMapperSemanticTokenProvider
+@enduml

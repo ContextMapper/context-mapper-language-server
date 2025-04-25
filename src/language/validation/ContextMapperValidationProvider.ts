@@ -1,5 +1,6 @@
 import { AstNode, ValidationAcceptor } from 'langium'
 
-export interface ContextMapperValidator<T extends AstNode> {
+export interface ContextMapperValidationProvider<T extends AstNode> {
+  supports(node: AstNode): node is T
   validate (node: T, acceptor: ValidationAcceptor): void
 }

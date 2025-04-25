@@ -17,7 +17,7 @@ beforeAll(async () => {
   // await services.shared.workspace.WorkspaceManager.initializeWorkspace([]);
 })
 
-describe('ContextMappingModelValidator tests', () => {
+describe('ContextMappingModelValidationProvider tests', () => {
   test('accept no context map', async () => {
     document = await parse(`
             BoundedContext FirstContext
