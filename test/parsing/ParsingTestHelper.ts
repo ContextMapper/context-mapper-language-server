@@ -7,6 +7,9 @@ export async function parseValidInput (parse: ReturnType<typeof parseHelper<Cont
   const document = await parse(input)
 
   expectNoParsingErrors(document)
+  expect(document.parseResult.lexerErrors).toHaveLength(0)
+  expect(document.diagnostics || []).toHaveLength(0)
+
   return document
 }
 
@@ -17,5 +20,5 @@ export async function parseInvalidInput (parse: ReturnType<typeof parseHelper<Co
 }
 
 export function expectNoParsingErrors (document: LangiumDocument<ContextMappingModel>) {
-  expect(document.parseResult.parserErrors.length).toEqual(0)
+  expect(document.parseResult.parserErrors).toHaveLength(0)
 }
