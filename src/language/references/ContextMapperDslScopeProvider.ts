@@ -10,7 +10,7 @@ import {
 export class ContextMapperDslScopeProvider extends DefaultScopeProvider {
   /*
     Some ContextMapper elements are not defined on the top-level of the document and should still be referencable.
-    Langium assumes nested elements to not be in global scope.
+    Langium assumes that nested elements don't belong in the global scope.
     Therefore, nested elements are explicitly added to the scope, while for other elements the Langium default behavior applies.
    */
   override getScope (context: ReferenceInfo): Scope {
