@@ -10,7 +10,7 @@ import {
   extractSemanticTokens
 } from '../SemanticTokenTestHelper.js'
 import { SemanticTokens } from 'vscode-languageserver-types'
-import { parseValidInput } from '../../parsing/ParsingTestHelper.js'
+import { parseValidInput } from '../../ParsingTestHelper.js'
 
 let services: ReturnType<typeof createContextMapperDslServices>
 let parse: ReturnType<typeof parseHelper<ContextMappingModel>>

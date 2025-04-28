@@ -4,7 +4,7 @@ import { ContextMappingModel } from '../../../src/language/generated/ast.js'
 import { EmptyFileSystem, LangiumDocument } from 'langium'
 import { SemanticTokenProvider } from 'langium/lsp'
 import { afterEach, beforeAll, describe, test } from 'vitest'
-import { parseValidInput } from '../../parsing/ParsingTestHelper.js'
+import { parseValidInput } from '../../ParsingTestHelper.js'
 import {
   createSemanticTokenParams, expectSemanticTokensToEqual,
   expectSemanticTokensToHaveLength,
