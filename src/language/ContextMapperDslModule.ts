@@ -14,6 +14,7 @@ import { SemanticTokenProviderRegistry } from './semantictokens/SemanticTokenPro
 import { ContextMapperDslValidationRegistry } from './validation/ContextMapperDslValidationRegistry.js'
 import { ContextMapperValidationProviderRegistry } from './validation/ContextMapperValidationProviderRegistry.js'
 import { ContextMapperDslScopeProvider } from './references/ContextMapperDslScopeProvider.js'
+import { ContextMapperDslFoldingRangeProvider } from './folding/ContextMapperDslFoldingRageProvider.js'
 
 /**
  * Declaration of custom services - add your own service classes here.
@@ -47,7 +48,8 @@ export const ContextMapperDslModule: Module<ContextMapperDslServices, ModuleType
     ValidationRegistry: (services) => new ContextMapperDslValidationRegistry(services)
   },
   lsp: {
-    SemanticTokenProvider: (services) => new ContextMapperDslSemanticTokenProvider(services, semanticTokenProviderRegistry)
+    SemanticTokenProvider: (services) => new ContextMapperDslSemanticTokenProvider(services, semanticTokenProviderRegistry),
+    FoldingRangeProvider: (services) => new ContextMapperDslFoldingRangeProvider(services)
   },
   references: {
     ScopeProvider: (services) => new ContextMapperDslScopeProvider(services)
