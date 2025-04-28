@@ -8,7 +8,7 @@ import {
 } from '../../../src/language/generated/ast.js'
 import { EmptyFileSystem, LangiumDocument } from 'langium'
 import { beforeAll, describe, expect, test } from 'vitest'
-import { parseValidInput } from '../ParsingTestHelper.js'
+import { parseValidInput } from '../../ParsingTestHelper.js'
 
 let services: ReturnType<typeof createContextMapperDslServices>
 let parse: ReturnType<typeof parseHelper<ContextMappingModel>>

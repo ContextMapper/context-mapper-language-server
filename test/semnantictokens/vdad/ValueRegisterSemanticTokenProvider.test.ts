@@ -11,7 +11,7 @@ import {
   expectSemanticTokensToHaveLength,
   extractSemanticTokens
 } from '../SemanticTokenTestHelper.js'
-import { parseValidInput } from '../../parsing/ParsingTestHelper.js'
+import { parseValidInput } from '../../ParsingTestHelper.js'
 
 let services: ReturnType<typeof createContextMapperDslServices>
 let parse: ReturnType<typeof parseHelper<ContextMappingModel>>

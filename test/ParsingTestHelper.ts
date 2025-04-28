@@ -1,6 +1,6 @@
 import { expect } from 'vitest'
 import { LangiumDocument } from 'langium'
-import { ContextMappingModel } from '../../src/language/generated/ast.js'
+import { ContextMappingModel } from '../src/language/generated/ast.js'
 import { parseHelper } from 'langium/test'
 
 export async function parseValidInput (parse: ReturnType<typeof parseHelper<ContextMappingModel>>, input: string): Promise<LangiumDocument<ContextMappingModel>> {

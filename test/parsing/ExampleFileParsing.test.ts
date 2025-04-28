@@ -4,7 +4,7 @@ import { ContextMappingModel } from '../../src/language/generated/ast.js'
 import { EmptyFileSystem } from 'langium'
 import { beforeAll, describe, test } from 'vitest'
 import fs from 'fs'
-import { parseValidInput } from './ParsingTestHelper.js'
+import { parseValidInput } from '../ParsingTestHelper.js'
 import path from 'node:path'
 
 let services: ReturnType<typeof createContextMapperDslServices>

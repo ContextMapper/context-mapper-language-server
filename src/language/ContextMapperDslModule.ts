@@ -13,6 +13,7 @@ import { ContextMapperDslSemanticTokenProvider } from './semantictokens/ContextM
 import { SemanticTokenProviderRegistry } from './semantictokens/SemanticTokenProviderRegistry.js'
 import { ContextMapperDslValidationRegistry } from './validation/ContextMapperDslValidationRegistry.js'
 import { ContextMapperValidationProviderRegistry } from './validation/ContextMapperValidationProviderRegistry.js'
+import { ContextMapperDslScopeProvider } from './references/ContextMapperDslScopeProvider.js'
 
 /**
  * Declaration of custom services - add your own service classes here.
@@ -47,6 +48,9 @@ export const ContextMapperDslModule: Module<ContextMapperDslServices, ModuleType
   },
   lsp: {
     SemanticTokenProvider: (services) => new ContextMapperDslSemanticTokenProvider(services, semanticTokenProviderRegistry)
+  },
+  references: {
+    ScopeProvider: (services) => new ContextMapperDslScopeProvider(services)
   }
 }
 
