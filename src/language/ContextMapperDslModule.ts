@@ -15,6 +15,7 @@ import { ContextMapperDslValidationRegistry } from './validation/ContextMapperDs
 import { ContextMapperValidationProviderRegistry } from './validation/ContextMapperValidationProviderRegistry.js'
 import { ContextMapperDslScopeProvider } from './references/ContextMapperDslScopeProvider.js'
 import { ContextMapperDslFoldingRangeProvider } from './folding/ContextMapperDslFoldingRageProvider.js'
+import { ContextMapperDslScopeComputation } from './references/ContextMapperDslScopeComputation.js'
 
 /**
  * Declaration of custom services - add your own service classes here.
@@ -52,7 +53,8 @@ export const ContextMapperDslModule: Module<ContextMapperDslServices, ModuleType
     FoldingRangeProvider: (services) => new ContextMapperDslFoldingRangeProvider(services)
   },
   references: {
-    ScopeProvider: (services) => new ContextMapperDslScopeProvider(services)
+    ScopeProvider: (services) => new ContextMapperDslScopeProvider(services),
+    ScopeComputation: (services) => new ContextMapperDslScopeComputation(services)
   }
 }
 
