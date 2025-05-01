@@ -139,9 +139,9 @@ describe('Stakeholders parsing tests', () => {
     expect(document.parseResult.value.stakeholders[0].stakeholders).toHaveLength(1)
     const stakeholder = document.parseResult.value.stakeholders[0].stakeholders[0] as Stakeholder
     expect(stakeholder.name).toEqual('TestStakeholder')
-    expect(stakeholder.interest).toEqual('HIGH')
-    expect(stakeholder.influence).toEqual('MEDIUM')
-    expect(stakeholder.description).toEqual('description')
+    expect(stakeholder.interest).toEqual(['HIGH'])
+    expect(stakeholder.influence).toEqual(['MEDIUM'])
+    expect(stakeholder.description).toEqual(['description'])
   })
 })
 
@@ -161,7 +161,7 @@ function expectEmptyStakeholderGroup (group: StakeholderGroup): void {
 function expectEmptyStakeholder (stakeholder: Stakeholder): void {
   expect(stakeholder).not.toBeUndefined()
   expect(stakeholder.name).toEqual('TestStakeholder')
-  expect(stakeholder.influence).toBeUndefined()
-  expect(stakeholder.interest).toBeUndefined()
-  expect(stakeholder.description).toBeUndefined()
+  expect(stakeholder.influence).toHaveLength(0)
+  expect(stakeholder.interest).toHaveLength(0)
+  expect(stakeholder.description).toHaveLength(0)
 }

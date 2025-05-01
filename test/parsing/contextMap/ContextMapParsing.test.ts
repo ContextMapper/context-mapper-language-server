@@ -21,13 +21,13 @@ describe('Context Map parsing tests', () => {
       }
    `)
 
-    expect(document.parseResult.value.contextMaps).toHaveLength(1)
-    const contextMap = document.parseResult.value.contextMaps[0]
+    expect(document.parseResult.value.contextMap).toHaveLength(1)
+    const contextMap = document.parseResult.value.contextMap[0]
     expect(contextMap).not.toBeUndefined()
     expect(contextMap.name).toBeUndefined()
     expect(contextMap.boundedContexts).toHaveLength(0)
-    expect(contextMap.type).toBeUndefined()
-    expect(contextMap.state).toBeUndefined()
+    expect(contextMap.type).toHaveLength(0)
+    expect(contextMap.state).toHaveLength(0)
     expect(contextMap.relationships).toHaveLength(0)
   })
 
@@ -37,8 +37,8 @@ describe('Context Map parsing tests', () => {
       }
     `)
 
-    expect(document.parseResult.value.contextMaps).toHaveLength(1)
-    const contextMap = document.parseResult.value.contextMaps[0]
+    expect(document.parseResult.value.contextMap).toHaveLength(1)
+    const contextMap = document.parseResult.value.contextMap[0]
     expect(contextMap).not.toBeUndefined()
     expect(contextMap.name).toEqual('TestMap')
   })
@@ -57,12 +57,12 @@ describe('Context Map parsing tests', () => {
       BoundedContext SecondContext
     `)
 
-    expect(document.parseResult.value.contextMaps).toHaveLength(1)
-    const contextMap = document.parseResult.value.contextMaps[0]
+    expect(document.parseResult.value.contextMap).toHaveLength(1)
+    const contextMap = document.parseResult.value.contextMap[0]
     expect(contextMap).not.toBeUndefined()
     expect(contextMap.name).toEqual('TestMap')
-    expect(contextMap.state).toEqual('AS_IS')
-    expect(contextMap.type).toEqual('ORGANIZATIONAL')
+    expect(contextMap.state).toEqual(['AS_IS'])
+    expect(contextMap.type).toEqual(['ORGANIZATIONAL'])
     expect(contextMap.boundedContexts).toHaveLength(2)
     expect(contextMap.relationships).toHaveLength(1)
   })
@@ -78,8 +78,8 @@ describe('Context Map parsing tests', () => {
       BoundedContext SecondContext
     `)
 
-    expect(document.parseResult.value.contextMaps).toHaveLength(1)
-    const contextMap = document.parseResult.value.contextMaps[0]
+    expect(document.parseResult.value.contextMap).toHaveLength(1)
+    const contextMap = document.parseResult.value.contextMap[0]
     expect(contextMap).not.toBeUndefined()
     expect(contextMap.boundedContexts).toHaveLength(2)
   })

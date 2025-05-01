@@ -31,9 +31,9 @@ describe('Relationship parsing tests', () => {
       BoundedContext TestContext
     `)
 
-    expect(document.parseResult.value.contextMaps).toHaveLength(1)
-    expect(document.parseResult.value.contextMaps[0].relationships).toHaveLength(1)
-    const relationship = document.parseResult.value.contextMaps[0].relationships[0] as SharedKernel
+    expect(document.parseResult.value.contextMap).toHaveLength(1)
+    expect(document.parseResult.value.contextMap[0].relationships).toHaveLength(1)
+    const relationship = document.parseResult.value.contextMap[0].relationships[0] as SharedKernel
     expect(relationship).not.toBeUndefined()
     expect(relationship.name).toEqual('RelName')
     expect(relationship.implementationTechnology).toEqual('Java')
@@ -123,9 +123,9 @@ describe('Relationship parsing tests', () => {
       BoundedContext TestContext
     `)
 
-    expect(document.parseResult.value.contextMaps).toHaveLength(1)
-    expect(document.parseResult.value.contextMaps[0].relationships).toHaveLength(1)
-    const relationship = document.parseResult.value.contextMaps[0].relationships[0] as Partnership
+    expect(document.parseResult.value.contextMap).toHaveLength(1)
+    expect(document.parseResult.value.contextMap[0].relationships).toHaveLength(1)
+    const relationship = document.parseResult.value.contextMap[0].relationships[0] as Partnership
     expect(relationship).not.toBeUndefined()
     expect(relationship.name).toEqual('RelName')
     expect(relationship.implementationTechnology).toEqual('Java')
@@ -208,13 +208,13 @@ describe('Relationship parsing tests', () => {
       }
     `)
 
-    expect(document.parseResult.value.contextMaps).toHaveLength(1)
-    expect(document.parseResult.value.contextMaps[0].relationships).toHaveLength(1)
-    const relationship = document.parseResult.value.contextMaps[0].relationships[0] as CustomerSupplierRelationship
+    expect(document.parseResult.value.contextMap).toHaveLength(1)
+    expect(document.parseResult.value.contextMap[0].relationships).toHaveLength(1)
+    const relationship = document.parseResult.value.contextMap[0].relationships[0] as CustomerSupplierRelationship
     expect(relationship).not.toBeUndefined()
     expect(relationship.name).toEqual('RelName')
-    expect(relationship.implementationTechnology).toEqual('Java')
-    expect(relationship.downstreamGovernanceRights).toEqual('INFLUENCER')
+    expect(relationship.implementationTechnology).toEqual(['Java'])
+    expect(relationship.downstreamGovernanceRights).toEqual(['INFLUENCER'])
     expect(relationship.upstreamExposedAggregates).toHaveLength(1)
     expect(relationship.upstream).not.toBeUndefined()
     expect(relationship.downstream).not.toBeUndefined()
@@ -285,14 +285,14 @@ describe('Relationship parsing tests', () => {
       BoundedContext TestContext
     `)
 
-    expect(document.parseResult.value.contextMaps).toHaveLength(1)
-    expect(document.parseResult.value.contextMaps[0].relationships).toHaveLength(1)
-    const relationship = document.parseResult.value.contextMaps[0].relationships[0] as UpstreamDownstreamRelationship
+    expect(document.parseResult.value.contextMap).toHaveLength(1)
+    expect(document.parseResult.value.contextMap[0].relationships).toHaveLength(1)
+    const relationship = document.parseResult.value.contextMap[0].relationships[0] as UpstreamDownstreamRelationship
     expect(relationship).not.toBeUndefined()
     expect(relationship.name).toEqual('RelName')
-    expect(relationship.downstreamGovernanceRights).toEqual('INFLUENCER')
+    expect(relationship.downstreamGovernanceRights).toEqual(['INFLUENCER'])
     expect(relationship.upstreamExposedAggregates).toHaveLength(1)
-    expect(relationship.implementationTechnology).toEqual('Java')
+    expect(relationship.implementationTechnology).toEqual(['Java'])
     expect(relationship.upstream).not.toBeUndefined()
     expect(relationship.upstreamRoles).toHaveLength(1)
     expect(relationship.upstreamRoles[0]).toEqual('OHS')
@@ -351,9 +351,9 @@ describe('Relationship parsing tests', () => {
 })
 
 function expectRelationshipType (document: LangiumDocument<ContextMappingModel>, type: string) {
-  expect(document.parseResult.value.contextMaps).toHaveLength(1)
-  expect(document.parseResult.value.contextMaps[0].relationships).toHaveLength(1)
-  const relationship = document.parseResult.value.contextMaps[0].relationships[0]
+  expect(document.parseResult.value.contextMap).toHaveLength(1)
+  expect(document.parseResult.value.contextMap[0].relationships).toHaveLength(1)
+  const relationship = document.parseResult.value.contextMap[0].relationships[0]
   expect(relationship).not.toBeUndefined()
   expect(relationship.$type).toEqual(type)
 }

@@ -1,5 +1,4 @@
-import { ValidationAcceptor } from 'langium'
-import type { ContextMappingModel, Value } from '../generated/ast.js'
+import { AstNode, ValidationAcceptor } from 'langium'
 import { ContextMapperValidationProviderRegistry } from './ContextMapperValidationProviderRegistry.js'
 
 export class ContextMapperDslValidator {
@@ -9,11 +8,7 @@ export class ContextMapperDslValidator {
     this._registry = contextMapperValidationProviderRegistry
   }
 
-  checkContextMappingModel (model: ContextMappingModel, acceptor: ValidationAcceptor) {
-    this._registry.get(model)?.validate(model, acceptor)
-  }
-
-  checkValue (value: Value, acceptor: ValidationAcceptor) {
-    this._registry.get(value)?.validate(value, acceptor)
+  validate (node: AstNode, acceptor: ValidationAcceptor) {
+    this._registry.get(node)?.validate(node, acceptor)
   }
 }

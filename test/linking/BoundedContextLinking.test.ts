@@ -34,7 +34,7 @@ describe('Bounded context linking tests', () => {
         BoundedContext TestContext
     `)
 
-    const relationship = document.parseResult.value.contextMaps[0].relationships[0] as SharedKernel
+    const relationship = document.parseResult.value.contextMap[0].relationships[0] as SharedKernel
     expect(relationship.participant1.ref).not.toBeUndefined()
     expect(relationship.participant1.ref?.name).toEqual('TestContext')
     expect(relationship.participant2.ref).not.toBeUndefined()
@@ -50,7 +50,7 @@ describe('Bounded context linking tests', () => {
         BoundedContext TestContext
     `)
 
-    const relationship = document.parseResult.value.contextMaps[0].relationships[0] as Partnership
+    const relationship = document.parseResult.value.contextMap[0].relationships[0] as Partnership
     expect(relationship.participant1.ref).not.toBeUndefined()
     expect(relationship.participant1.ref?.name).toEqual('FirstContext')
     expect(relationship.participant2.ref).not.toBeUndefined()
@@ -66,7 +66,7 @@ describe('Bounded context linking tests', () => {
         BoundedContext TestContext
     `)
 
-    const relationship = document.parseResult.value.contextMaps[0].relationships[0] as UpstreamDownstreamRelationship
+    const relationship = document.parseResult.value.contextMap[0].relationships[0] as UpstreamDownstreamRelationship
     expect(relationship.upstream.ref).not.toBeUndefined()
     expect(relationship.upstream.ref?.name).toEqual('FirstContext')
     expect(relationship.downstream.ref).not.toBeUndefined()
@@ -82,7 +82,7 @@ describe('Bounded context linking tests', () => {
         BoundedContext TestContext
     `)
 
-    const relationship = document.parseResult.value.contextMaps[0].relationships[0] as CustomerSupplierRelationship
+    const relationship = document.parseResult.value.contextMap[0].relationships[0] as CustomerSupplierRelationship
     expect(relationship.downstream.ref).not.toBeUndefined()
     expect(relationship.downstream.ref?.name).toEqual('FirstContext')
     expect(relationship.upstream.ref).not.toBeUndefined()
@@ -99,7 +99,7 @@ describe('Bounded context linking tests', () => {
         BoundedContext SecondContext
     `)
 
-    const contextMap = document.parseResult.value.contextMaps[0]
+    const contextMap = document.parseResult.value.contextMap[0]
     expect(contextMap.boundedContexts).toHaveLength(2)
     expect(contextMap.boundedContexts[0].ref).not.toBeUndefined()
     expect(contextMap.boundedContexts[0].ref?.name).toEqual('FirstContext')
@@ -118,9 +118,9 @@ describe('Bounded context linking tests', () => {
     `)
 
     const boundedContext = document.parseResult.value.boundedContexts[0]
-    expect(boundedContext.refinedBoundedContext).not.toBeUndefined()
-    expect(boundedContext.refinedBoundedContext.ref).not.toBeUndefined()
-    expect(boundedContext.refinedBoundedContext.ref?.name).toEqual('RefinedContext')
+    expect(boundedContext.refinedBoundedContext).toHaveLength(1)
+    expect(boundedContext.refinedBoundedContext[0].ref).not.toBeUndefined()
+    expect(boundedContext.refinedBoundedContext[0].ref?.name).toEqual('RefinedContext')
     expect(boundedContext.realizedBoundedContexts).toHaveLength(1)
     expect(boundedContext.realizedBoundedContexts[0].ref).not.toBeUndefined()
     expect(boundedContext.realizedBoundedContexts[0].ref?.name).toEqual('RealizedContext')
@@ -136,9 +136,9 @@ describe('Bounded context linking tests', () => {
     `)
 
     const aggregate = document.parseResult.value.boundedContexts[0].aggregates[0]
-    expect(aggregate.owner).not.toBeUndefined()
-    expect(aggregate.owner?.ref).not.toBeUndefined()
-    expect(aggregate.owner?.ref?.name).toEqual('TestContext')
+    expect(aggregate.owner).toHaveLength(1)
+    expect(aggregate.owner[0].ref).not.toBeUndefined()
+    expect(aggregate.owner[0].ref?.name).toEqual('TestContext')
   })
 
   test('check linking of shareholders context', async () => {

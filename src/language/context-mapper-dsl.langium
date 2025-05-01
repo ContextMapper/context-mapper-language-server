@@ -12,7 +12,7 @@ hidden terminal SL_COMMENT: /\/\/[^\n\r]*/;
 
 entry ContextMappingModel:
 	(
-		(contextMaps+=ContextMap) |
+		(contextMap+=ContextMap) |
 		(boundedContexts+=BoundedContext) |
 		(domains+=Domain) |
 		(userRequirements+=UserRequirement) |
@@ -22,12 +22,10 @@ entry ContextMappingModel:
 ;
 
 /*
- In Langium, elements in unordered groups are optional by default.
- However, the usage of the ? cardinality is not allowed in unordered groups.
- Therefore, to create a rule with optional, unordered elements, one needs to omit the ? operator and combine them with the & operator.
- This behavior may change in the future.
- Also, unordered groups may cause unreadable parsing errors. To resolve that, unordered groups can be replaced with a (A | B | C)* rule and enforce non-repetition of elements with a validator.
+ Unordered groups may cause unreadable parsing errors. To resolve that, unordered groups can be replaced with a (A | B | C)* rule and enforce non-repetition of elements with a validator.
  https://github.com/eclipse-langium/langium/discussions/1903
+ Also, unordered groups cause issues with autocomplete.
+ Therefore all unordered group rules had to be converted to the recommended workaround from above.
  */
 
 ContextMap:
@@ -35,9 +33,9 @@ ContextMap:
 	'ContextMap' (name=ID)?
 	OPEN
 		(
-			('type' ('=')? type=ContextMapType) &
-			('state' ('=')? state=ContextMapState)
-		)
+			('type' ('=')? type+=ContextMapType) |
+			('state' ('=')? state+=ContextMapState)
+		)*
 		('contains' boundedContexts+=[BoundedContext] ("," boundedContexts+=[BoundedContext])*)*
 		relationships+=Relationship*
 	CLOSE
@@ -46,22 +44,22 @@ ContextMap:
 BoundedContext:
 	'BoundedContext' name=ID (
 		(
-			('implements' (implementedDomainParts+=[DomainPart]) ("," implementedDomainParts+=[DomainPart])*) &
-			('realizes' (realizedBoundedContexts+=[BoundedContext]) ("," realizedBoundedContexts+=[BoundedContext])*) &
-			('refines' refinedBoundedContext=[BoundedContext])
-		)
+			('implements' (implementedDomainParts+=[DomainPart]) ("," implementedDomainParts+=[DomainPart])*) |
+			('realizes' (realizedBoundedContexts+=[BoundedContext]) ("," realizedBoundedContexts+=[BoundedContext])*) |
+			('refines' refinedBoundedContext+=[BoundedContext])
+		)*
 	)
 	(
 		OPEN
 			(
-				('domainVisionStatement' ('=')? domainVisionStatement=STRING) &
-				('type' ('=')? type=BoundedContextType) &
-				(('responsibilities' ('=')? responsibilities+=STRING) ("," responsibilities+=STRING)*) &
-				('implementationTechnology' ('=')? implementationTechnology=STRING) &
-				('knowledgeLevel' ('=')? knowledgeLevel=KnowledgeLevel) &
-				('businessModel' ('=')? businessModel=STRING) &
-				('evolution' ('=')? evolution=Evolution)
-			)
+				('domainVisionStatement' ('=')? domainVisionStatement+=STRING) |
+				('type' ('=')? type+=BoundedContextType) |
+				(('responsibilities' ('=')? responsibilities+=STRING) ("," responsibilities+=STRING)*) |
+				('implementationTechnology' ('=')? implementationTechnology+=STRING) |
+				('knowledgeLevel' ('=')? knowledgeLevel+=KnowledgeLevel) |
+				('businessModel' ('=')? businessModel+=STRING) |
+				('evolution' ('=')? evolution+=Evolution)
+			)*
 			(
 				(
 					modules+=SculptorModule |
@@ -91,9 +89,9 @@ Subdomain:
 	(
 		OPEN
 			(
-				('type' ('=')? type=SubDomainType) &
-				('domainVisionStatement' ('=')? domainVisionStatement=STRING)
-			)
+				('type' ('=')? type+=SubDomainType) |
+				('domainVisionStatement' ('=')? domainVisionStatement+=STRING)
+			)*
 		CLOSE
 	)?
 ;
@@ -147,10 +145,10 @@ UpstreamDownstreamRelationship:
 		(':' name=ID)?
 		(OPEN 
 			(
-				('implementationTechnology' ('=')? implementationTechnology=STRING) &
-				(('exposedAggregates' ('=')? upstreamExposedAggregates+=[Aggregate]) ("," upstreamExposedAggregates+=[Aggregate])*) &
-				('downstreamRights' ('=')? downstreamGovernanceRights=DownstreamGovernanceRights)
-			)
+				('implementationTechnology' ('=')? implementationTechnology+=STRING) |
+				(('exposedAggregates' ('=')? upstreamExposedAggregates+=[Aggregate]) ("," upstreamExposedAggregates+=[Aggregate])*) |
+				('downstreamRights' ('=')? downstreamGovernanceRights+=DownstreamGovernanceRights)
+			)*
 		CLOSE)?
 	)
 ;
@@ -166,10 +164,10 @@ CustomerSupplierRelationship:
 		(':' name=ID)?
 		(OPEN 
 			(
-				('implementationTechnology' ('=')? implementationTechnology=STRING) &
-				(('exposedAggregates' ('=')? upstreamExposedAggregates+=[Aggregate]) ("," upstreamExposedAggregates+=[Aggregate])*) &
-				('downstreamRights' ('=')? downstreamGovernanceRights=DownstreamGovernanceRights)
-			)
+				('implementationTechnology' ('=')? implementationTechnology+=STRING) |
+				(('exposedAggregates' ('=')? upstreamExposedAggregates+=[Aggregate]) ("," upstreamExposedAggregates+=[Aggregate])*) |
+				('downstreamRights' ('=')? downstreamGovernanceRights+=DownstreamGovernanceRights)
+			)*
 		CLOSE)?
 	)
 ;
@@ -178,23 +176,23 @@ Aggregate:
 	(doc=STRING)?
   "Aggregate" name=ID (OPEN
     (
-    	(('responsibilities' ('=')? responsibilities+=STRING) ("," responsibilities+=STRING)*) &
+    	(('responsibilities' ('=')? responsibilities+=STRING) ("," responsibilities+=STRING)*) |
     	(
     		(('useCases' ('=')? useCases+=[UseCase]) ("," useCases+=[UseCase])*) |
     		(('userStories' ('=')? userStories+=[UserStory]) ("," userStories+=[UserStory])*) |
     		((('features' | 'userRequirements') ('=')? userRequirements+=[UserRequirement]) ("," userRequirements+=[UserRequirement])*)
-    	) &
-    	('owner' ('=')? owner=[BoundedContext]) &
-    	('knowledgeLevel' ('=')? knowledgeLevel=KnowledgeLevel) &
-    	(('likelihoodForChange' | 'structuralVolatility') ('=')? likelihoodForChange=Volatility) &
-    	('contentVolatility' ('=')? contentVolatility=Volatility) &
-    	('availabilityCriticality' ('=')? availabilityCriticality=Criticality) &
-    	('consistencyCriticality' ('=')? consistencyCriticality=Criticality) &
-    	('storageSimilarity' ('=')? storageSimilarity=Similarity) &
-    	('securityCriticality' ('=')? securityCriticality=Criticality) &
-    	('securityZone' ('=')? securityZone=STRING) &
-    	('securityAccessGroup' ('=')? securityAccessGroup=STRING)
-    )
+    	) |
+    	('owner' ('=')? owner+=[BoundedContext]) |
+    	('knowledgeLevel' ('=')? knowledgeLevel+=KnowledgeLevel) |
+    	(('likelihoodForChange' | 'structuralVolatility') ('=')? likelihoodForChange+=Volatility) |
+    	('contentVolatility' ('=')? contentVolatility+=Volatility) |
+    	('availabilityCriticality' ('=')? availabilityCriticality+=Criticality) |
+    	('consistencyCriticality' ('=')? consistencyCriticality+=Criticality) |
+    	('storageSimilarity' ('=')? storageSimilarity+=Similarity) |
+    	('securityCriticality' ('=')? securityCriticality+=Criticality) |
+    	('securityZone' ('=')? securityZone+=STRING) |
+    	('securityAccessGroup' ('=')? securityAccessGroup+=STRING)
+    )*
   CLOSE)?
 ;
 
@@ -205,13 +203,13 @@ UserRequirement:
 UseCase:
 	'UseCase' name=ID (OPEN
 		(
-			('actor' ('=')? role=STRING) &
-			('secondaryActors' ('=')? secondaryActors+=STRING ("," secondaryActors+=STRING)*) &
-			('interactions' ('=')? features+=Feature ("," features+=Feature)*) &
-			('benefit' ('=')? benefit=STRING) &
-			('scope' ('=')? scope=STRING) &
-			('level' ('=')? level=STRING)
-		)
+			('actor' ('=')? role+=STRING) |
+			('secondaryActors' ('=')? secondaryActors+=STRING ("," secondaryActors+=STRING)*) |
+			('interactions' ('=')? features+=Feature ("," features+=Feature)*) |
+			('benefit' ('=')? benefit+=STRING) |
+			('scope' ('=')? scope+=STRING) |
+			('level' ('=')? level+=STRING)
+		)*
 	CLOSE)?
 ;
 
@@ -247,10 +245,10 @@ SculptorModule:
 	'Module' name=ID  (
 		OPEN 
 			(
-				(external?='external') &
-				('basePackage' '=' basePackage=JavaIdentifier) &
-				('hint' '=' hint=STRING)
-			)
+				(external+='external') |
+				('basePackage' '=' basePackage+=JavaIdentifier) |
+				('hint' '=' hint+=STRING)
+			)*
 			(
 				(aggregates+=Aggregate) 
 			)*
@@ -286,10 +284,10 @@ StakeholderGroup:
 Stakeholder:
 	'Stakeholder' name=ID (OPEN
 		(
-			('influence' ('=')? influence=INFLUENCE) &
-			('interest' ('=')? interest=INTEREST) &
-			('description' ('=')? description=STRING)
-		)
+			('influence' ('=')? influence+=INFLUENCE) |
+			('interest' ('=')? interest+=INTEREST) |
+			('description' ('=')? description+=STRING)
+		)*
 	CLOSE)?
 ;
 
@@ -334,10 +332,10 @@ Value:
 ValueElicitation:
 	('Stakeholder'|'Stakeholders') stakeholder=[AbstractStakeholder] (OPEN
 		(
-			('priority' ('=')? priority=PRIORITY) &
-			('impact' ('=')? impact=IMPACT) &
+			('priority' ('=')? priority+=PRIORITY) |
+			('impact' ('=')? impact+=IMPACT) |
 			('consequences' (consequences+=Consequence)+)
-		)
+		)*
 	CLOSE)?
 ;
 
@@ -347,9 +345,9 @@ ValueEpic:
     	(
     		'As a' stakeholder=[AbstractStakeholder] 'I value' value=STRING 'as demonstrated in' 
     		(
-				('realization of' realizedValues+=STRING)+ & 
+				('realization of' realizedValues+=STRING)+ |
     			('reduction of' reducedValues+=STRING)+
-			)	
+			)*
     	)
 	CLOSE)?
 ;

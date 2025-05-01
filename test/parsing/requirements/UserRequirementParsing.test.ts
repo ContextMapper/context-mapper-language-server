@@ -60,10 +60,10 @@ describe('User requirement parsing tests', () => {
     expect(useCase.secondaryActors).toHaveLength(2)
     expect(useCase.secondaryActors[0]).toEqual('actor1')
     expect(useCase.secondaryActors[1]).toEqual('actor2')
-    expect(useCase.role).toEqual('role')
-    expect(useCase.benefit).toEqual('benefit')
-    expect(useCase.level).toEqual('level')
-    expect(useCase.scope).toEqual('scope')
+    expect(useCase.role).toEqual(['role'])
+    expect(useCase.benefit).toEqual(['benefit'])
+    expect(useCase.level).toEqual(['level'])
+    expect(useCase.scope).toEqual(['scope'])
     expect(useCase.features).toHaveLength(2)
   })
 
@@ -166,12 +166,12 @@ describe('User requirement parsing tests', () => {
 
 function expectUseCaseToBeEmpty (useCase: UseCase) {
   expect(useCase.name).toEqual('TestUseCase')
-  expect(useCase.role).toBeUndefined()
+  expect(useCase.role).toHaveLength(0)
   expect(useCase.secondaryActors).toHaveLength(0)
   expect(useCase.features).toHaveLength(0)
-  expect(useCase.benefit).toBeUndefined()
-  expect(useCase.scope).toBeUndefined()
-  expect(useCase.level).toBeUndefined()
+  expect(useCase.benefit).toHaveLength(0)
+  expect(useCase.scope).toHaveLength(0)
+  expect(useCase.level).toHaveLength(0)
 }
 
 function expectUserStoryToBeEmpty (userStory: UserStory) {
