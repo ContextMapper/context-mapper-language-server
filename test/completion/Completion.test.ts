@@ -5,11 +5,11 @@ import { ContextMappingModel } from '../../src/language/generated/ast.js'
 import { EmptyFileSystem, LangiumDocument } from 'langium'
 import { afterEach, beforeAll, describe, expect, test } from 'vitest'
 import { fail } from 'node:assert'
+import { uinteger } from 'vscode-languageserver-types'
 
 let services: ReturnType<typeof createContextMapperDslServices>
 let completionProvider: CompletionProvider
 let parse: ReturnType<typeof parseHelper<ContextMappingModel>>
-let document: LangiumDocument<ContextMappingModel> | undefined
 
 beforeAll(async () => {
   services = createContextMapperDslServices(EmptyFileSystem)
@@ -18,7 +18,7 @@ beforeAll(async () => {
 })
 
 afterEach(async () => {
-  document && await clearDocuments(services.shared, [document])
+  await clearDocuments(services.shared, services.shared.workspace.LangiumDocuments.all.toArray())
 })
 
 describe('Completion tests', () => {
@@ -40,20 +40,60 @@ describe('Completion tests', () => {
       BoundedContext AnotherContext
     `)
 
-    const params = {
-      textDocument: {
-        uri: docToComplete.uri.path
-      },
-      position: {
-        line: 2,
-        character: 28
-      }
-    }
+    const params = createCompletionParams(docToComplete, 2, 28)
     const completionList = await completionProvider.getCompletion(docToComplete, params)
     if (completionList == null) {
       fail('Expected completion provider to return completion list')
+      return
     }
     expect(completionList.items).toHaveLength(1)
     expect(completionList.items[0].label).toEqual('TestContext')
   })
+
+  test('check completion of bounded context property', async () => {
+    const documentToComplete = await parse(`
+      BoundedContext TestContext {
+        typ
+      }
+    `)
+
+    const params = createCompletionParams(documentToComplete, 2, 11)
+    const completionList = await completionProvider.getCompletion(documentToComplete, params)
+    if (completionList == null) {
+      fail('Expected completion provider to return completion list')
+      return
+    }
+    expect(completionList.items).toHaveLength(1)
+    expect(completionList.items[0].label).toEqual('type')
+  })
+
+  test('check completion of bounded context property with existing property', async () => {
+    const documentToComplete = await parse(`
+      ContextMap {
+        state UNDEFINED
+        ty
+      }
+    `)
+
+    const params = createCompletionParams(documentToComplete, 3, 10)
+    const completionList = await completionProvider.getCompletion(documentToComplete, params)
+    if (completionList == null) {
+      fail('Expected completion provider to return completion list')
+      return
+    }
+    expect(completionList.items).toHaveLength(1)
+    expect(completionList.items[0].label).toEqual('type')
+  })
 })
+
+function createCompletionParams (document: LangiumDocument<ContextMappingModel>, positionLine: uinteger, positionChar: uinteger): any {
+  return {
+    textDocument: {
+      uri: document.uri.path
+    },
+    position: {
+      line: positionLine,
+      character: positionChar
+    }
+  }
+}
