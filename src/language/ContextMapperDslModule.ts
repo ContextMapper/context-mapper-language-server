@@ -16,7 +16,6 @@ import { ContextMapperValidationProviderRegistry } from './validation/ContextMap
 import { ContextMapperDslScopeProvider } from './references/ContextMapperDslScopeProvider.js'
 import { ContextMapperDslFoldingRangeProvider } from './folding/ContextMapperDslFoldingRageProvider.js'
 import { ContextMapperDslScopeComputation } from './references/ContextMapperDslScopeComputation.js'
-import { ContextMapperDslCompletionProvider } from './completion/ContextMapperDslCompletionProvider.js'
 
 /**
  * Declaration of custom services - add your own service classes here.
