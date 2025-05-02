@@ -177,11 +177,9 @@ Aggregate:
   "Aggregate" name=ID (OPEN
     (
     	(('responsibilities' ('=')? responsibilities+=STRING) ("," responsibilities+=STRING)*) |
-    	(
-    		(('useCases' ('=')? useCases+=[UseCase]) ("," useCases+=[UseCase])*) |
-    		(('userStories' ('=')? userStories+=[UserStory]) ("," userStories+=[UserStory])*) |
-    		((('features' | 'userRequirements') ('=')? userRequirements+=[UserRequirement]) ("," userRequirements+=[UserRequirement])*)
-    	) |
+		(('useCases' ('=')? useCases+=[UseCase]) ("," useCases+=[UseCase])*) |
+		(('userStories' ('=')? userStories+=[UserStory]) ("," userStories+=[UserStory])*) |
+		((('features' | 'userRequirements') ('=')? userRequirements+=[UserRequirement]) ("," userRequirements+=[UserRequirement])*) |
     	('owner' ('=')? owner+=[BoundedContext]) |
     	('knowledgeLevel' ('=')? knowledgeLevel+=KnowledgeLevel) |
     	(('likelihoodForChange' | 'structuralVolatility') ('=')? likelihoodForChange+=Volatility) |

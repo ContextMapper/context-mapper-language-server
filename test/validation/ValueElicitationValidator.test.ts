@@ -105,4 +105,45 @@ describe('ValueElicitationValidationProvider tests', () => {
     expect(document.diagnostics).toHaveLength(1)
     expect(document.diagnostics![0].range.start.line).toEqual(4)
   })
+
+  test('report one consequences', async () => {
+    document = await parse(`
+      ValueRegister TestRegister {
+        Value TestValue {
+          Stakeholder TestStakeholder {
+            consequences
+              good "conseq"
+              bad "conseq"
+          }
+        }
+      }
+      Stakeholders {
+        Stakeholder TestStakeholder
+      }
+    `)
+
+    expect(document.diagnostics).toHaveLength(0)
+  })
+
+  test('report multiple impacts', async () => {
+    document = await parse(`
+      ValueRegister TestRegister {
+        Value TestValue {
+          Stakeholder TestStakeholder {
+            consequences
+              good "conseq"
+              bad "conseq"
+            consequences
+              neutral "conseq"
+          }
+        }
+      }
+      Stakeholders {
+        Stakeholder TestStakeholder
+      }
+    `)
+
+    expect(document.diagnostics).toHaveLength(1)
+    expect(document.diagnostics![0].range.start.line).toEqual(4)
+  })
 })

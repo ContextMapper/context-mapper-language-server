@@ -14,7 +14,7 @@ import {
   UpstreamDownstreamRelationship,
   UseCase,
   Value,
-  ValueElicitation
+  ValueElicitation, ValueEpic
 } from '../generated/ast.js'
 import { BoundedContextValidationProvider } from './impl/BoundedContextValidationProvider.js'
 import { SubDomainValidationProvider } from './impl/SubDomainValidationProvider.js'
@@ -26,6 +26,7 @@ import { UseCaseValidationProvider } from './impl/UseCaseValidationProvider.js'
 import { SculptorModuleValidationProvider } from './impl/SculptorModuleValidationProvider.js'
 import { StakeholderValidationProvider } from './impl/StakeholderValidationProvider.js'
 import { ValueElicitationValidationProvider } from './impl/ValueElicitationValidationProvider.js'
+import { ValueEpicValidationProvider } from './impl/ValueEpicValidationProvider.js'
 
 export class ContextMapperValidationProviderRegistry {
   private readonly _providers = new Map<string, ContextMapperValidationProvider<AstNode>>([
@@ -39,7 +40,8 @@ export class ContextMapperValidationProviderRegistry {
     [UseCase, new UseCaseValidationProvider()],
     [SculptorModule, new SculptorModuleValidationProvider()],
     [Stakeholder, new StakeholderValidationProvider()],
-    [ValueElicitation, new ValueElicitationValidationProvider()]
+    [ValueElicitation, new ValueElicitationValidationProvider()],
+    [ValueEpic, new ValueEpicValidationProvider()]
   ])
 
   get (node: AstNode): ContextMapperValidationProvider<AstNode> | undefined {

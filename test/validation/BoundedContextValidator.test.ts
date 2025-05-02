@@ -15,26 +15,70 @@ beforeAll(async () => {
 })
 
 describe('BoundedContextValidationProvider tests', () => {
-  // TODO: test implementedDomainParts & realizedBoundedContexts after regex enforcement impl
+  test('accept one implements', async () => {
+    document = await parse(`
+      BoundedContext FirstContext implements TestDomain, TestDomainTwo
+      Domain TestDomain
+      Domain TestDomainTwo
+    `)
 
-  test('accept one refinement', async () => {
+    expect(document.diagnostics).toHaveLength(0)
+  })
+
+  test('report multiple implements', async () => {
+    document = await parse(`
+      BoundedContext FirstContext
+        implements TestDomain, TestDomainTwo
+        implements OtherDomain
+      Domain TestDomain
+      Domain TestDomainTwo
+      Domain OtherDomain
+    `)
+
+    expect(document.diagnostics).toHaveLength(1)
+    expect(document.diagnostics![0].range.start.line).toEqual(2)
+  })
+
+  test('accept one realizes', async () => {
     document = await parse(`
       BoundedContext FirstContext 
-        refines OtherContext {
-        
-      }
+        realizes OtherContext, OtherContextTwo
+      BoundedContext OtherContext
+      BoundedContext OtherContextTwo
+    `)
+
+    expect(document.diagnostics).toHaveLength(0)
+  })
+
+  test('report multiple realizes', async () => {
+    document = await parse(`
+      BoundedContext FirstContext 
+        realizes OtherContext, OtherContextTwo
+        realizes OtherContextThree
+      BoundedContext OtherContext
+      BoundedContext OtherContextTwo
+      BoundedContext OtherContextThree
+    `)
+
+    expect(document.diagnostics).toHaveLength(1)
+    expect(document.diagnostics![0].range.start.line).toEqual(2)
+  })
+
+  test('accept one refines', async () => {
+    document = await parse(`
+      BoundedContext FirstContext 
+        refines OtherContext
       BoundedContext OtherContext
     `)
 
     expect(document.diagnostics).toHaveLength(0)
   })
 
-  test('report multiple refinements', async () => {
+  test('report multiple refines', async () => {
     document = await parse(`
       BoundedContext FirstContext 
         refines OtherContext
-        refines ThirdContext {
-        }
+        refines ThirdContext
       BoundedContext OtherContext
       BoundedContext ThirdContext
     `)
@@ -170,6 +214,28 @@ describe('BoundedContextValidationProvider tests', () => {
       BoundedContext FirstContext {
         evolution UNDEFINED
         evolution UNDEFINED
+      }
+    `)
+
+    expect(document.diagnostics).toHaveLength(1)
+    expect(document.diagnostics![0].range.start.line).toEqual(2)
+  })
+
+  test('accept one responsibilities', async () => {
+    document = await parse(`
+      BoundedContext FirstContext {
+        responsibilities "resp1", "resp2"
+      }
+    `)
+
+    expect(document.diagnostics).toHaveLength(0)
+  })
+
+  test('report multiple responsibilities', async () => {
+    document = await parse(`
+      BoundedContext FirstContext {
+        responsibilities "resp1", "resp2"
+        responsibilities "resp3"
       }
     `)
 

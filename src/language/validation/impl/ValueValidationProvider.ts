@@ -5,6 +5,6 @@ import { enforceZeroOrOneCardinality } from '../ValidationHelper.js'
 
 export class ValueValidationProvider implements ContextMapperValidationProvider<Value> {
   validate (node: Value, acceptor: ValidationAcceptor): void {
-    enforceZeroOrOneCardinality(node, 'coreValue', acceptor, 'isCore')
+    enforceZeroOrOneCardinality(node, 'coreValue', acceptor, ['isCore'])
   }
 }

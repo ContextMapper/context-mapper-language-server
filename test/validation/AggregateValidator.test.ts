@@ -282,7 +282,192 @@ describe('AggregateValidationProvider tests', () => {
       }
     `)
 
+    expect(document.diagnostics).toHaveLength(2)
+    expect(document.diagnostics!.map(d => d.range.start.line).sort()).toEqual([3, 4])
+  })
+
+  test('accept one responsibilities', async () => {
+    document = await parse(`
+      BoundedContext TestOwner {
+        Aggregate TestAggregate {
+          responsibilities "resp1", "resp2"
+        }
+      }
+    `)
+
+    expect(document.diagnostics).toHaveLength(0)
+  })
+
+  test('report multiple responsibilities', async () => {
+    document = await parse(`
+      BoundedContext TestOwner {
+        Aggregate TestAggregate {
+          responsibilities "resp1", "resp2"
+          responsibilities "resp3"
+        }
+      }
+    `)
+
     expect(document.diagnostics).toHaveLength(1)
     expect(document.diagnostics![0].range.start.line).toEqual(3)
+  })
+
+  test('accept one useCases', async () => {
+    document = await parse(`
+      BoundedContext TestOwner {
+        Aggregate TestAggregate {
+          useCases TestCase, TestCaseTwo
+        }
+      }
+      
+      UseCase TestCase
+      UseCase TestCaseTwo
+    `)
+
+    expect(document.diagnostics).toHaveLength(0)
+  })
+
+  test('report multiple useCases', async () => {
+    document = await parse(`
+      BoundedContext TestOwner {
+        Aggregate TestAggregate {
+          useCases TestCase, TestCaseTwo
+          useCases TestCaseThree
+        }
+      }
+      
+      UseCase TestCase
+      UseCase TestCaseTwo
+      UseCase TestCaseThree
+    `)
+
+    expect(document.diagnostics).toHaveLength(1)
+    expect(document.diagnostics![0].range.start.line).toEqual(3)
+  })
+
+  test('accept one userStories', async () => {
+    document = await parse(`
+      BoundedContext TestOwner {
+        Aggregate TestAggregate {
+          userStories TestStory, UserStoryTwo
+        }
+      }
+      
+      UserStory TestStory
+      UserStory UserStoryTwo
+    `)
+
+    expect(document.diagnostics).toHaveLength(0)
+  })
+
+  test('report multiple userStories', async () => {
+    document = await parse(`
+      BoundedContext TestOwner {
+        Aggregate TestAggregate {
+          userStories TestStory, UserStoryTwo
+          userStories UserStoryThree
+        }
+      }
+      
+      UserStory TestStory
+      UserStory UserStoryTwo
+      UserStory UserStoryThree
+    `)
+
+    expect(document.diagnostics).toHaveLength(1)
+    expect(document.diagnostics![0].range.start.line).toEqual(3)
+  })
+
+  test('accept one features', async () => {
+    document = await parse(`
+      BoundedContext TestOwner {
+        Aggregate TestAggregate {
+          features Feature, FeatureTwo
+        }
+      }
+      
+      UseCase Feature
+      UserStory FeatureTwo
+    `)
+
+    expect(document.diagnostics).toHaveLength(0)
+  })
+
+  test('report multiple features', async () => {
+    document = await parse(`
+      BoundedContext TestOwner {
+        Aggregate TestAggregate {
+          features Feature, FeatureTwo
+          features FeatureThree
+        }
+      }
+      
+      UseCase Feature
+      UserStory FeatureTwo
+      UserStory FeatureThree
+    `)
+  })
+
+  test('accept one userRequirements', async () => {
+    document = await parse(`
+      BoundedContext TestOwner {
+        Aggregate TestAggregate {
+          userRequirements Feature, FeatureTwo
+        }
+      }
+      
+      UseCase Feature
+      UserStory FeatureTwo
+    `)
+
+    expect(document.diagnostics).toHaveLength(0)
+  })
+
+  test('report multiple userRequirements', async () => {
+    document = await parse(`
+      BoundedContext TestOwner {
+        Aggregate TestAggregate {
+          userRequirements Feature, FeatureTwo
+          userRequirements FeatureThree
+        }
+      }
+      
+      UseCase Feature
+      UserStory FeatureTwo
+      UserStory FeatureThree
+    `)
+  })
+
+  test('report userRequirements and features', async () => {
+    document = await parse(`
+      BoundedContext TestOwner {
+        Aggregate TestAggregate {
+          userRequirements Feature, FeatureTwo
+          features FeatureThree
+        }
+      }
+      
+      UseCase Feature
+      UserStory FeatureTwo
+      UserStory FeatureThree
+    `)
+  })
+
+  test('report userRequirements and useCases and userStories', async () => {
+    document = await parse(`
+      BoundedContext TestOwner {
+        Aggregate TestAggregate {
+          useCases TestCase
+          userStories TestStory
+          userRequirements Feature
+        }
+      }
+      UseCase Feature
+      UseCase TestCase
+      UserStory TestStory
+    `)
+
+    expect(document.diagnostics).toHaveLength(3)
+    expect(document.diagnostics!.map(d => d.range.start.line).sort()).toEqual([3, 4, 5])
   })
 })

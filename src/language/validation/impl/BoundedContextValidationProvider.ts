@@ -1,17 +1,17 @@
 import { ContextMapperValidationProvider } from '../ContextMapperValidationProvider.js'
 import { BoundedContext } from '../../generated/ast.js'
 import { ValidationAcceptor } from 'langium'
-import { enforceZeroOrOneCardinality } from '../ValidationHelper.js'
+import { enforceZeroOrOneCardinality, enforceZeroOrOneCardinalityOfListAttribute } from '../ValidationHelper.js'
 
 export class BoundedContextValidationProvider implements ContextMapperValidationProvider<BoundedContext> {
   validate (node: BoundedContext, acceptor: ValidationAcceptor): void {
-    // TODO: regex enforce implementedDomainParts
-    // TODO: regex enforce realizedBoundedContexts
-    enforceZeroOrOneCardinality(node, 'refinedBoundedContext', acceptor, 'refines')
+    enforceZeroOrOneCardinalityOfListAttribute(node, 'implementedDomainParts', acceptor, ['implements'])
+    enforceZeroOrOneCardinalityOfListAttribute(node, 'realizedBoundedContexts', acceptor, ['realizes'])
+    enforceZeroOrOneCardinality(node, 'refinedBoundedContext', acceptor, ['refines'])
 
     enforceZeroOrOneCardinality(node, 'domainVisionStatement', acceptor)
     enforceZeroOrOneCardinality(node, 'type', acceptor)
-    // TODO: regex enforce responsibilities
+    enforceZeroOrOneCardinalityOfListAttribute(node, 'responsibilities', acceptor)
     enforceZeroOrOneCardinality(node, 'implementationTechnology', acceptor)
     enforceZeroOrOneCardinality(node, 'knowledgeLevel', acceptor)
     enforceZeroOrOneCardinality(node, 'businessModel', acceptor)

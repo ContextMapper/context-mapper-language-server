@@ -102,4 +102,53 @@ describe('UseCaseValidationProvider tests', () => {
     expect(document.diagnostics).toHaveLength(1)
     expect(document.diagnostics![0].range.start.line).toEqual(2)
   })
+
+  test('accept one secondaryActors', async () => {
+    document = await parse(`
+      UseCase TestUseCase {
+        secondaryActors "act1", "act2"
+      }
+    `)
+
+    expect(document.diagnostics).toHaveLength(0)
+  })
+
+  test('report multiple secondaryActors', async () => {
+    document = await parse(`
+      UseCase TestUseCase {
+        secondaryActors "act1", "act2"
+        secondaryActors "act3"
+      }
+    `)
+
+    expect(document.diagnostics).toHaveLength(1)
+    expect(document.diagnostics![0].range.start.line).toEqual(2)
+  })
+
+  test('accept one interactions', async () => {
+    document = await parse(`
+      UseCase TestUseCase {
+        interactions
+          create an "order",
+          update an "order"
+      }
+    `)
+
+    expect(document.diagnostics).toHaveLength(0)
+  })
+
+  test('accept multiple interactions', async () => {
+    document = await parse(`
+      UseCase TestUseCase {
+        interactions
+          create an "order",
+          update an "order"
+        interactions
+          delete an "order"
+      }
+    `)
+
+    expect(document.diagnostics).toHaveLength(1)
+    expect(document.diagnostics![0].range.start.line).toEqual(2)
+  })
 })
