@@ -377,8 +377,8 @@ describe('Value register parsing tests', () => {
     expect(document.parseResult.value.valueRegisters[0].values[0].elicitations).toHaveLength(1)
     const elicitation = document.parseResult.value.valueRegisters[0].values[0].elicitations[0]
     expect(elicitation.stakeholder).not.toBeUndefined()
-    expect(elicitation.priority).toEqual('LOW')
-    expect(elicitation.impact).toEqual('MEDIUM')
+    expect(elicitation.priority).toEqual(['LOW'])
+    expect(elicitation.impact).toEqual(['MEDIUM'])
     expect(elicitation.consequences).toHaveLength(1)
   })
 
@@ -465,7 +465,7 @@ function expectEmptyEpic (epic: ValueEpic) {
 function expectEmptyValueElicitation (elicitation: ValueElicitation) {
   expect(elicitation).not.toBeUndefined()
   expect(elicitation.stakeholder).not.toBeUndefined()
-  expect(elicitation.priority).toBeUndefined()
-  expect(elicitation.impact).toBeUndefined()
+  expect(elicitation.priority).toHaveLength(0)
+  expect(elicitation.impact).toHaveLength(0)
   expect(elicitation.consequences).toHaveLength(0)
 }

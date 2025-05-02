@@ -36,7 +36,7 @@ describe('Aggregate linking tests', () => {
       }
     `)
 
-    const relationship = document.parseResult.value.contextMaps[0].relationships[0] as UpstreamDownstreamRelationship
+    const relationship = document.parseResult.value.contextMap[0].relationships[0] as UpstreamDownstreamRelationship
     expect(relationship.upstreamExposedAggregates).toHaveLength(1)
     expect(relationship.upstreamExposedAggregates[0]).not.toBeUndefined()
     expect(relationship.upstreamExposedAggregates[0].ref).not.toBeUndefined()
@@ -56,7 +56,7 @@ describe('Aggregate linking tests', () => {
       }
     `)
 
-    const relationship = document.parseResult.value.contextMaps[0].relationships[0] as CustomerSupplierRelationship
+    const relationship = document.parseResult.value.contextMap[0].relationships[0] as CustomerSupplierRelationship
     expect(relationship.upstreamExposedAggregates).toHaveLength(1)
     expect(relationship.upstreamExposedAggregates[0]).not.toBeUndefined()
     expect(relationship.upstreamExposedAggregates[0].ref).not.toBeUndefined()
@@ -78,7 +78,7 @@ describe('Aggregate linking tests', () => {
       }
     `)
 
-    const relationship = document.parseResult.value.contextMaps[0].relationships[0] as CustomerSupplierRelationship
+    const relationship = document.parseResult.value.contextMap[0].relationships[0] as CustomerSupplierRelationship
     expect(relationship.upstreamExposedAggregates).toHaveLength(1)
     expect(relationship.upstreamExposedAggregates[0]).not.toBeUndefined()
     expect(relationship.upstreamExposedAggregates[0].ref).not.toBeUndefined()

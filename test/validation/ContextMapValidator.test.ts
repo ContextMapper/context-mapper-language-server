@@ -14,42 +14,61 @@ beforeAll(async () => {
   parse = (input: string) => doParse(input, { validation: true })
 })
 
-describe('ContextMappingModelValidationProvider tests', () => {
-  test('accept no context map', async () => {
+describe('ContextMapValidationProvider tests', () => {
+  test('accept no attribute', async () => {
     document = await parse(`
-            BoundedContext FirstContext
+      ContextMap {
+      }
     `)
 
     expect(document.diagnostics).toHaveLength(0)
   })
 
-  test('accept one context map', async () => {
+  test('accept one type attribute', async () => {
     document = await parse(`
-            ContextMap {
-              FirstContext [SK] <-> [SK] SecondContext
-            }
-            BoundedContext FirstContext
-            BoundedContext SecondContext
+      ContextMap {
+        type UNDEFINED
+      }
     `)
 
     expect(document.diagnostics).toHaveLength(0)
   })
 
-  test('report multiple context maps', async () => {
+  test('accept one state attribute', async () => {
     document = await parse(`
-            ContextMap {
-              FirstContext [SK] <-> [SK] SecondContext
-            }
-            ContextMap {
-              
-            }
-            BoundedContext FirstContext
-            BoundedContext SecondContext
+      ContextMap {
+        state AS_IS
+      }
+    `)
+
+    expect(document.diagnostics).toHaveLength(0)
+  })
+
+  test('report multiple type attributes', async () => {
+    document = await parse(`
+      ContextMap {
+        type UNDEFINED
+        type SYSTEM_LANDSCAPE
+      }
     `)
 
     expect(document.diagnostics).not.toBeUndefined()
     expect(document.diagnostics).toHaveLength(1)
     const diagnostic = document.diagnostics![0]
-    expect(diagnostic.range.start.line).toEqual(1)
+    expect(diagnostic.range.start.line).toEqual(2)
+  })
+
+  test('report multiple state attributes', async () => {
+    document = await parse(`
+      ContextMap {
+        state AS_IS
+        state TO_BE
+      }
+    `)
+
+    expect(document.diagnostics).not.toBeUndefined()
+    expect(document.diagnostics).toHaveLength(1)
+    const diagnostic = document.diagnostics![0]
+    expect(diagnostic.range.start.line).toEqual(2)
   })
 })

@@ -7,21 +7,21 @@ class ContextMapperDslValidationRegistry {
 }
 
 class ContextMapperDslValidator {
-+ checkContextMappingModel(ContextMappingModel, ValidationAcceptor)
-+ checkValue(Value, ValidationAcceptor)
++ validate(AstNode, ValidationAcceptor)
 }
 
 class ContextMapperValidationProviderRegistry {
+- _providers: Map<string, ContextMapperValidationProvider<AstNode>>
 + get(AstNode): ContextMapperValidationProvider<AstNode>
 }
 
 interface ContextMapperValidationProvider {
-+ supports(AstNode): boolean
 + validate(T, ValidationAcceptor)
 }
 
 ValidationRegistry <|-- ContextMapperDslValidationRegistry
 ContextMapperDslValidationRegistry --> ContextMapperDslValidator
+ContextMapperDslValidationRegistry --> ContextMapperValidationProviderRegistry
 ContextMapperDslValidator --> ContextMapperValidationProviderRegistry
 ContextMapperValidationProviderRegistry o-- "0..*" ContextMapperValidationProvider
 @enduml
