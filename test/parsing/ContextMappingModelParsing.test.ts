@@ -19,7 +19,7 @@ describe('ContextMappingModel tests', () => {
     document = await parseValidInput(parse, '')
 
     expect(document.parseResult.value.valueRegisters).toHaveLength(0)
-    expect(document.parseResult.value.contextMaps).toHaveLength(0)
+    expect(document.parseResult.value.contextMap).toHaveLength(0)
     expect(document.parseResult.value.boundedContexts).toHaveLength(0)
     expect(document.parseResult.value.domains).toHaveLength(0)
     expect(document.parseResult.value.stakeholders).toHaveLength(0)

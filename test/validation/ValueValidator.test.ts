@@ -12,9 +12,6 @@ beforeAll(async () => {
   services = createContextMapperDslServices(EmptyFileSystem)
   const doParse = parseHelper<ContextMappingModel>(services.ContextMapperDsl)
   parse = (input: string) => doParse(input, { validation: true })
-
-  // activate the following if your linking test requires elements from a built-in library, for example
-  // await services.shared.workspace.WorkspaceManager.initializeWorkspace([]);
 })
 
 describe('ContextMappingModelValidationProvider tests', () => {
