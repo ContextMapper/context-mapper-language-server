@@ -64,6 +64,16 @@ describe('ValidationHelper tests', () => {
     expect(acceptor).toHaveBeenCalledTimes(1)
   })
 
+  test('enforceZeroOrOneCardinality with multiple keywords', () => {
+    const node = {
+      key: ['test', 'test2']
+    } as TestNode
+
+    enforceZeroOrOneCardinality(node, 'key', acceptor, ['key', 'keyx'])
+
+    expect(acceptor).toHaveBeenCalledTimes(2)
+  })
+
   test('enforceZeroOrOneCardinalityOfListAttribute with no match', () => {
     const node: TestNode = {
       $cstNode: {
@@ -110,6 +120,34 @@ describe('ValidationHelper tests', () => {
       },
       key: ['test', 'key', 'test2', 'key2']
     } as TestNode
+
+    enforceZeroOrOneCardinalityOfListAttribute(node, 'key', acceptor)
+
+    expect(acceptor).toHaveBeenCalledTimes(1)
+  })
+
+  test('enforceZeroOrOneCardinalityOfListAttribute with multiple keywords', () => {
+    const node: TestNode = {
+      $cstNode: {
+        text: `
+          Test Structurekey {
+            key "test", "key"
+            keyx "test2", "key2"
+          }
+        `
+      },
+      key: ['test', 'key', 'test2', 'key2']
+    } as TestNode
+
+    enforceZeroOrOneCardinalityOfListAttribute(node, 'key', acceptor, ['key', 'keyx'])
+
+    expect(acceptor).toHaveBeenCalledTimes(2)
+  })
+
+  test('enforceZeroOrOneCardinalityOfListAttribute with non-array', () => {
+    const node = {
+      key: 'abc'
+    } as NonArrayNode
 
     enforceZeroOrOneCardinalityOfListAttribute(node, 'key', acceptor)
 

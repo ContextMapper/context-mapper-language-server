@@ -8,10 +8,10 @@ export class ContextMapperDslScopeComputation extends DefaultScopeComputation {
     Without imports, this behavior is wrong and therefore no nodes must be exported here.
    */
   override computeExportsForNode (
-    parentNode: AstNode,
-    document: LangiumDocument<AstNode>,
-    children?: (root: AstNode) => Iterable<AstNode>,
-    cancelToken?: CancellationToken
+    _parentNode: AstNode,
+    _document: LangiumDocument,
+    _children?: (root: AstNode) => Iterable<AstNode>,
+    _cancelToken?: CancellationToken
   ): Promise<AstNodeDescription[]> {
     return Promise.resolve([])
   }
