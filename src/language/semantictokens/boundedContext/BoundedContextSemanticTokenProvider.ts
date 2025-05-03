@@ -1,5 +1,5 @@
 import { SemanticTokenAcceptor } from 'langium/lsp'
-import { BoundedContext, isBoundedContext } from '../../generated/ast.js'
+import { BoundedContext } from '../../generated/ast.js'
 import { SemanticTokenTypes } from 'vscode-languageserver-types'
 import {
   highlightAttribute,
@@ -7,13 +7,8 @@ import {
   highlightTypeDeclaration
 } from '../HighlightingHelper.js'
 import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticTokenProvider.js'
-import { AstNode } from 'langium'
 
 export class BoundedContextSemanticTokenProvider implements ContextMapperSemanticTokenProvider<BoundedContext> {
-  supports (node: AstNode): node is BoundedContext {
-    return isBoundedContext(node)
-  }
-
   highlight (node: BoundedContext, acceptor: SemanticTokenAcceptor) {
     highlightTypeDeclaration(node, acceptor, 'BoundedContext')
 

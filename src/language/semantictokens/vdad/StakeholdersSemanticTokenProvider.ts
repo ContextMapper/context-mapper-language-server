@@ -1,13 +1,9 @@
 import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticTokenProvider.js'
-import { isStakeholders, Stakeholders } from '../../generated/ast.js'
+import { Stakeholders } from '../../generated/ast.js'
 import { SemanticTokenAcceptor } from 'langium/lsp'
 import { highlightAttribute, highlightKeyword } from '../HighlightingHelper.js'
 
-export class StakeholderSemanticTokenProvider implements ContextMapperSemanticTokenProvider<Stakeholders> {
-  supports (node: any): node is Stakeholders {
-    return isStakeholders(node)
-  }
-
+export class StakeholdersSemanticTokenProvider implements ContextMapperSemanticTokenProvider<Stakeholders> {
   highlight (node: Stakeholders, acceptor: SemanticTokenAcceptor) {
     highlightKeyword(node, acceptor, 'Stakeholders')
 

@@ -1,15 +1,10 @@
 import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticTokenProvider.js'
-import { isValueCluster, ValueCluster } from '../../generated/ast.js'
-import { AstNode } from 'langium'
+import { ValueCluster } from '../../generated/ast.js'
 import { SemanticTokenAcceptor } from 'langium/lsp'
 import { highlightField, highlightTypeDeclaration } from '../HighlightingHelper.js'
 import { SemanticTokenTypes } from 'vscode-languageserver-types'
 
 export class ValueClusterSemanticTokenProvider implements ContextMapperSemanticTokenProvider<ValueCluster> {
-  supports (node: AstNode): node is ValueCluster {
-    return isValueCluster(node)
-  }
-
   highlight (node: ValueCluster, acceptor: SemanticTokenAcceptor) {
     highlightTypeDeclaration(node, acceptor, 'ValueCluster')
 

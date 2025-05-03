@@ -1,21 +1,15 @@
 import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticTokenProvider.js'
 import {
   AbstractStakeholder,
-  isAbstractStakeholder,
   isStakeholder,
   isStakeholderGroup,
   Stakeholder, StakeholderGroup
 } from '../../generated/ast.js'
-import { AstNode } from 'langium'
 import { SemanticTokenAcceptor } from 'langium/lsp'
 import { highlightField, highlightTypeDeclaration } from '../HighlightingHelper.js'
 import { SemanticTokenTypes } from 'vscode-languageserver-types'
 
 export class AbstractStakeholderSemanticTokenProvider implements ContextMapperSemanticTokenProvider<AbstractStakeholder> {
-  supports (node: AstNode): node is AbstractStakeholder {
-    return isAbstractStakeholder(node)
-  }
-
   highlight (node: AbstractStakeholder, acceptor: SemanticTokenAcceptor) {
     if (isStakeholder(node)) {
       this.highlightStakeholder(node, acceptor)

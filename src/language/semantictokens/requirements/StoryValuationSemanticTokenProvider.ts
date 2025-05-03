@@ -1,14 +1,9 @@
 import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticTokenProvider.js'
-import { isStoryValuation, StoryValuation } from '../../generated/ast.js'
-import { AstNode } from 'langium'
+import { StoryValuation } from '../../generated/ast.js'
 import { SemanticTokenAcceptor } from 'langium/lsp'
 import { highlightKeyword, highlightString } from '../HighlightingHelper.js'
 
 export class StoryValuationSemanticTokenProvider implements ContextMapperSemanticTokenProvider<StoryValuation> {
-  supports (node: AstNode): node is StoryValuation {
-    return isStoryValuation(node)
-  }
-
   highlight (node: StoryValuation, acceptor: SemanticTokenAcceptor) {
     highlightKeyword(node, acceptor, 'and that')
     highlightString(node, acceptor, 'promotedValues')

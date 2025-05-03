@@ -1,5 +1,5 @@
 import {
-  isUseCase, isUserRequirement,
+  isUseCase,
   isUserStory,
   UseCase,
   UserRequirement,
@@ -14,13 +14,8 @@ import {
 } from '../HighlightingHelper.js'
 import { SemanticTokenTypes } from 'vscode-languageserver-types'
 import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticTokenProvider.js'
-import { AstNode } from 'langium'
 
 export class RequirementsSemanticTokenProvider implements ContextMapperSemanticTokenProvider<UserRequirement> {
-  supports (node: AstNode): node is UserRequirement {
-    return isUserRequirement(node)
-  }
-
   highlight (node: UserRequirement, acceptor: SemanticTokenAcceptor) {
     if (isUseCase(node)) {
       this.highlightUseCase(node, acceptor)

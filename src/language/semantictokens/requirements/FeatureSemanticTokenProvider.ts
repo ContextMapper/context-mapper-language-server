@@ -1,21 +1,15 @@
 import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticTokenProvider.js'
 import {
   Feature,
-  isFeature,
   isStoryFeature,
   isUserActivityDefaultVerb,
   StoryFeature
 } from '../../generated/ast.js'
-import { AstNode } from 'langium'
 import { SemanticTokenAcceptor } from 'langium/lsp'
 import { highlightKeyword, highlightString } from '../HighlightingHelper.js'
 
 export class FeatureSemanticTokenProvider implements ContextMapperSemanticTokenProvider<Feature> {
-  supports (node: AstNode): node is Feature {
-    return isFeature(node)
-  }
-
-  public highlight (node: Feature, acceptor: SemanticTokenAcceptor) {
+  highlight (node: Feature, acceptor: SemanticTokenAcceptor) {
     if (isStoryFeature(node)) {
       this.highlightStoryFeature(node, acceptor)
     }
