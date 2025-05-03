@@ -2,7 +2,6 @@ import {
   CustomerSupplierRelationship,
   isCustomerSupplierRelationship,
   isPartnership,
-  isRelationship,
   isSharedKernel,
   isSymmetricRelationship,
   isUpstreamDownstreamRelationship,
@@ -18,10 +17,6 @@ import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticToke
 import { highlightField, highlightKeyword, highlightOperator, highlightType } from '../HighlightingHelper.js'
 
 export class RelationshipSemanticTokenProvider implements ContextMapperSemanticTokenProvider<Relationship> {
-  supports (node: Relationship): node is Relationship {
-    return isRelationship(node)
-  }
-
   highlight (node: Relationship, acceptor: SemanticTokenAcceptor) {
     if (node.name) {
       highlightType(node, acceptor, 'name', [SemanticTokenModifiers.declaration])

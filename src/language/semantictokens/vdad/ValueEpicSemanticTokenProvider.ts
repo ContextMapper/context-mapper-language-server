@@ -1,14 +1,9 @@
 import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticTokenProvider.js'
-import { isValueEpic, ValueEpic } from '../../generated/ast.js'
-import { AstNode } from 'langium'
+import { ValueEpic } from '../../generated/ast.js'
 import { SemanticTokenAcceptor } from 'langium/lsp'
 import { highlightKeyword, highlightString, highlightType, highlightTypeDeclaration } from '../HighlightingHelper.js'
 
 export class ValueEpicSemanticTokenProvider implements ContextMapperSemanticTokenProvider<ValueEpic> {
-  supports (node: AstNode): node is ValueEpic {
-    return isValueEpic(node)
-  }
-
   highlight (node: ValueEpic, acceptor: SemanticTokenAcceptor) {
     highlightTypeDeclaration(node, acceptor, 'ValueEpic')
 

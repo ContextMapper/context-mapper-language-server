@@ -1,14 +1,9 @@
 import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticTokenProvider.js'
-import { isValueNarrative, ValueNarrative } from '../../generated/ast.js'
-import { AstNode } from 'langium'
+import { ValueNarrative } from '../../generated/ast.js'
 import { SemanticTokenAcceptor } from 'langium/lsp'
 import { highlightKeyword, highlightString, highlightTypeDeclaration } from '../HighlightingHelper.js'
 
 export class ValueNarrativeSemanticTokenProvider implements ContextMapperSemanticTokenProvider<ValueNarrative> {
-  supports (node: AstNode): node is ValueNarrative {
-    return isValueNarrative(node)
-  }
-
   highlight (node: ValueNarrative, acceptor: SemanticTokenAcceptor) {
     highlightTypeDeclaration(node, acceptor, 'ValueNarrative')
 

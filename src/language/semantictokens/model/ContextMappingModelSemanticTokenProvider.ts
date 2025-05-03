@@ -1,6 +1,5 @@
 import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticTokenProvider.js'
-import { ContextMappingModel, isContextMappingModel } from '../../generated/ast.js'
-import { AstNode } from 'langium'
+import { ContextMappingModel } from '../../generated/ast.js'
 import { SemanticTokenAcceptor } from 'langium/lsp'
 import { SemanticTokenTypes } from 'vscode-languageserver-types'
 
@@ -8,10 +7,6 @@ const ML_COMMENT_REGEX = /\/\*[\s\S]*?\*\//g
 const SL_COMMENT_REGEX = /\/\/[^\n\r]*/g
 
 export class ContextMappingModelSemanticTokenProvider implements ContextMapperSemanticTokenProvider<ContextMappingModel> {
-  supports (node: AstNode): node is ContextMappingModel {
-    return isContextMappingModel(node)
-  }
-
   highlight (node: ContextMappingModel, acceptor: SemanticTokenAcceptor): void {
     if (node.$cstNode) {
       this.highlightComments(ML_COMMENT_REGEX, node, acceptor)

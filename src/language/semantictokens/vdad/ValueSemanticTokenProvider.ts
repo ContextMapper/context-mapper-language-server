@@ -1,7 +1,4 @@
-import {
-  isValue,
-  Value
-} from '../../generated/ast.js'
+import { Value } from '../../generated/ast.js'
 import { SemanticTokenAcceptor } from 'langium/lsp'
 import {
   highlightKeyword,
@@ -10,13 +7,8 @@ import {
 } from '../HighlightingHelper.js'
 import { SemanticTokenTypes } from 'vscode-languageserver-types'
 import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticTokenProvider.js'
-import { AstNode } from 'langium'
 
 export class ValueSemanticTokenProvider implements ContextMapperSemanticTokenProvider<Value> {
-  supports (node: AstNode): node is Value {
-    return isValue(node)
-  }
-
   highlight (node: Value, acceptor: SemanticTokenAcceptor) {
     highlightTypeDeclaration(node, acceptor, 'Value')
 

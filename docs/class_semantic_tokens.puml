@@ -6,11 +6,11 @@ class ContextMapperDslSemanticTokenProvider {
 }
 
 class SemanticTokenProviderRegistry {
+- semanticTokenProviders: Map<string, ContextMapperSemanticTokenProvider<AstNode>>
 + get(AstNode): ContextMapperSemanticTokenProvider<AstNode>
 }
 
 interface ContextMapperSemanticTokenProvider {
-+ supports(AstNode): boolean
 + highlight(T, SemanticTokenAcceptor)
 }
 
