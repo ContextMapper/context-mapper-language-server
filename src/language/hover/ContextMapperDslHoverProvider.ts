@@ -12,7 +12,7 @@ export class ContextMapperDslHoverProvider extends MultilineCommentHoverProvider
   }
 
   override getHoverContent (document: LangiumDocument, params: HoverParams): MaybePromise<Hover | undefined> {
-    // from https://github.com/eclipse-langium/langium/discussions/1603
+    // adapted from https://github.com/eclipse-langium/langium/discussions/1603
     const rootNode = document.parseResult?.value?.$cstNode
     if (rootNode) {
       const offset = document.textDocument.offsetAt(params.position)
