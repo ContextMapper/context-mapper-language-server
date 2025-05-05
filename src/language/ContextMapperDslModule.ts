@@ -16,6 +16,8 @@ import { ContextMapperValidationProviderRegistry } from './validation/ContextMap
 import { ContextMapperDslScopeProvider } from './references/ContextMapperDslScopeProvider.js'
 import { ContextMapperDslFoldingRangeProvider } from './folding/ContextMapperDslFoldingRageProvider.js'
 import { ContextMapperDslScopeComputation } from './references/ContextMapperDslScopeComputation.js'
+import { ContextMapperDslHoverProvider } from './hover/ContextMapperDslHoverProvider.js'
+import { KeywordHoverRegistry } from './hover/KeywordHoverRegistry.js'
 
 /**
  * Declaration of custom services - add your own service classes here.
@@ -50,7 +52,8 @@ export const ContextMapperDslModule: Module<ContextMapperDslServices, ModuleType
   },
   lsp: {
     SemanticTokenProvider: (services) => new ContextMapperDslSemanticTokenProvider(services, semanticTokenProviderRegistry),
-    FoldingRangeProvider: (services) => new ContextMapperDslFoldingRangeProvider(services)
+    FoldingRangeProvider: (services) => new ContextMapperDslFoldingRangeProvider(services),
+    HoverProvider: (services) => new ContextMapperDslHoverProvider(services, new KeywordHoverRegistry())
   },
   references: {
     ScopeProvider: (services) => new ContextMapperDslScopeProvider(services),
