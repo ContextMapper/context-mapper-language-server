@@ -18,6 +18,7 @@ import { ContextMapperDslFoldingRangeProvider } from './folding/ContextMapperDsl
 import { ContextMapperDslScopeComputation } from './references/ContextMapperDslScopeComputation.js'
 import { ContextMapperDslHoverProvider } from './hover/ContextMapperDslHoverProvider.js'
 import { KeywordHoverRegistry } from './hover/KeywordHoverRegistry.js'
+import { ContextMapperDslNodeKindProvider } from './shared/ContextMapperDslNodeKindProvider.js'
 
 /**
  * Declaration of custom services - add your own service classes here.
@@ -82,7 +83,12 @@ export function createContextMapperDslServices (context: DefaultSharedModuleCont
 } {
   const shared = inject(
     createDefaultSharedModule(context),
-    ContextMapperDslGeneratedSharedModule
+    ContextMapperDslGeneratedSharedModule,
+    {
+      lsp: {
+        NodeKindProvider: () => new ContextMapperDslNodeKindProvider()
+      }
+    }
   )
   const ContextMapperDsl = inject(
     createDefaultModule({ shared }),
