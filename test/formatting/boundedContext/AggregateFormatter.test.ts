@@ -81,4 +81,19 @@ BoundedContext TestContext {
     expect(textEdit).toHaveLength(1)
     expectTextEditToEqual(textEdit[0], '\n      ', 3, 29, 4, 4)
   })
+
+  test('check indentation of aggregate doc', async () => {
+    document = await parse(`
+BoundedContext TestContext {
+    "doc"
+  Aggregate TestAggregate
+}
+`)
+
+    const params = createFormattingParams(document)
+    const textEdit = await formatter.formatDocument(document, params)
+
+    expect(textEdit).toHaveLength(1)
+    expectTextEditToEqual(textEdit[0], '\n  ', 1, 28, 2, 4)
+  })
 })

@@ -70,4 +70,19 @@ BoundedContext TestContext {
     expect(textEdit).toHaveLength(1)
     expectTextEditToEqual(textEdit[0], '\n    ', 2, 21, 3, 2)
   })
+
+  test('check indentation of module doc', async () => {
+    document = await parse(`
+BoundedContext TestContext {
+"doc"
+  Module TestModule
+}
+`)
+
+    const params = createFormattingParams(document)
+    const textEdit = await formatter.formatDocument(document, params)
+
+    expect(textEdit).toHaveLength(1)
+    expectTextEditToEqual(textEdit[0], '\n  ', 1, 28, 2, 0)
+  })
 })

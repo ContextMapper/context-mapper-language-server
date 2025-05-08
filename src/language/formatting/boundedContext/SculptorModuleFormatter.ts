@@ -9,7 +9,6 @@ export class SculptorModuleFormatter extends BracePairFormatter<SculptorModule> 
 
     formatter.property('doc')
       .prepend(Formatting.newLine())
-      .prepend(Formatting.indent())
 
     formatFieldAttributes([
       'external',

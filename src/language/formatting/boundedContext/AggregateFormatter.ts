@@ -9,7 +9,6 @@ export class AggregateFormatter extends BracePairFormatter<Aggregate> {
 
     formatter.property('doc')
       .prepend(Formatting.newLine())
-      .prepend(Formatting.noIndent())
 
     formatFieldAttributes([
       'responsibilities',
