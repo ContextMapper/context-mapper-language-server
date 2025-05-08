@@ -62,7 +62,7 @@ export class RelationshipSemanticTokenProvider implements ContextMapperSemanticT
     if (node.upstreamRoles.length > 0) {
       acceptor({
         node,
-        type: SemanticTokenTypes.enumMember,
+        type: SemanticTokenTypes.keyword,
         property: 'upstreamRoles'
       })
     }
@@ -72,7 +72,7 @@ export class RelationshipSemanticTokenProvider implements ContextMapperSemanticT
     if (node.downstreamRoles.length > 0) {
       acceptor({
         node,
-        type: SemanticTokenTypes.enumMember,
+        type: SemanticTokenTypes.keyword,
         property: 'downstreamRoles'
       })
     }

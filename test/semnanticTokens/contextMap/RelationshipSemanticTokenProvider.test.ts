@@ -354,10 +354,10 @@ describe('Relationship semantic token tests', () => {
 
     expectSemanticTokensToEqual(tokens[1], 1, 10, 11, semanticTokenProvider.tokenTypes.type, 0)
     expectSemanticTokensToEqual(tokens[2], 0, 13, 1, semanticTokenProvider.tokenTypes.keyword, 0)
-    expectSemanticTokensToEqual(tokens[3], 0, 2, 3, semanticTokenProvider.tokenTypes.enumMember, 0)
+    expectSemanticTokensToEqual(tokens[3], 0, 2, 3, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[4], 0, 5, 2, semanticTokenProvider.tokenTypes.operator, 0)
     expectSemanticTokensToEqual(tokens[5], 0, 4, 1, semanticTokenProvider.tokenTypes.keyword, 0)
-    expectSemanticTokensToEqual(tokens[6], 0, 2, 2, semanticTokenProvider.tokenTypes.enumMember, 0)
+    expectSemanticTokensToEqual(tokens[6], 0, 2, 2, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[7], 0, 4, 12, semanticTokenProvider.tokenTypes.type, 0)
     expectSemanticTokensToEqual(tokens[8], 0, 15, 7, semanticTokenProvider.tokenTypes.type, semanticTokenProvider.tokenModifiers.declaration)
 
@@ -481,10 +481,10 @@ describe('Relationship semantic token tests', () => {
 
     expectSemanticTokensToEqual(tokens[1], 1, 10, 11, semanticTokenProvider.tokenTypes.type, 0)
     expectSemanticTokensToEqual(tokens[2], 0, 13, 1, semanticTokenProvider.tokenTypes.keyword, 0)
-    expectSemanticTokensToEqual(tokens[3], 0, 2, 3, semanticTokenProvider.tokenTypes.enumMember, 0)
+    expectSemanticTokensToEqual(tokens[3], 0, 2, 3, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[4], 0, 5, 2, semanticTokenProvider.tokenTypes.operator, 0)
     expectSemanticTokensToEqual(tokens[5], 0, 4, 1, semanticTokenProvider.tokenTypes.keyword, 0)
-    expectSemanticTokensToEqual(tokens[6], 0, 2, 2, semanticTokenProvider.tokenTypes.enumMember, 0)
+    expectSemanticTokensToEqual(tokens[6], 0, 2, 2, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[7], 0, 4, 12, semanticTokenProvider.tokenTypes.type, 0)
     expectSemanticTokensToEqual(tokens[8], 0, 15, 7, semanticTokenProvider.tokenTypes.type, semanticTokenProvider.tokenModifiers.declaration)
 
