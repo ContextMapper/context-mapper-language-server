@@ -131,8 +131,6 @@ describe('BoundedContextValidationProvider tests', () => {
     expect(document.diagnostics![0].range.start.line).toEqual(2)
   })
 
-  // TODO: test responsibilities after Regex validation impl
-
   test('accept one implementationTechnology', async () => {
     document = await parse(`
       BoundedContext FirstContext {

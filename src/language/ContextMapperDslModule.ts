@@ -19,6 +19,8 @@ import { ContextMapperDslScopeComputation } from './references/ContextMapperDslS
 import { ContextMapperDslHoverProvider } from './hover/ContextMapperDslHoverProvider.js'
 import { KeywordHoverRegistry } from './hover/KeywordHoverRegistry.js'
 import { ContextMapperDslNodeKindProvider } from './shared/ContextMapperDslNodeKindProvider.js'
+import { ContextMapperDslFormatter } from './formatting/ContextMapperDslFormatter.js'
+import { ContextMapperFormatterRegistry } from './formatting/ContextMapperFormatterRegistry.js'
 
 /**
  * Declaration of custom services - add your own service classes here.
@@ -54,7 +56,8 @@ export const ContextMapperDslModule: Module<ContextMapperDslServices, ModuleType
   lsp: {
     SemanticTokenProvider: (services) => new ContextMapperDslSemanticTokenProvider(services, semanticTokenProviderRegistry),
     FoldingRangeProvider: (services) => new ContextMapperDslFoldingRangeProvider(services),
-    HoverProvider: (services) => new ContextMapperDslHoverProvider(services, new KeywordHoverRegistry())
+    HoverProvider: (services) => new ContextMapperDslHoverProvider(services, new KeywordHoverRegistry()),
+    Formatter: () => new ContextMapperDslFormatter(new ContextMapperFormatterRegistry())
   },
   references: {
     ScopeProvider: (services) => new ContextMapperDslScopeProvider(services),
