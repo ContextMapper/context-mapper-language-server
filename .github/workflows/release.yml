@@ -1,0 +1,37 @@
+name: Release Workflow
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release-build:
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
+
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}  # to check out the actual pull request commit, not the merge commit
+          fetch-depth: 0  # a full history is required for pull request analysis
+      - name: Download language-server artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: cml-language-server
+          path: ./cml-ls
+
+      - name: Prepare publication
+        run: sed -i -e 's/<TOKEN>/${{ secrets.GITHUB_TOKEN }}/g' .yarnrc.yml
+
+      - name: Publish to GitHub Package Registry
+        run: yarn npm publish --access public
+
+      - name: Create GitHub release
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./cml-ls
