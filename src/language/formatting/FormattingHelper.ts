@@ -29,12 +29,11 @@ export function formatFieldAttributes<T extends AstNode> (keywords: string[], fo
 
 export function formatEqualSigns<T extends AstNode> (formatter: NodeFormatter<T>): void {
   formatter.keywords('=')
-    .prepend(Formatting.oneSpace({ allowMore: false }))
-    .append(Formatting.oneSpace({ allowMore: false }))
+    .surround(Formatting.oneSpace())
 }
 
 export function formatListSeparators<T extends AstNode> (formatter: NodeFormatter<T>): void {
   formatter.keywords(',')
     .prepend(Formatting.noSpace())
-    .append(Formatting.oneSpace({ allowMore: false }))
+    .append(Formatting.oneSpace())
 }
