@@ -4,7 +4,7 @@ import { clearDocuments, parseHelper } from 'langium/test'
 import { ContextMappingModel } from '../../../src/language/generated/ast.js'
 import { EmptyFileSystem, LangiumDocument } from 'langium'
 import { afterEach, beforeAll, describe, expect, test } from 'vitest'
-import { createFormattingParams } from '../FormattingTestHelper.js'
+import { createFormattingParams, expectTextEditToEqual } from '../FormattingTestHelper.js'
 
 let services: ReturnType<typeof createContextMapperDslServices>
 let parse: ReturnType<typeof parseHelper<ContextMappingModel>>
@@ -57,11 +57,7 @@ BoundedContext TestContext {
     const textEdit = await formatter.formatDocument(document, params)
 
     expect(textEdit).toHaveLength(1)
-    expect(textEdit[0].range.start.line).toEqual(2)
-    expect(textEdit[0].range.start.character).toEqual(32)
-    expect(textEdit[0].range.end.line).toEqual(3)
-    expect(textEdit[0].range.end.character).toEqual(4)
-    expect(textEdit[0].newText).toEqual('\n  ')
+    expectTextEditToEqual(textEdit[0], '\n  ', 2, 32, 3, 4)
   })
 
   test('check equals-spacing', async () => {
@@ -75,16 +71,7 @@ BoundedContext TestContext {
     const textEdit = await formatter.formatDocument(document, params)
 
     expect(textEdit).toHaveLength(2)
-    expect(textEdit[0].newText).toEqual(' ')
-    expect(textEdit[0].range.start.line).toEqual(2)
-    expect(textEdit[0].range.start.character).toEqual(6)
-    expect(textEdit[0].range.end.line).toEqual(2)
-    expect(textEdit[0].range.end.character).toEqual(6)
-
-    expect(textEdit[1].newText).toEqual(' ')
-    expect(textEdit[1].range.start.line).toEqual(2)
-    expect(textEdit[1].range.start.character).toEqual(7)
-    expect(textEdit[1].range.end.line).toEqual(2)
-    expect(textEdit[1].range.end.character).toEqual(7)
+    expectTextEditToEqual(textEdit[0], ' ', 2, 6, 2, 6)
+    expectTextEditToEqual(textEdit[1], ' ', 2, 7, 2, 7)
   })
 })

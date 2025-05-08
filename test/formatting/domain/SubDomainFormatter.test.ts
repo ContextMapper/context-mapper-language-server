@@ -4,7 +4,7 @@ import { ContextMappingModel } from '../../../src/language/generated/ast.js'
 import { EmptyFileSystem, LangiumDocument } from 'langium'
 import { Formatter } from 'langium/lsp'
 import { afterEach, beforeAll, describe, expect, test } from 'vitest'
-import { createFormattingParams } from '../FormattingTestHelper.js'
+import { createFormattingParams, expectTextEditToEqual } from '../FormattingTestHelper.js'
 
 let services: ReturnType<typeof createContextMapperDslServices>
 let parse: ReturnType<typeof parseHelper<ContextMappingModel>>
@@ -53,10 +53,6 @@ Domain TestDomain {
     const textEdit = await formatter.formatDocument(document, params)
 
     expect(textEdit).toHaveLength(1)
-    expect(textEdit[0].newText).toEqual('\n    ')
-    expect(textEdit[0].range.start.line).toEqual(2)
-    expect(textEdit[0].range.start.character).toEqual(27)
-    expect(textEdit[0].range.end.line).toEqual(3)
-    expect(textEdit[0].range.end.character).toEqual(2)
+    expectTextEditToEqual(textEdit[0], '\n    ', 2, 27, 3, 2)
   })
 })

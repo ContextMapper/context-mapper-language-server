@@ -40,12 +40,7 @@ BoundedContext TestContext
     const textEdit = await formatter.formatDocument(document, params)
 
     expect(textEdit).toHaveLength(7)
-
-    expect(textEdit[0].newText).toEqual('\n')
-    expect(textEdit[0].range.start.line).toEqual(0)
-    expect(textEdit[0].range.start.character).toEqual(0)
-    expect(textEdit[0].range.end.line).toEqual(1)
-    expect(textEdit[0].range.end.character).toEqual(2)
+    expectTextEditToEqual(textEdit[0], '\n', 0, 0, 1, 2)
   })
 
   test('check indentation of top-level element', async () => {

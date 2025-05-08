@@ -4,7 +4,7 @@ import { ContextMappingModel } from '../../../src/language/generated/ast.js'
 import { EmptyFileSystem, LangiumDocument } from 'langium'
 import { Formatter } from 'langium/lsp'
 import { afterEach, beforeAll, describe, expect, test } from 'vitest'
-import { createFormattingParams } from '../FormattingTestHelper.js'
+import { createFormattingParams, expectTextEditToEqual } from '../FormattingTestHelper.js'
 
 let services: ReturnType<typeof createContextMapperDslServices>
 let parse: ReturnType<typeof parseHelper<ContextMappingModel>>
@@ -51,22 +51,9 @@ type=UNDEFINED
     const textEdit = await formatter.formatDocument(document, params)
 
     expect(textEdit).toHaveLength(3)
-    expect(textEdit[0].newText).toEqual('\n  ')
-    expect(textEdit[0].range.start.line).toEqual(1)
-    expect(textEdit[0].range.start.character).toEqual(12)
-    expect(textEdit[0].range.end.line).toEqual(2)
-    expect(textEdit[0].range.end.character).toEqual(0)
-
-    expect(textEdit[1].newText).toEqual(' ')
-    expect(textEdit[1].range.start.line).toEqual(2)
-    expect(textEdit[1].range.start.character).toEqual(4)
-    expect(textEdit[1].range.end.line).toEqual(2)
-    expect(textEdit[1].range.end.character).toEqual(4)
-    expect(textEdit[2].newText).toEqual(' ')
-    expect(textEdit[2].range.start.line).toEqual(2)
-    expect(textEdit[2].range.start.character).toEqual(5)
-    expect(textEdit[2].range.end.line).toEqual(2)
-    expect(textEdit[2].range.end.character).toEqual(5)
+    expectTextEditToEqual(textEdit[0], '\n  ', 1, 12, 2, 0)
+    expectTextEditToEqual(textEdit[1], ' ', 2, 4, 2, 4)
+    expectTextEditToEqual(textEdit[2], ' ', 2, 5, 2, 5)
   })
 
   test('check relationship indentation', async () => {
@@ -82,10 +69,6 @@ BoundedContext OtherContext
     const textEdit = await formatter.formatDocument(document, params)
 
     expect(textEdit).toHaveLength(1)
-    expect(textEdit[0].newText).toEqual('\n  ')
-    expect(textEdit[0].range.start.line).toEqual(1)
-    expect(textEdit[0].range.start.character).toEqual(20)
-    expect(textEdit[0].range.end.line).toEqual(2)
-    expect(textEdit[0].range.end.character).toEqual(0)
+    expectTextEditToEqual(textEdit[0], '\n  ', 1, 20, 2, 0)
   })
 })
