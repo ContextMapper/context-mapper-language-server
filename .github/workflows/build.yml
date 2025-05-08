@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-  release:
-    types: [published]
 
 permissions:
   contents: read
@@ -73,11 +71,3 @@ jobs:
         with:
           name: cml-language-server
           path: ./cml-ls/
-
-      - name: Prepare publication
-        if: github.event_name == 'release'  # Publish only on release creation
-        run: sed -i -e 's/<TOKEN>/${{ secrets.GITHUB_TOKEN }}/g' .yarnrc.yml
-
-      - name: Publish to GitHub Package Registry
-        if: github.event_name == 'release'  # Publish only on release creation
-        run: yarn npm publish --access public
