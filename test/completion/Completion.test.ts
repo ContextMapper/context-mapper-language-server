@@ -84,6 +84,26 @@ describe('Completion tests', () => {
     expect(completionList.items).toHaveLength(1)
     expect(completionList.items[0].label).toEqual('type')
   })
+
+  test('check completion of relationship arrows', async () => {
+    const docToComplete = await parse(`
+      ContextMap {
+        AnotherContext 
+      }
+      BoundedContext TestContext
+      BoundedContext AnotherContext
+    `)
+
+    const params = createCompletionParams(docToComplete, 2, 23)
+    const completionList = await completionProvider.getCompletion(docToComplete, params)
+    if (completionList == null) {
+      fail('Expected completion provider to return completion list')
+      return
+    }
+
+    const suggestions = completionList.items.map(item => item.label)
+    expect(suggestions).toContain('<->')
+  })
 })
 
 function createCompletionParams (document: LangiumDocument<ContextMappingModel>, positionLine: uinteger, positionChar: uinteger): any {
