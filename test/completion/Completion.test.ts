@@ -6,12 +6,13 @@ import { EmptyFileSystem, LangiumDocument } from 'langium'
 import { afterEach, beforeAll, describe, expect, test } from 'vitest'
 import { fail } from 'node:assert'
 import { uinteger } from 'vscode-languageserver-types'
+import { CompletionParams } from 'vscode-languageserver'
 
 let services: ReturnType<typeof createContextMapperDslServices>
 let completionProvider: CompletionProvider
 let parse: ReturnType<typeof parseHelper<ContextMappingModel>>
 
-beforeAll(async () => {
+beforeAll(() => {
   services = createContextMapperDslServices(EmptyFileSystem)
   completionProvider = services.ContextMapperDsl.lsp.CompletionProvider!
   parse = parseHelper<ContextMappingModel>(services.ContextMapperDsl)
@@ -84,9 +85,29 @@ describe('Completion tests', () => {
     expect(completionList.items).toHaveLength(1)
     expect(completionList.items[0].label).toEqual('type')
   })
+
+  test('check completion of relationship arrows', async () => {
+    const docToComplete = await parse(`
+      ContextMap {
+        AnotherContext 
+      }
+      BoundedContext TestContext
+      BoundedContext AnotherContext
+    `)
+
+    const params = createCompletionParams(docToComplete, 2, 23)
+    const completionList = await completionProvider.getCompletion(docToComplete, params)
+    if (completionList == null) {
+      fail('Expected completion provider to return completion list')
+      return
+    }
+
+    const suggestions = completionList.items.map(item => item.label)
+    expect(suggestions).toContain('<->')
+  })
 })
 
-function createCompletionParams (document: LangiumDocument<ContextMappingModel>, positionLine: uinteger, positionChar: uinteger): any {
+function createCompletionParams (document: LangiumDocument<ContextMappingModel>, positionLine: uinteger, positionChar: uinteger): CompletionParams {
   return {
     textDocument: {
       uri: document.uri.path

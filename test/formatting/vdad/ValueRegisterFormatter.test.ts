@@ -11,14 +11,14 @@ let parse: ReturnType<typeof parseHelper<ContextMappingModel>>
 let document: LangiumDocument<ContextMappingModel> | undefined
 let formatter: Formatter
 
-beforeAll(async () => {
+beforeAll(() => {
   services = createContextMapperDslServices(EmptyFileSystem)
   parse = parseHelper<ContextMappingModel>(services.ContextMapperDsl)
   formatter = services.ContextMapperDsl.lsp.Formatter!
 })
 
 afterEach(async () => {
-  document && await clearDocuments(services.shared, [document])
+  if (document) await clearDocuments(services.shared, [document])
 })
 
 describe('Value register formatter tests', () => {

@@ -1,4 +1,4 @@
-import { type ValidationChecks, ValidationRegistry } from 'langium'
+import { AstNode, ValidationAcceptor, type ValidationChecks, ValidationRegistry } from 'langium'
 import { ContextMapperDslServices } from '../ContextMapperDslModule.js'
 import { ContextMapperDslAstType } from '../generated/ast.js'
 import { ContextMapperValidationProviderRegistry } from './ContextMapperValidationProviderRegistry.js'
@@ -12,7 +12,7 @@ export class ContextMapperDslValidationRegistry extends ValidationRegistry {
 
     // dynamically set validator for all grammar elements
     const checks: ValidationChecks<ContextMapperDslAstType> = Object.fromEntries(
-      typesToValidate.map(type => [type, validator.validate])
+      typesToValidate.map(type => [type, (node: AstNode, acceptor: ValidationAcceptor) => validator.validate(node, acceptor)])
     )
 
     super.register(checks, validator)

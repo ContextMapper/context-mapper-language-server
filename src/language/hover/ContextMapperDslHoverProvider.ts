@@ -6,6 +6,7 @@ import { KeywordHoverRegistry } from './KeywordHoverRegistry.js'
 
 export class ContextMapperDslHoverProvider extends MultilineCommentHoverProvider {
   private readonly _keywordHoverRegistry: KeywordHoverRegistry
+
   constructor (services: LangiumServices, keywordHoverRegistry: KeywordHoverRegistry) {
     super(services)
     this._keywordHoverRegistry = keywordHoverRegistry

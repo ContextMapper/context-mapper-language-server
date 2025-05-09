@@ -8,7 +8,7 @@ export async function parseValidInput (parse: ReturnType<typeof parseHelper<Cont
 
   expectNoParsingErrors(document)
   expect(document.parseResult.lexerErrors).toHaveLength(0)
-  expect(document.diagnostics || []).toHaveLength(0)
+  expect(document.diagnostics ?? []).toHaveLength(0)
 
   return document
 }

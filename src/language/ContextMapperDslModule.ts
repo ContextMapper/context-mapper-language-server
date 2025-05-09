@@ -21,15 +21,16 @@ import { KeywordHoverRegistry } from './hover/KeywordHoverRegistry.js'
 import { ContextMapperDslNodeKindProvider } from './shared/ContextMapperDslNodeKindProvider.js'
 import { ContextMapperDslFormatter } from './formatting/ContextMapperDslFormatter.js'
 import { ContextMapperFormatterRegistry } from './formatting/ContextMapperFormatterRegistry.js'
+import { ContextMapperDslCompletionProvider } from './completion/ContextMapperDslCompletionProvider.js'
 
 /**
  * Declaration of custom services - add your own service classes here.
  */
-export type ContextMapperDslAddedServices = {
+export interface ContextMapperDslAddedServices {
   validation: {
     ContextMapperDslValidator: ContextMapperDslValidator
   }
-};
+}
 
 /**
  * Union of Langium default services and your custom services - use this as constructor parameter
@@ -57,7 +58,8 @@ export const ContextMapperDslModule: Module<ContextMapperDslServices, ModuleType
     SemanticTokenProvider: (services) => new ContextMapperDslSemanticTokenProvider(services, semanticTokenProviderRegistry),
     FoldingRangeProvider: (services) => new ContextMapperDslFoldingRangeProvider(services),
     HoverProvider: (services) => new ContextMapperDslHoverProvider(services, new KeywordHoverRegistry()),
-    Formatter: () => new ContextMapperDslFormatter(new ContextMapperFormatterRegistry())
+    Formatter: () => new ContextMapperDslFormatter(new ContextMapperFormatterRegistry()),
+    CompletionProvider: (services) => new ContextMapperDslCompletionProvider(services)
   },
   references: {
     ScopeProvider: (services) => new ContextMapperDslScopeProvider(services),
@@ -102,7 +104,7 @@ export function createContextMapperDslServices (context: DefaultSharedModuleCont
   if (!context.connection) {
     // We don't run inside a language server
     // Therefore, initialize the configuration provider instantly
-    shared.workspace.ConfigurationProvider.initialized({})
+    void shared.workspace.ConfigurationProvider.initialized({})
   }
   return { shared, ContextMapperDsl }
 }

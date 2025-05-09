@@ -12,14 +12,14 @@ let foldingRangeProvider: FoldingRangeProvider
 let parse: ReturnType<typeof parseHelper<ContextMappingModel>>
 let document: LangiumDocument<ContextMappingModel> | undefined
 
-beforeAll(async () => {
+beforeAll(() => {
   services = createContextMapperDslServices(EmptyFileSystem)
   foldingRangeProvider = services.ContextMapperDsl.lsp.FoldingRangeProvider!
   parse = parseHelper<ContextMappingModel>(services.ContextMapperDsl)
 })
 
 afterEach(async () => {
-  document && await clearDocuments(services.shared, [document])
+  if (document) await clearDocuments(services.shared, [document])
 })
 
 describe('Comment block folding tests', () => {

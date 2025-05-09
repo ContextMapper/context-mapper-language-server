@@ -16,14 +16,14 @@ let parse: ReturnType<typeof parseHelper<ContextMappingModel>>
 let document: LangiumDocument<ContextMappingModel> | undefined
 let semanticTokenProvider: SemanticTokenProvider
 
-beforeAll(async () => {
+beforeAll(() => {
   services = createContextMapperDslServices(EmptyFileSystem)
   parse = parseHelper<ContextMappingModel>(services.ContextMapperDsl)
-  semanticTokenProvider = services.ContextMapperDsl.lsp.SemanticTokenProvider!!
+  semanticTokenProvider = services.ContextMapperDsl.lsp.SemanticTokenProvider!
 })
 
 afterEach(async () => {
-  document && await clearDocuments(services.shared, [document])
+  if (document) await clearDocuments(services.shared, [document])
 })
 
 describe('Relationship semantic token tests', () => {
@@ -47,7 +47,7 @@ describe('Relationship semantic token tests', () => {
 
     expectSemanticTokensToEqual(tokens[1], 1, 10, 11, semanticTokenProvider.tokenTypes.type, 0)
     expectSemanticTokensToEqual(tokens[2], 0, 13, 1, semanticTokenProvider.tokenTypes.keyword, 0)
-    expectSemanticTokensToEqual(tokens[3], 0, 3, 3, semanticTokenProvider.tokenTypes.operator, 0)
+    expectSemanticTokensToEqual(tokens[3], 0, 3, 3, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[4], 0, 5, 1, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[5], 0, 3, 12, semanticTokenProvider.tokenTypes.type, 0)
     expectSemanticTokensToEqual(tokens[6], 0, 15, 7, semanticTokenProvider.tokenTypes.type, semanticTokenProvider.tokenModifiers.declaration)
@@ -74,7 +74,7 @@ describe('Relationship semantic token tests', () => {
 
     expectSemanticTokensToEqual(tokens[1], 1, 10, 11, semanticTokenProvider.tokenTypes.type, 0)
     expectSemanticTokensToEqual(tokens[2], 0, 13, 1, semanticTokenProvider.tokenTypes.keyword, 0)
-    expectSemanticTokensToEqual(tokens[3], 0, 3, 3, semanticTokenProvider.tokenTypes.operator, 0)
+    expectSemanticTokensToEqual(tokens[3], 0, 3, 3, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[4], 0, 5, 1, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[5], 0, 3, 12, semanticTokenProvider.tokenTypes.type, 0)
   })
@@ -97,7 +97,7 @@ describe('Relationship semantic token tests', () => {
 
     expectSemanticTokensToEqual(tokens[1], 1, 11, 1, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[2], 0, 3, 11, semanticTokenProvider.tokenTypes.type, 0)
-    expectSemanticTokensToEqual(tokens[3], 0, 12, 3, semanticTokenProvider.tokenTypes.operator, 0)
+    expectSemanticTokensToEqual(tokens[3], 0, 12, 3, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[4], 0, 5, 1, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[5], 0, 3, 12, semanticTokenProvider.tokenTypes.type, 0)
   })
@@ -120,7 +120,7 @@ describe('Relationship semantic token tests', () => {
 
     expectSemanticTokensToEqual(tokens[1], 1, 10, 11, semanticTokenProvider.tokenTypes.type, 0)
     expectSemanticTokensToEqual(tokens[2], 0, 13, 1, semanticTokenProvider.tokenTypes.keyword, 0)
-    expectSemanticTokensToEqual(tokens[3], 0, 3, 3, semanticTokenProvider.tokenTypes.operator, 0)
+    expectSemanticTokensToEqual(tokens[3], 0, 3, 3, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[4], 0, 4, 12, semanticTokenProvider.tokenTypes.type, 0)
     expectSemanticTokensToEqual(tokens[5], 0, 14, 1, semanticTokenProvider.tokenTypes.keyword, 0)
   })
@@ -143,7 +143,7 @@ describe('Relationship semantic token tests', () => {
 
     expectSemanticTokensToEqual(tokens[1], 1, 11, 1, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[2], 0, 3, 11, semanticTokenProvider.tokenTypes.type, 0)
-    expectSemanticTokensToEqual(tokens[3], 0, 12, 3, semanticTokenProvider.tokenTypes.operator, 0)
+    expectSemanticTokensToEqual(tokens[3], 0, 12, 3, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[4], 0, 4, 12, semanticTokenProvider.tokenTypes.type, 0)
     expectSemanticTokensToEqual(tokens[5], 0, 14, 1, semanticTokenProvider.tokenTypes.keyword, 0)
   })
@@ -188,7 +188,7 @@ describe('Relationship semantic token tests', () => {
     const tokens = extractSemanticTokens(result, expectedNumberOfTokens)
 
     expectSemanticTokensToEqual(tokens[1], 1, 10, 11, semanticTokenProvider.tokenTypes.type, 0)
-    expectSemanticTokensToEqual(tokens[2], 0, 12, 3, semanticTokenProvider.tokenTypes.operator, 0)
+    expectSemanticTokensToEqual(tokens[2], 0, 12, 3, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[3], 0, 4, 12, semanticTokenProvider.tokenTypes.type, 0)
     expectSemanticTokensToEqual(tokens[4], 0, 15, 7, semanticTokenProvider.tokenTypes.type, semanticTokenProvider.tokenModifiers.declaration)
 
@@ -214,7 +214,7 @@ describe('Relationship semantic token tests', () => {
 
     expectSemanticTokensToEqual(tokens[1], 1, 10, 11, semanticTokenProvider.tokenTypes.type, 0)
     expectSemanticTokensToEqual(tokens[2], 0, 13, 2, semanticTokenProvider.tokenTypes.keyword, 0)
-    expectSemanticTokensToEqual(tokens[3], 0, 4, 3, semanticTokenProvider.tokenTypes.operator, 0)
+    expectSemanticTokensToEqual(tokens[3], 0, 4, 3, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[4], 0, 5, 2, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[5], 0, 4, 12, semanticTokenProvider.tokenTypes.type, 0)
   })
@@ -237,7 +237,7 @@ describe('Relationship semantic token tests', () => {
 
     expectSemanticTokensToEqual(tokens[1], 1, 11, 2, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[2], 0, 4, 11, semanticTokenProvider.tokenTypes.type, 0)
-    expectSemanticTokensToEqual(tokens[3], 0, 12, 3, semanticTokenProvider.tokenTypes.operator, 0)
+    expectSemanticTokensToEqual(tokens[3], 0, 12, 3, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[4], 0, 5, 2, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[5], 0, 4, 12, semanticTokenProvider.tokenTypes.type, 0)
   })
@@ -260,7 +260,7 @@ describe('Relationship semantic token tests', () => {
 
     expectSemanticTokensToEqual(tokens[1], 1, 10, 11, semanticTokenProvider.tokenTypes.type, 0)
     expectSemanticTokensToEqual(tokens[2], 0, 13, 2, semanticTokenProvider.tokenTypes.keyword, 0)
-    expectSemanticTokensToEqual(tokens[3], 0, 4, 3, semanticTokenProvider.tokenTypes.operator, 0)
+    expectSemanticTokensToEqual(tokens[3], 0, 4, 3, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[4], 0, 4, 12, semanticTokenProvider.tokenTypes.type, 0)
     expectSemanticTokensToEqual(tokens[5], 0, 14, 2, semanticTokenProvider.tokenTypes.keyword, 0)
   })
@@ -283,7 +283,7 @@ describe('Relationship semantic token tests', () => {
 
     expectSemanticTokensToEqual(tokens[1], 1, 11, 2, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[2], 0, 4, 11, semanticTokenProvider.tokenTypes.type, 0)
-    expectSemanticTokensToEqual(tokens[3], 0, 12, 3, semanticTokenProvider.tokenTypes.operator, 0)
+    expectSemanticTokensToEqual(tokens[3], 0, 12, 3, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[4], 0, 4, 12, semanticTokenProvider.tokenTypes.type, 0)
     expectSemanticTokensToEqual(tokens[5], 0, 14, 2, semanticTokenProvider.tokenTypes.keyword, 0)
   })
@@ -326,7 +326,7 @@ describe('Relationship semantic token tests', () => {
     const tokens = extractSemanticTokens(result, expectedNumberOfTokens)
 
     expectSemanticTokensToEqual(tokens[1], 1, 10, 11, semanticTokenProvider.tokenTypes.type, 0)
-    expectSemanticTokensToEqual(tokens[2], 0, 12, 3, semanticTokenProvider.tokenTypes.operator, 0)
+    expectSemanticTokensToEqual(tokens[2], 0, 12, 3, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[3], 0, 4, 12, semanticTokenProvider.tokenTypes.type, 0)
   })
 
@@ -355,7 +355,7 @@ describe('Relationship semantic token tests', () => {
     expectSemanticTokensToEqual(tokens[1], 1, 10, 11, semanticTokenProvider.tokenTypes.type, 0)
     expectSemanticTokensToEqual(tokens[2], 0, 13, 1, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[3], 0, 2, 3, semanticTokenProvider.tokenTypes.keyword, 0)
-    expectSemanticTokensToEqual(tokens[4], 0, 5, 2, semanticTokenProvider.tokenTypes.operator, 0)
+    expectSemanticTokensToEqual(tokens[4], 0, 5, 2, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[5], 0, 4, 1, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[6], 0, 2, 2, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[7], 0, 4, 12, semanticTokenProvider.tokenTypes.type, 0)
@@ -389,7 +389,7 @@ describe('Relationship semantic token tests', () => {
 
     expectSemanticTokensToEqual(tokens[1], 1, 10, 11, semanticTokenProvider.tokenTypes.type, 0)
     expectSemanticTokensToEqual(tokens[2], 0, 13, 1, semanticTokenProvider.tokenTypes.keyword, 0)
-    expectSemanticTokensToEqual(tokens[3], 0, 3, 2, semanticTokenProvider.tokenTypes.operator, 0)
+    expectSemanticTokensToEqual(tokens[3], 0, 3, 2, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[4], 0, 4, 1, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[5], 0, 3, 12, semanticTokenProvider.tokenTypes.type, 0)
   })
@@ -412,7 +412,7 @@ describe('Relationship semantic token tests', () => {
 
     expectSemanticTokensToEqual(tokens[1], 1, 10, 11, semanticTokenProvider.tokenTypes.type, 0)
     expectSemanticTokensToEqual(tokens[2], 0, 13, 1, semanticTokenProvider.tokenTypes.keyword, 0)
-    expectSemanticTokensToEqual(tokens[3], 0, 3, 2, semanticTokenProvider.tokenTypes.operator, 0)
+    expectSemanticTokensToEqual(tokens[3], 0, 3, 2, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[4], 0, 4, 1, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[5], 0, 3, 12, semanticTokenProvider.tokenTypes.type, 0)
   })
@@ -482,7 +482,7 @@ describe('Relationship semantic token tests', () => {
     expectSemanticTokensToEqual(tokens[1], 1, 10, 11, semanticTokenProvider.tokenTypes.type, 0)
     expectSemanticTokensToEqual(tokens[2], 0, 13, 1, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[3], 0, 2, 3, semanticTokenProvider.tokenTypes.keyword, 0)
-    expectSemanticTokensToEqual(tokens[4], 0, 5, 2, semanticTokenProvider.tokenTypes.operator, 0)
+    expectSemanticTokensToEqual(tokens[4], 0, 5, 2, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[5], 0, 4, 1, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[6], 0, 2, 2, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[7], 0, 4, 12, semanticTokenProvider.tokenTypes.type, 0)
@@ -516,7 +516,7 @@ describe('Relationship semantic token tests', () => {
 
     expectSemanticTokensToEqual(tokens[1], 1, 10, 11, semanticTokenProvider.tokenTypes.type, 0)
     expectSemanticTokensToEqual(tokens[2], 0, 13, 1, semanticTokenProvider.tokenTypes.keyword, 0)
-    expectSemanticTokensToEqual(tokens[3], 0, 3, 2, semanticTokenProvider.tokenTypes.operator, 0)
+    expectSemanticTokensToEqual(tokens[3], 0, 3, 2, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[4], 0, 4, 1, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[5], 0, 3, 12, semanticTokenProvider.tokenTypes.type, 0)
   })
@@ -539,7 +539,7 @@ describe('Relationship semantic token tests', () => {
 
     expectSemanticTokensToEqual(tokens[1], 1, 10, 11, semanticTokenProvider.tokenTypes.type, 0)
     expectSemanticTokensToEqual(tokens[2], 0, 13, 1, semanticTokenProvider.tokenTypes.keyword, 0)
-    expectSemanticTokensToEqual(tokens[3], 0, 3, 2, semanticTokenProvider.tokenTypes.operator, 0)
+    expectSemanticTokensToEqual(tokens[3], 0, 3, 2, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[4], 0, 4, 1, semanticTokenProvider.tokenTypes.keyword, 0)
     expectSemanticTokensToEqual(tokens[5], 0, 3, 12, semanticTokenProvider.tokenTypes.type, 0)
   })

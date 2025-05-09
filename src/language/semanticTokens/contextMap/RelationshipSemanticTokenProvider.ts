@@ -14,7 +14,7 @@ import {
 import { SemanticTokenAcceptor } from 'langium/lsp'
 import { SemanticTokenModifiers, SemanticTokenTypes } from 'vscode-languageserver-types'
 import { ContextMapperSemanticTokenProvider } from '../ContextMapperSemanticTokenProvider.js'
-import { highlightField, highlightKeyword, highlightOperator, highlightType } from '../HighlightingHelper.js'
+import { highlightField, highlightKeyword, highlightType } from '../HighlightingHelper.js'
 
 export class RelationshipSemanticTokenProvider implements ContextMapperSemanticTokenProvider<Relationship> {
   highlight (node: Relationship, acceptor: SemanticTokenAcceptor) {
@@ -46,13 +46,13 @@ export class RelationshipSemanticTokenProvider implements ContextMapperSemanticT
 
   private highlightPartnership (node: Partnership, acceptor: SemanticTokenAcceptor) {
     highlightKeyword(node, acceptor, 'P')
-    highlightOperator(node, acceptor, '<->')
+    highlightKeyword(node, acceptor, '<->')
     highlightKeyword(node, acceptor, 'Partnership')
   }
 
   private highlightSharedKernel (node: SharedKernel, acceptor: SemanticTokenAcceptor) {
     highlightKeyword(node, acceptor, 'SK')
-    highlightOperator(node, acceptor, '<->')
+    highlightKeyword(node, acceptor, '<->')
     highlightKeyword(node, acceptor, 'Shared-Kernel')
   }
 
@@ -77,8 +77,8 @@ export class RelationshipSemanticTokenProvider implements ContextMapperSemanticT
       })
     }
 
-    highlightOperator(node, acceptor, '->')
-    highlightOperator(node, acceptor, '<-')
+    highlightKeyword(node, acceptor, '->')
+    highlightKeyword(node, acceptor, '<-')
 
     if (node.upstreamExposedAggregates.length > 0) {
       highlightField(node, acceptor, ['exposedAggregates'], 'upstreamExposedAggregates', SemanticTokenTypes.type)

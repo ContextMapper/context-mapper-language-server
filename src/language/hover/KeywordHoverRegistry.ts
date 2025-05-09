@@ -1,5 +1,5 @@
 export class KeywordHoverRegistry {
-  private readonly _registry: Map<string, string> = new Map([
+  private readonly _registry = new Map<string, string>([
     [
       'BoundedContext',
       `**Bounded Context**: A description of a boundary (typically a subsystem, or the work of a particular team) within which a particular model is defined and applicable. \
