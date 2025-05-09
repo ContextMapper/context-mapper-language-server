@@ -1,19 +1,20 @@
 import eslint from '@eslint/js'
 import typescriptEslint from 'typescript-eslint';
 
-export default typescriptEslint.config(
+export default typescriptEslint.config({
+        ignores: [
+            'esbuild.mjs',
+            'eslint.config.mjs',
+            '**/generated/**'
+        ],
+    },
     eslint.configs.recommended,
     typescriptEslint.configs.recommendedTypeChecked,
     typescriptEslint.configs.stylisticTypeChecked,
     {
-        ignores: [
-            'esbuild.mjs',
-            'eslint.config.mjs'
-        ],
         languageOptions: {
             parserOptions: {
-                project: './tsconfig.json',
-                tsconfigRootDir: import.meta.dirname,
+                project: ['./tsconfig.json']
             }
         },
         rules: {
