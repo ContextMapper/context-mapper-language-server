@@ -12,7 +12,7 @@ export default typescriptEslint.config(
         ],
         languageOptions: {
             parserOptions: {
-                projectService: true,
+                project: './tsconfig.json',
                 tsconfigRootDir: import.meta.dirname,
             }
         },
