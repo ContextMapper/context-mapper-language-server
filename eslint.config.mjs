@@ -6,6 +6,10 @@ export default typescriptEslint.config(
     typescriptEslint.configs.recommendedTypeChecked,
     typescriptEslint.configs.stylisticTypeChecked,
     {
+        ignores: [
+            'esbuild.mjs',
+            'eslint.config.mjs'
+        ],
         languageOptions: {
             parserOptions: {
                 projectService: true,
