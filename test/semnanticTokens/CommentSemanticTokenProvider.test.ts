@@ -15,14 +15,14 @@ let parse: ReturnType<typeof parseHelper<ContextMappingModel>>
 let document: LangiumDocument<ContextMappingModel> | undefined
 let semanticTokenProvider: SemanticTokenProvider
 
-beforeAll(async () => {
+beforeAll(() => {
   services = createContextMapperDslServices(EmptyFileSystem)
   parse = parseHelper<ContextMappingModel>(services.ContextMapperDsl)
-  semanticTokenProvider = services.ContextMapperDsl.lsp.SemanticTokenProvider!!
+  semanticTokenProvider = services.ContextMapperDsl.lsp.SemanticTokenProvider!
 })
 
 afterEach(async () => {
-  document && await clearDocuments(services.shared, [document])
+  if (document) await clearDocuments(services.shared, [document])
 })
 
 describe('Comment semantic token tests', () => {

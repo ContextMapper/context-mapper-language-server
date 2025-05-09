@@ -8,7 +8,7 @@ let services: ReturnType<typeof createContextMapperDslServices>
 let parse: ReturnType<typeof parseHelper<ContextMappingModel>>
 let document: LangiumDocument<ContextMappingModel> | undefined
 
-beforeAll(async () => {
+beforeAll(() => {
   services = createContextMapperDslServices(EmptyFileSystem)
   const doParse = parseHelper<ContextMappingModel>(services.ContextMapperDsl)
   parse = (input: string) => doParse(input, { validation: true })

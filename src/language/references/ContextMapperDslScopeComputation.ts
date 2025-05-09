@@ -2,6 +2,7 @@ import { AstNode, AstNodeDescription, DefaultScopeComputation, LangiumDocument }
 import { CancellationToken } from 'vscode-languageserver'
 
 export class ContextMapperDslScopeComputation extends DefaultScopeComputation {
+
   /*
     For the time being imports aren't supported yet.
     By default, Langium adds top-level elements to the global scope.

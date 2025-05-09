@@ -26,11 +26,11 @@ import { ContextMapperDslCompletionProvider } from './completion/ContextMapperDs
 /**
  * Declaration of custom services - add your own service classes here.
  */
-export type ContextMapperDslAddedServices = {
+export interface ContextMapperDslAddedServices {
   validation: {
     ContextMapperDslValidator: ContextMapperDslValidator
   }
-};
+}
 
 /**
  * Union of Langium default services and your custom services - use this as constructor parameter
@@ -104,7 +104,7 @@ export function createContextMapperDslServices (context: DefaultSharedModuleCont
   if (!context.connection) {
     // We don't run inside a language server
     // Therefore, initialize the configuration provider instantly
-    shared.workspace.ConfigurationProvider.initialized({})
+    void shared.workspace.ConfigurationProvider.initialized({})
   }
   return { shared, ContextMapperDsl }
 }

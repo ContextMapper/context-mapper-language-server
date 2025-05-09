@@ -10,7 +10,7 @@ let parse: ReturnType<typeof parseHelper<ContextMappingModel>>
 let document: LangiumDocument<ContextMappingModel> | undefined
 let hoverProvider: HoverProvider
 
-beforeAll(async () => {
+beforeAll(() => {
   services = createContextMapperDslServices(EmptyFileSystem)
   parse = parseHelper<ContextMappingModel>(services.ContextMapperDsl)
   hoverProvider = services.ContextMapperDsl.lsp.HoverProvider!

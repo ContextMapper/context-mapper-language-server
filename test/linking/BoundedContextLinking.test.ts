@@ -15,13 +15,13 @@ let services: ReturnType<typeof createContextMapperDslServices>
 let parse: ReturnType<typeof parseHelper<ContextMappingModel>>
 let document: LangiumDocument<ContextMappingModel> | undefined
 
-beforeAll(async () => {
+beforeAll(() => {
   services = createContextMapperDslServices(EmptyFileSystem)
   parse = parseHelper<ContextMappingModel>(services.ContextMapperDsl)
 })
 
 afterEach(async () => {
-  document && await clearDocuments(services.shared, [document])
+  if (document) await clearDocuments(services.shared, [document])
 })
 
 describe('Bounded context linking tests', () => {

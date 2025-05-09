@@ -21,9 +21,9 @@ export class AggregateValidationProvider implements ContextMapperValidationProvi
     enforceZeroOrOneCardinality(node, 'securityAccessGroup', acceptor)
 
     // make sure only one of the userRequirements keywords is used
-    const userRequirementProperties = ['userRequirements', 'useCases', 'userStories'] as Array<keyof Aggregate>
+    const userRequirementProperties = ['userRequirements', 'useCases', 'userStories'] as (keyof Aggregate)[]
     const setUserRequirements = userRequirementProperties.filter(p => {
-      const value = node[p] as Array<any>
+      const value = node[p] as object[]
       return value.length > 0
     })
     if (setUserRequirements.length > 1) {

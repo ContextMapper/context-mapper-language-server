@@ -6,12 +6,13 @@ import { EmptyFileSystem, LangiumDocument } from 'langium'
 import { afterEach, beforeAll, describe, expect, test } from 'vitest'
 import { fail } from 'node:assert'
 import { uinteger } from 'vscode-languageserver-types'
+import { CompletionParams } from 'vscode-languageserver'
 
 let services: ReturnType<typeof createContextMapperDslServices>
 let completionProvider: CompletionProvider
 let parse: ReturnType<typeof parseHelper<ContextMappingModel>>
 
-beforeAll(async () => {
+beforeAll(() => {
   services = createContextMapperDslServices(EmptyFileSystem)
   completionProvider = services.ContextMapperDsl.lsp.CompletionProvider!
   parse = parseHelper<ContextMappingModel>(services.ContextMapperDsl)
@@ -106,7 +107,7 @@ describe('Completion tests', () => {
   })
 })
 
-function createCompletionParams (document: LangiumDocument<ContextMappingModel>, positionLine: uinteger, positionChar: uinteger): any {
+function createCompletionParams (document: LangiumDocument<ContextMappingModel>, positionLine: uinteger, positionChar: uinteger): CompletionParams {
   return {
     textDocument: {
       uri: document.uri.path

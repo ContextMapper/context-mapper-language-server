@@ -35,7 +35,7 @@ export function highlightType (node: AstNode, acceptor: SemanticTokenAcceptor, p
   })
 }
 
-export function highlightTypeDeclaration (node: AstNode, acceptor: SemanticTokenAcceptor, keyword: string, hasName: boolean = true) {
+export function highlightTypeDeclaration (node: AstNode, acceptor: SemanticTokenAcceptor, keyword: string, hasName = true) {
   highlightKeyword(node, acceptor, keyword)
   if (hasName) {
     highlightType(node, acceptor, 'name', [SemanticTokenModifiers.declaration])

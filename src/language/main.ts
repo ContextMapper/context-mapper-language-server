@@ -7,7 +7,10 @@ import { createContextMapperDslServices } from './ContextMapperDslModule.js'
 const connection = createConnection(ProposedFeatures.all)
 
 // Inject the shared services and language-specific services
-const { shared } = createContextMapperDslServices({ connection, ...NodeFileSystem })
+const { shared } = createContextMapperDslServices({
+  connection,
+  ...NodeFileSystem
+})
 
 // Start the language server with the shared services
 startLanguageServer(shared)

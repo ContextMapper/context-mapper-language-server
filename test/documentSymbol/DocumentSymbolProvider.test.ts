@@ -11,14 +11,14 @@ let parse: ReturnType<typeof parseHelper<ContextMappingModel>>
 let document: LangiumDocument<ContextMappingModel> | undefined
 let documentSymbolProvider: DocumentSymbolProvider
 
-beforeAll(async () => {
+beforeAll(() => {
   services = createContextMapperDslServices(EmptyFileSystem)
   parse = parseHelper<ContextMappingModel>(services.ContextMapperDsl)
   documentSymbolProvider = services.ContextMapperDsl.lsp.DocumentSymbolProvider!
 })
 
 afterEach(async () => {
-  document && await clearDocuments(services.shared, [document])
+  if (document) await clearDocuments(services.shared, [document])
 })
 
 describe('Document symbol provider tests', () => {

@@ -4,10 +4,11 @@ import {
   Aggregate,
   DomainPart,
   isContextMappingModel,
-  isStakeholderGroup, StakeholderGroup
+  isStakeholderGroup
 } from '../generated/ast.js'
 
 export class ContextMapperDslScopeProvider extends DefaultScopeProvider {
+
   /*
     Some ContextMapper elements are not defined on the top-level of the document and should still be referencable.
     Langium assumes that nested elements don't belong in the global scope.
@@ -43,7 +44,7 @@ export class ContextMapperDslScopeProvider extends DefaultScopeProvider {
         .concat(
           model.stakeholders.flatMap(s => s.stakeholders)
             .filter(s => isStakeholderGroup(s))
-            .flatMap(sg => (sg as StakeholderGroup).stakeholders)
+            .flatMap(sg => sg.stakeholders)
             .map(s => this.descriptions.createDescription(s, s.name))
         )
       return this.createScope(stakeholderDescriptions)

@@ -54,9 +54,13 @@ import {
 
 export class SemanticTokenProviderRegistry {
   private readonly _domainProvider = new DomainSemanticTokenProvider()
+
   private readonly _relationshipProvider = new RelationshipSemanticTokenProvider()
+
   private readonly _featureProvider = new FeatureSemanticTokenProvider()
+
   private readonly _userRequirementProvider = new RequirementsSemanticTokenProvider()
+
   private readonly _stakeholderProvider = new AbstractStakeholderSemanticTokenProvider()
 
   private readonly semanticTokenProviders = new Map<string, ContextMapperSemanticTokenProvider<AstNode>>([
