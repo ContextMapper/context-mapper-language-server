@@ -17,7 +17,7 @@ beforeAll(() => {
 
 describe('Example file parsing tests', () => {
   test('Parse example files', async () => {
-    const exampleFiles = await getFiles(path.resolve(__dirname, 'example-files'))
+    const exampleFiles = await getFiles(path.resolve(__dirname, '../example-files'))
     for (const exampleFile of exampleFiles) {
       const content = await getFileContent(exampleFile)
       await parseValidInput(parse, content)
