@@ -1,20 +1,25 @@
-import eslint from '@eslint/js'
-import typescriptEslint from 'typescript-eslint';
+import tsLint from 'typescript-eslint'
+import stylisticLint from '@stylistic/eslint-plugin-ts'
 
-export default typescriptEslint.config({
+export default tsLint.config(
+    {
         ignores: [
-            'esbuild.mjs',
-            'eslint.config.mjs',
-            '**/generated/**'
-        ],
+            'out/*',
+            'node_modules/*',
+            '**/generated/**',
+        ]
     },
-    eslint.configs.recommended,
-    typescriptEslint.configs.recommendedTypeChecked,
-    typescriptEslint.configs.stylisticTypeChecked,
+    //eslintJs.configs.recommended,
+    tsLint.configs.recommendedTypeChecked,
+    stylisticLint.configs.all,
+    /*{
+
+    }*/
     {
         languageOptions: {
             parserOptions: {
-                project: ['./tsconfig.json']
+                project: ['./tsconfig.json'],
+                tsconfigRootDir: import.meta.dirname
             }
         },
         rules: {
@@ -25,7 +30,22 @@ export default typescriptEslint.config({
                     'varsIgnorePattern': '^_',
                     'caughtErrorsIgnorePattern': '^_'
                 }
-            ]
+            ],
+            '@stylistic/ts/indent': ['error', 2],
+            '@stylistic/ts/quotes': ['error', 'single'],
+            '@stylistic/ts/semi': ['error', 'never'],
+            '@stylistic/ts/object-curly-spacing': ['error', 'always'],
+            '@stylistic/ts/quote-props': ['error', 'consistent-as-needed'],
+            '@stylistic/ts/member-delimiter-style': ['error', {
+                multiline: {
+                    delimiter: 'comma',
+                    requireLast: false
+                },
+                singleline: {
+                    delimiter: 'comma',
+                    requireLast: false
+                }
+            }]
         }
     }
-);
+)

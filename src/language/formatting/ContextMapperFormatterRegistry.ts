@@ -50,6 +50,7 @@ import { ActionFormatter } from './vdad/ActionFormatter.js'
 
 export class ContextMapperFormatterRegistry {
   private readonly _bracePairFormatter = new BracePairFormatter<AstNode>()
+
   private readonly _relationshipFormatter = new RelationshipFormatter()
 
   private readonly _formatters = new Map<string, ContextMapperFormatter<AstNode>>([

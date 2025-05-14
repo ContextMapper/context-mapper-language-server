@@ -1,4 +1,4 @@
-import {PlantUMLDiagramGenerator} from "./PlantUMLDiagramGenerator.js";
+import { PlantUMLDiagramGenerator } from './PlantUMLDiagramGenerator.js'
 import {
   BoundedContext,
   ContextMap,
@@ -11,8 +11,8 @@ import {
   Relationship,
   SymmetricRelationship,
   UpstreamDownstreamRelationship, UpstreamRole
-} from "../../generated/ast.js";
-import {PlantUMLBuilder} from "./PlantUMLBuilder.js";
+} from '../../generated/ast.js'
+import { PlantUMLBuilder } from './PlantUMLBuilder.js'
 
 export class ComponentDiagramGenerator implements PlantUMLDiagramGenerator<ContextMap> {
   private readonly plantUMLBuilder = new PlantUMLBuilder()
@@ -29,7 +29,7 @@ export class ComponentDiagramGenerator implements PlantUMLDiagramGenerator<Conte
     ['OHS', 'OPEN_HOST_SERVICE']
   ])
 
-  createDiagram(node: ContextMap): string {
+  createDiagram (node: ContextMap): string {
     if (node.boundedContexts.length === 0) {
       this.plantUMLBuilder.addEmptyDiagramNote()
       return this.plantUMLBuilder.build()
@@ -52,16 +52,16 @@ export class ComponentDiagramGenerator implements PlantUMLDiagramGenerator<Conte
     return this.plantUMLBuilder.build()
   }
 
-  private printComponents(bc: BoundedContext) {
+  private printComponents (bc: BoundedContext) {
     this.plantUMLBuilder.add(`component [${bc.name}]`)
     if (bc.domainVisionStatement.length === 1) {
       this.plantUMLBuilder.add(`note right of [${bc.name}]`)
       if (bc.domainVisionStatement[0].length > 30) {
         const words = bc.domainVisionStatement[0].split(' ')
         let charCount = 0
-        let line = ""
+        let line = ''
         for (const word of words) {
-          line += (word + " ")
+          line += word + ' '
           charCount += word.length + 1
           if (charCount > 30) {
             this.plantUMLBuilder.add(line.trim())
@@ -80,23 +80,23 @@ export class ComponentDiagramGenerator implements PlantUMLDiagramGenerator<Conte
     }
   }
 
-  private printSymmetricRelationship(relationship: SymmetricRelationship) {
+  private printSymmetricRelationship (relationship: SymmetricRelationship) {
     this.plantUMLBuilder.add(`[${relationship.participant1.ref!.name}]<-->[${relationship.participant2.ref!.name}] : ${this.getSymmetricRelationshipLabel(relationship)}`)
     this.plantUMLBuilder.addLinebreak()
   }
 
-  private printUpstreamDownstreamRelationship(relationship: UpstreamDownstreamRelationship) {
+  private printUpstreamDownstreamRelationship (relationship: UpstreamDownstreamRelationship) {
     const interfaceId = this.getUniqueInterfaceId(relationship.name, relationship.upstream.ref!.name, relationship.downstream.ref!.name)
 
     this.plantUMLBuilder.add(`interface "${this.getAsymmetricRelationshipLabel(relationship)}" as ${interfaceId}`)
 
-    this.printInterfaceExposure(relationship, interfaceId);
+    this.printInterfaceExposure(relationship, interfaceId)
 
     this.printInterfaceUsage(relationship, interfaceId)
     this.plantUMLBuilder.addLinebreak()
   }
 
-  private getSymmetricRelationshipLabel(relationship: SymmetricRelationship) {
+  private getSymmetricRelationshipLabel (relationship: SymmetricRelationship) {
     const labelParts: string[] = []
     const hasName = relationship.name != null && relationship.name !== ''
 
@@ -113,7 +113,7 @@ export class ComponentDiagramGenerator implements PlantUMLDiagramGenerator<Conte
     return labelParts.join('')
   }
 
-  private getAsymmetricRelationshipLabel(relationship: UpstreamDownstreamRelationship) {
+  private getAsymmetricRelationshipLabel (relationship: UpstreamDownstreamRelationship) {
     const labelParts: string[] = []
     const hasName = relationship.name != null && relationship.name !== ''
     if (hasName) {
@@ -135,7 +135,7 @@ export class ComponentDiagramGenerator implements PlantUMLDiagramGenerator<Conte
     return labelParts.join('')
   }
 
-  private getRelationshipTypeLabel(relationship: Relationship) {
+  private getRelationshipTypeLabel (relationship: Relationship) {
     if (isPartnership(relationship)) {
       return 'Partnership'
     } else if (isSharedKernel(relationship)) {
@@ -147,7 +147,7 @@ export class ComponentDiagramGenerator implements PlantUMLDiagramGenerator<Conte
     }
   }
 
-  private getUniqueInterfaceId(name: string | undefined, upstreamName: string, downstreamName: string): string {
+  private getUniqueInterfaceId (name: string | undefined, upstreamName: string, downstreamName: string): string {
     if (name != null && !this.usedInterfaceNames.has(name)) {
       this.usedInterfaceNames.add(name)
       return name
@@ -164,7 +164,7 @@ export class ComponentDiagramGenerator implements PlantUMLDiagramGenerator<Conte
     return interfaceName
   }
 
-  private printInterfaceExposure(relationship: UpstreamDownstreamRelationship, interfaceId: string) {
+  private printInterfaceExposure (relationship: UpstreamDownstreamRelationship, interfaceId: string) {
     const exposureParts: string[] = []
     const upstreamRoles = relationship.upstreamRoles.map(r => this.upstreamRolesToString.get(r)).join(', ')
 
@@ -183,7 +183,7 @@ export class ComponentDiagramGenerator implements PlantUMLDiagramGenerator<Conte
     this.plantUMLBuilder.add(exposureParts.join(''))
   }
 
-  private printInterfaceUsage(relationship: UpstreamDownstreamRelationship, interfaceId: string) {
+  private printInterfaceUsage (relationship: UpstreamDownstreamRelationship, interfaceId: string) {
     const interfaceParts: string[] = []
     const downstreamRole = this.getDownstreamRole(relationship.downstreamRoles)
 
@@ -211,15 +211,15 @@ export class ComponentDiagramGenerator implements PlantUMLDiagramGenerator<Conte
     this.plantUMLBuilder.add(interfaceParts.join(''))
   }
 
-  private getDownstreamRole(roles: DownstreamRole[]): string {
-    if (roles.length === 0) return "";
+  private getDownstreamRole (roles: DownstreamRole[]): string {
+    if (roles.length === 0) return ''
 
     // currently CML only supports one downstream role (ACL or CONFORMIST)
-    const role = roles[0];
+    const role = roles[0]
     if (role === 'ACL') {
-      return "via " + this.downstreamRolesToString.get(role);
+      return 'via ' + this.downstreamRolesToString.get(role)
     } else {
-      return "as " + this.downstreamRolesToString.get(role);
+      return 'as ' + this.downstreamRolesToString.get(role)
     }
   }
 }

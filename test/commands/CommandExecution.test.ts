@@ -1,10 +1,10 @@
-import {createContextMapperDslServices} from "../../src/language/ContextMapperDslModule.js";
-import {ExecuteCommandHandler} from "langium/lsp";
-import {clearDocuments} from "langium/test";
-import {afterEach, beforeAll, describe, expect, test} from "vitest";
-import {NodeFileSystem} from "langium/node";
-import fs from "node:fs";
-import path from "node:path";
+import { createContextMapperDslServices } from '../../src/language/ContextMapperDslModule.js'
+import { ExecuteCommandHandler } from 'langium/lsp'
+import { clearDocuments } from 'langium/test'
+import { afterEach, beforeAll, describe, expect, test } from 'vitest'
+import { NodeFileSystem } from 'langium/node'
+import fs from 'node:fs'
+import path from 'node:path'
 
 const outDir = path.join(__dirname, 'out')
 
@@ -18,7 +18,7 @@ beforeAll(() => {
 
 afterEach(async () => {
   await clearDocuments(services.shared, services.shared.workspace.LangiumDocuments.all.toArray())
-  fs.rmSync(outDir, {recursive: true})
+  fs.rmSync(outDir, { recursive: true })
 })
 
 describe('Command execution tests', () => {

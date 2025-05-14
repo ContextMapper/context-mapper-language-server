@@ -1,5 +1,5 @@
-import {ComponentDiagramGenerator} from "../../src/language/generators/plantuml/ComponentDiagramGenerator.js";
-import {beforeEach, describe, expect, test} from "vitest";
+import { ComponentDiagramGenerator } from '../../src/language/generators/plantuml/ComponentDiagramGenerator.js'
+import { beforeEach, describe, expect, test } from 'vitest'
 import {
   Aggregate,
   BoundedContext,
@@ -12,8 +12,8 @@ import {
   SharedKernel,
   UpstreamDownstreamRelationship,
   UpstreamRole
-} from "../../src/language/generated/ast.js";
-import {Reference} from "langium";
+} from '../../src/language/generated/ast.js'
+import { Reference } from 'langium'
 
 let generator: ComponentDiagramGenerator
 
@@ -615,7 +615,7 @@ myContext2_to_myContext1 <.. [myContext2] : consume
 
     const boundedContext2 = {
       name: 'myContext2',
-      domainVisionStatement: [] as string[],
+      domainVisionStatement: [] as string[]
     } as BoundedContext
     const boundedContext2Ref = {
       ref: boundedContext2
@@ -632,7 +632,7 @@ myContext2_to_myContext1 <.. [myContext2] : consume
           downstreamRoles: [] as DownstreamRole[],
           downstreamGovernanceRights: [] as DownstreamGovernanceRights[],
           implementationTechnology: [],
-          $type: 'UpstreamDownstreamRelationship',
+          $type: 'UpstreamDownstreamRelationship'
         } as UpstreamDownstreamRelationship
       ]
     } as ContextMap
@@ -675,7 +675,7 @@ myContext2_to_myContext1 <.. [myContext2] : use Aggregates ExposedAggregate1, Ex
 
     const boundedContext2 = {
       name: 'myContext2',
-      domainVisionStatement: [] as string[],
+      domainVisionStatement: [] as string[]
     }
     const boundedContext2Ref = {
       ref: boundedContext2
@@ -692,7 +692,7 @@ myContext2_to_myContext1 <.. [myContext2] : use Aggregates ExposedAggregate1, Ex
           downstreamRoles: [],
           downstreamGovernanceRights: [],
           implementationTechnology: [],
-          $type: 'CustomerSupplierRelationship',
+          $type: 'CustomerSupplierRelationship'
         } as CustomerSupplierRelationship
       ]
     } as ContextMap
