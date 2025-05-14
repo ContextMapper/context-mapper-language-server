@@ -6,7 +6,7 @@ import { ComponentDiagramGenerator } from './plantuml/ComponentDiagramGenerator.
 import { CancellationToken } from 'vscode-languageserver'
 
 export class PlantUMLGenerator implements ContextMapperGenerator {
-  async generate (model: ContextMappingModel, filePath: string, args: unknown[], cancelToken: CancellationToken): Promise<string | undefined> {
+  async generate (model: ContextMappingModel, filePath: string, args: unknown[], cancelToken: CancellationToken): Promise<string[] | undefined> {
     // there must not be any extra spaces especially at the start, since the path will be treated as relative otherwise
     const destination = (args[0] as string)?.trim()
     if (destination == null || destination === '') {
@@ -23,24 +23,30 @@ export class PlantUMLGenerator implements ContextMapperGenerator {
       await fs.promises.mkdir(destination, { recursive: true })
     }
 
-    await this.generateComponentDiagram(model, destination, fileName)
+    const diagrams: string[] = []
+
+    const componentDiagram = await this.generateComponentDiagram(model, destination, fileName)
+    if (componentDiagram) {
+      diagrams.push(componentDiagram)
+    }
 
     console.log('Successfully generated PlantUML diagrams')
-    return destination
+    return diagrams
   }
 
-  private async generateComponentDiagram (model: ContextMappingModel, destination: string, fileName: string) {
+  private async generateComponentDiagram (model: ContextMappingModel, destination: string, fileName: string): Promise<string | undefined> {
     if (model.contextMap.length === 0) {
       return
     }
 
     const generator = new ComponentDiagramGenerator()
     const diagram = generator.createDiagram(model.contextMap[0])
-    await this.createFile(destination, fileName, diagram)
+    return await this.createFile(destination, fileName, diagram)
   }
 
   private async createFile (destination: string, fileName: string, content: string) {
     const filePath = `${path.join(destination, fileName)}.puml`
     await fs.promises.writeFile(filePath, content)
+    return filePath
   }
 }

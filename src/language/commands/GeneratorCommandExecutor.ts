@@ -14,7 +14,7 @@ export class GeneratorCommandExecutor {
     this.serviceRegistry = serviceRegistry
   }
 
-  async execute (generator: ContextMapperGenerator, args: unknown[], cancelToken: CancellationToken): Promise<string | undefined> {
+  async execute (generator: ContextMapperGenerator, args: unknown[], cancelToken: CancellationToken): Promise<string[] | undefined> {
     const filePath = args[0] as string
 
     const model = await this.extractModel(filePath)
