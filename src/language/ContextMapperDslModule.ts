@@ -22,6 +22,7 @@ import { ContextMapperDslNodeKindProvider } from './shared/ContextMapperDslNodeK
 import { ContextMapperDslFormatter } from './formatting/ContextMapperDslFormatter.js'
 import { ContextMapperFormatterRegistry } from './formatting/ContextMapperFormatterRegistry.js'
 import { ContextMapperDslCompletionProvider } from './completion/ContextMapperDslCompletionProvider.js'
+import {ContextMapperCommandHandler} from "./commands/ContextMapperCommandHandler.js";
 
 /**
  * Declaration of custom services - add your own service classes here.
@@ -59,7 +60,7 @@ export const ContextMapperDslModule: Module<ContextMapperDslServices, ModuleType
     FoldingRangeProvider: (services) => new ContextMapperDslFoldingRangeProvider(services),
     HoverProvider: (services) => new ContextMapperDslHoverProvider(services, new KeywordHoverRegistry()),
     Formatter: () => new ContextMapperDslFormatter(new ContextMapperFormatterRegistry()),
-    CompletionProvider: (services) => new ContextMapperDslCompletionProvider(services)
+    CompletionProvider: (services) => new ContextMapperDslCompletionProvider(services),
   },
   references: {
     ScopeProvider: (services) => new ContextMapperDslScopeProvider(services),
@@ -91,7 +92,8 @@ export function createContextMapperDslServices (context: DefaultSharedModuleCont
     ContextMapperDslGeneratedSharedModule,
     {
       lsp: {
-        NodeKindProvider: () => new ContextMapperDslNodeKindProvider()
+        NodeKindProvider: () => new ContextMapperDslNodeKindProvider(),
+        ExecuteCommandHandler: (services) => new ContextMapperCommandHandler(services)
       }
     }
   )
