@@ -16,7 +16,7 @@
         "url": "https://github.com/lstreckeisen/context-mapper-language-server.git"
     },
     "scripts": {
-        "build": "tsc -b tsconfig.json",
+        "build": "tsc -b tsconfig.src.json",
         "lint": "eslint",
         "lint:fix": "eslint --fix",
         "langium:generate": "langium generate",
