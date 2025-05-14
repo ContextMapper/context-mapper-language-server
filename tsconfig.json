@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "ESNext",
+        "target": "ES2017",
         "module": "Node16",
         "lib": [
             "ESNext",
@@ -8,7 +8,7 @@
             "WebWorker"
         ],
         "sourceMap": true,
-        "outDir": "dist",
+        "outDir": "out",
         "strict": true,
         "noUnusedLocals": true,
         "noImplicitReturns": true,
@@ -22,8 +22,7 @@
     },
     "include": [
         "src/**/*.ts",
-        "test/**/*.ts",
-        "vitest.config.ts"
+        "test/**/*.ts"
     ],
     "exclude": [
         "node_modules"
