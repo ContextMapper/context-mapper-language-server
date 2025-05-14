@@ -1,21 +1,26 @@
 import tsLint from 'typescript-eslint'
 import stylisticLint from '@stylistic/eslint-plugin-ts'
 
-export default tsLint.config(
-    {
+const files = ['src/**/*.ts', 'test/**/*.ts']
+
+export default tsLint.config({
         ignores: [
-            'out/*',
-            'node_modules/*',
             '**/generated/**',
+            '**/*.{js,cjs,mjs}'
         ]
     },
-    //eslintJs.configs.recommended,
-    tsLint.configs.recommendedTypeChecked,
-    stylisticLint.configs.all,
-    /*{
-
-    }*/
+    tsLint.configs.recommendedTypeChecked.map((config) => {
+        return {
+            ...config,
+            files
+        }
+    }),
     {
+        ...stylisticLint.configs.all,
+        files
+    },
+    {
+        files,
         languageOptions: {
             parserOptions: {
                 project: ['./tsconfig.json'],
