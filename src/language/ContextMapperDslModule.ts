@@ -22,6 +22,7 @@ import { ContextMapperDslNodeKindProvider } from './shared/ContextMapperDslNodeK
 import { ContextMapperDslFormatter } from './formatting/ContextMapperDslFormatter.js'
 import { ContextMapperFormatterRegistry } from './formatting/ContextMapperFormatterRegistry.js'
 import { ContextMapperDslCompletionProvider } from './completion/ContextMapperDslCompletionProvider.js'
+import { ContextMapperCommandHandler } from './commands/ContextMapperCommandHandler.js'
 
 /**
  * Declaration of custom services - add your own service classes here.
@@ -36,7 +37,7 @@ export interface ContextMapperDslAddedServices {
  * Union of Langium default services and your custom services - use this as constructor parameter
  * of custom service classes.
  */
-export type ContextMapperDslServices = LangiumServices & ContextMapperDslAddedServices;
+export type ContextMapperDslServices = LangiumServices & ContextMapperDslAddedServices
 
 /**
  * Dependency injection module that overrides Langium default services and contributes the
@@ -44,7 +45,7 @@ export type ContextMapperDslServices = LangiumServices & ContextMapperDslAddedSe
  * selected services, while the custom services must be fully specified.
  */
 
-type ModuleType = PartialLangiumServices & ContextMapperDslAddedServices;
+type ModuleType = PartialLangiumServices & ContextMapperDslAddedServices
 
 const semanticTokenProviderRegistry = new SemanticTokenProviderRegistry()
 const validationProviderRegistry = new ContextMapperValidationProviderRegistry()
@@ -91,7 +92,8 @@ export function createContextMapperDslServices (context: DefaultSharedModuleCont
     ContextMapperDslGeneratedSharedModule,
     {
       lsp: {
-        NodeKindProvider: () => new ContextMapperDslNodeKindProvider()
+        NodeKindProvider: () => new ContextMapperDslNodeKindProvider(),
+        ExecuteCommandHandler: (services) => new ContextMapperCommandHandler(services)
       }
     }
   )
@@ -106,5 +108,6 @@ export function createContextMapperDslServices (context: DefaultSharedModuleCont
     // Therefore, initialize the configuration provider instantly
     void shared.workspace.ConfigurationProvider.initialized({})
   }
-  return { shared, ContextMapperDsl }
+  return { shared,
+    ContextMapperDsl }
 }

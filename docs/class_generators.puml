@@ -1,0 +1,19 @@
+@startuml
+
+class ContextMapperCommandHandler {
++ registerCommands(ExecuteCommandAcceptor)
+}
+
+class GeneratorCommandExecutor {
+- serviceRegistry: ServiceRegistry
++ execute(ContextMapperGenerator, unknown[], CancellationToken)
+}
+
+interface ContextMapperGenerator {
++ generate(ContextMappingModel, string, unknown[], CancellationToken)
+}
+
+ContextMapperCommandHandler *-- "1" GeneratorCommandExecutor
+ContextMapperCommandHandler o-- "0..*" ContextMapperGenerator
+
+@enduml

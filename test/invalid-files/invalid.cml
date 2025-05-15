@@ -1,0 +1,5 @@
+ContextMap {
+    contains TestContext
+}
+
+BoundedContext TestContext {
