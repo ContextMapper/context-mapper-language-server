@@ -33,7 +33,7 @@ export class ComponentDiagramGenerator implements PlantUMLDiagramGenerator<Conte
 
   createDiagram (node: ContextMap): string {
     if (node.boundedContexts.length === 0) {
-      this.plantUMLBuilder.addEmptyDiagramNote()
+      this.plantUMLBuilder.addEmptyDiagramNote('"Sorry, we cannot generate a component diagram. Your Context Map seems to be empty."')
       return this.plantUMLBuilder.build()
     }
 

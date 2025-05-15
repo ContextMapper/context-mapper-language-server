@@ -9,8 +9,8 @@ export class PlantUMLBuilder {
     this._content.push(content)
   }
 
-  addEmptyDiagramNote () {
-    this.add('note "Sorry, we cannot generate a component diagram. Your Context Map seems to be empty." as EmptyDiagramError')
+  addEmptyDiagramNote (message: string) {
+    this.add(`note ${message} as EmptyDiagramError`)
     this.addLinebreak()
   }
 
