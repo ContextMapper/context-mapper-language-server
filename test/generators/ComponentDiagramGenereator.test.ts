@@ -1,3 +1,5 @@
+// adapted from https://github.com/ContextMapper/context-mapper-dsl/blob/master/org.contextmapper.dsl.tests/src/org/contextmapper/dsl/generators/plantuml/PlantUMLComponentDiagramCreatorTest.java
+
 import { ComponentDiagramGenerator } from '../../src/language/generators/plantuml/ComponentDiagramGenerator.js'
 import { beforeEach, describe, expect, test } from 'vitest'
 import {

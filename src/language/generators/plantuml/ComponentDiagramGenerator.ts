@@ -1,3 +1,5 @@
+// adapted from https://github.com/ContextMapper/context-mapper-dsl/blob/master/org.contextmapper.dsl/src/org/contextmapper/dsl/generator/plantuml/PlantUMLComponentDiagramCreator.java
+
 import { PlantUMLDiagramGenerator } from './PlantUMLDiagramGenerator.js'
 import {
   BoundedContext,
