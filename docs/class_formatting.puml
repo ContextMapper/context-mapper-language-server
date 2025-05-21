@@ -1,17 +1,19 @@
 @startuml
-abstract class AbstractFormatter
+abstract class AbstractFormatter {
+{abstract} # format(node: AstNode)
+}
 
 class ContextMapperDslFormatter {
-# format(AstNode)
+# format(node: AstNode)
 }
 
 interface ContextMapperFormatter {
-+ format(T, NodeFormatter<T>)
++ format(node: T, formatter: NodeFormatter<T>)
 }
 
 class ContextMapperFormatterRegistry {
 - _formatters: Map<string, ContextMapperFormatter<AstNode>>
-+ get(AstNode): ContextMapperFormatter<AstNode> | undefined
++ get(node: AstNode): ContextMapperFormatter<AstNode> | undefined
 }
 
 AbstractFormatter <|-- ContextMapperDslFormatter

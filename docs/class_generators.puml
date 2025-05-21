@@ -1,18 +1,29 @@
 @startuml
 
+<style>
+class {
+    MaximumWidth: 500
+}
+</style>
+
+abstract class AbstractExecuteCommandHandler {
+{abstract} + registerCommands(ExecuteCommandAcceptor)
+}
+
 class ContextMapperCommandHandler {
 + registerCommands(ExecuteCommandAcceptor)
 }
 
 class GeneratorCommandExecutor {
 - serviceRegistry: ServiceRegistry
-+ execute(ContextMapperGenerator, unknown[], CancellationToken)
++ execute(generator: ContextMapperGenerator, args: unknown[], cancelToken: CancellationToken): Promise<string[]>
 }
 
 interface ContextMapperGenerator {
-+ generate(ContextMappingModel, string, unknown[], CancellationToken)
++ generate(model: ContextMappingModel, filePath: string, args: unknown[], cancelToken: CancellationToken): Promise<string[]>
 }
 
+AbstractExecuteCommandHandler <|-- ContextMapperCommandHandler
 ContextMapperCommandHandler *-- "1" GeneratorCommandExecutor
 ContextMapperCommandHandler o-- "0..*" ContextMapperGenerator
 
