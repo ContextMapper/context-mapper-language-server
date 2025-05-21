@@ -6,16 +6,16 @@ import { ComponentDiagramGenerator } from './plantuml/ComponentDiagramGenerator.
 import { CancellationToken } from 'vscode-languageserver'
 
 export class PlantUMLGenerator implements ContextMapperGenerator {
-  async generate (model: ContextMappingModel, filePath: string, args: unknown[], cancelToken: CancellationToken): Promise<string[] | undefined> {
+  async generate (model: ContextMappingModel, filePath: string, args: unknown[], cancelToken: CancellationToken): Promise<string[]> {
     // there must not be any extra spaces especially at the start, since the path will be treated as relative otherwise
     const destination = (args[0] as string)?.trim()
     if (destination == null || destination === '') {
       console.log('Destination must be specified')
-      return undefined
+      throw Error('Destination must be specified')
     }
 
     if (cancelToken.isCancellationRequested) {
-      return undefined
+      return []
     }
     const fileName = filePath.split('/').pop()!.split('.')[0]
 
@@ -30,7 +30,6 @@ export class PlantUMLGenerator implements ContextMapperGenerator {
       diagrams.push(componentDiagram)
     }
 
-    console.log('Successfully generated PlantUML diagrams')
     return diagrams
   }
 

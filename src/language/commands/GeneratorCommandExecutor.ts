@@ -14,31 +14,26 @@ export class GeneratorCommandExecutor {
     this.serviceRegistry = serviceRegistry
   }
 
-  async execute (generator: ContextMapperGenerator, args: unknown[], cancelToken: CancellationToken): Promise<string[] | undefined> {
+  async execute (generator: ContextMapperGenerator, args: unknown[], cancelToken: CancellationToken): Promise<string[]> {
     const filePath = args[0] as string
 
     const model = await this.extractModel(filePath)
     if (cancelToken.isCancellationRequested) {
-      return undefined
+      return []
     }
 
-    if (model == null) {
-      return undefined
-    }
-    args.shift()
+    args.shift() // remove source file from args array
     return await generator.generate(model, filePath, args, cancelToken)
   }
 
-  private async extractModel (filePath: string): Promise<ContextMappingModel | undefined> {
+  private async extractModel (filePath: string): Promise<ContextMappingModel> {
     const extensions = ContextMapperDslLanguageMetaData.fileExtensions as readonly string[]
     if (!extensions.includes(path.extname(filePath))) {
-      console.error('Unsupported file extension on file', filePath)
-      return undefined
+      throw new Error(`Unsupported file extension on file ${filePath}`)
     }
 
     if (!fs.existsSync(filePath)) {
-      console.error(`File ${filePath} does not exist.`)
-      return undefined
+      throw new Error(`File ${filePath} does not exist.`)
     }
 
     const document = await this.getServices().shared.workspace.LangiumDocuments.getOrCreateDocument(URI.file(path.resolve(filePath)))
@@ -46,8 +41,7 @@ export class GeneratorCommandExecutor {
 
     const validationErrors = (document.diagnostics ?? []).filter(e => e.severity === 1)
     if (validationErrors.length > 0) {
-      console.error(`File ${filePath} is invalid`)
-      return undefined
+      throw new Error(`File ${filePath} is invalid`)
     }
 
     return document.parseResult.value as ContextMappingModel
