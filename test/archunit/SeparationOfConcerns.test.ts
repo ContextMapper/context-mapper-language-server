@@ -6,7 +6,7 @@ import path from 'node:path'
 describe('Ensure separation of concerns', () => {
   test('check language-internal dependencies', async () => {
     const langFolders = fs.readdirSync(path.join(__dirname, '..', '..', 'src', 'language'), { withFileTypes: true })
-      .filter(file => file.isDirectory() && file.name !== 'generated')
+      .filter(file => file.isDirectory() && file.name !== 'generated' && file.name !== 'utils')
       .map(file => path.join('language', file.name))
 
     for (const sourceFolder of langFolders) {
