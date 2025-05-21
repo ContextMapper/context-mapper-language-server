@@ -1,8 +1,8 @@
 import { AbstractExecuteCommandHandler, ExecuteCommandAcceptor, ExecuteCommandFunction } from 'langium/lsp'
 import { LangiumDefaultSharedCoreServices } from 'langium'
 import { GeneratorCommandExecutor } from './GeneratorCommandExecutor.js'
-import { PlantUMLGenerator } from '../generators/PlantUMLGenerator.js'
-import { ContextMapperGenerator } from '../generators/ContextMapperGenerator.js'
+import { PlantUMLGenerator } from './generators/PlantUMLGenerator.js'
+import { ContextMapperGenerator } from './generators/ContextMapperGenerator.js'
 
 export class ContextMapperCommandHandler extends AbstractExecuteCommandHandler {
   private readonly generatorCommandExecutor: GeneratorCommandExecutor

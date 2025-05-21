@@ -13,7 +13,7 @@ import {
   Relationship,
   SymmetricRelationship,
   UpstreamDownstreamRelationship, UpstreamRole
-} from '../../generated/ast.js'
+} from '../../../generated/ast.js'
 import { PlantUMLBuilder } from './PlantUMLBuilder.js'
 
 export class ComponentDiagramGenerator implements PlantUMLDiagramGenerator<ContextMap> {
