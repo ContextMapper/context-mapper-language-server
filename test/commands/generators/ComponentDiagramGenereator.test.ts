@@ -1,6 +1,6 @@
 // adapted from https://github.com/ContextMapper/context-mapper-dsl/blob/master/org.contextmapper.dsl.tests/src/org/contextmapper/dsl/generators/plantuml/PlantUMLComponentDiagramCreatorTest.java
 
-import { ComponentDiagramGenerator } from '../../src/language/generators/plantuml/ComponentDiagramGenerator.js'
+import { ComponentDiagramGenerator } from '../../../src/language/commands/generators/plantuml/ComponentDiagramGenerator.js'
 import { beforeEach, describe, expect, test } from 'vitest'
 import {
   Aggregate,
@@ -14,7 +14,7 @@ import {
   SharedKernel,
   UpstreamDownstreamRelationship,
   UpstreamRole
-} from '../../src/language/generated/ast.js'
+} from '../../../src/language/generated/ast.js'
 import { Reference } from 'langium'
 
 let generator: ComponentDiagramGenerator

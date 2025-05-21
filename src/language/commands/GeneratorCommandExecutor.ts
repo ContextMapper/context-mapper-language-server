@@ -1,7 +1,7 @@
 import { ServiceRegistry, URI } from 'langium'
 import path from 'node:path'
 import fs from 'node:fs'
-import { ContextMapperGenerator } from '../generators/ContextMapperGenerator.js'
+import { ContextMapperGenerator } from './generators/ContextMapperGenerator.js'
 import { ContextMappingModel } from '../generated/ast.js'
 import { ContextMapperDslLanguageMetaData } from '../generated/module.js'
 import { ContextMapperDslServices } from '../ContextMapperDslModule.js'
