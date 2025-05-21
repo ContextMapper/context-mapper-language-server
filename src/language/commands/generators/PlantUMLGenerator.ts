@@ -1,7 +1,7 @@
 import { ContextMapperGenerator } from './ContextMapperGenerator.js'
 import path from 'node:path'
 import fs from 'node:fs'
-import { ContextMappingModel } from '../generated/ast.js'
+import { ContextMappingModel } from '../../generated/ast.js'
 import { ComponentDiagramGenerator } from './plantuml/ComponentDiagramGenerator.js'
 import { CancellationToken } from 'vscode-languageserver'
 

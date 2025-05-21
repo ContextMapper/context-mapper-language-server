@@ -1,17 +1,19 @@
 @startuml
-abstract class AbstractSemanticTokenProvider
+abstract class AbstractSemanticTokenProvider {
+{abstract} # highlightElement(node: AstNode, acceptor: SemanticTokenAcceptor)
+}
 
 class ContextMapperDslSemanticTokenProvider {
-# highlightElement(AstNode, SemanticTokenAcceptor)
+# highlightElement(node: AstNode, acceptor: SemanticTokenAcceptor)
 }
 
 class SemanticTokenProviderRegistry {
 - semanticTokenProviders: Map<string, ContextMapperSemanticTokenProvider<AstNode>>
-+ get(AstNode): ContextMapperSemanticTokenProvider<AstNode>
++ get(node: AstNode): ContextMapperSemanticTokenProvider<AstNode> | undefined
 }
 
 interface ContextMapperSemanticTokenProvider {
-+ highlight(T, SemanticTokenAcceptor)
++ highlight(node: T, acceptor: SemanticTokenAcceptor)
 }
 
 AbstractSemanticTokenProvider <|-- ContextMapperDslSemanticTokenProvider

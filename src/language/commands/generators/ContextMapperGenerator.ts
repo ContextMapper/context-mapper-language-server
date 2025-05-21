@@ -1,4 +1,4 @@
-import { ContextMappingModel } from '../generated/ast.js'
+import { ContextMappingModel } from '../../generated/ast.js'
 import { CancellationToken } from 'vscode-languageserver'
 
 export interface ContextMapperGenerator {
