@@ -3,6 +3,7 @@ import { LangiumDefaultSharedCoreServices } from 'langium'
 import { GeneratorCommandExecutor } from './GeneratorCommandExecutor.js'
 import { PlantUMLGenerator } from './generators/PlantUMLGenerator.js'
 import { ContextMapperGenerator } from './generators/ContextMapperGenerator.js'
+import { DummyGenerator } from './generators/DummyGenerator.js'
 
 export class ContextMapperCommandHandler extends AbstractExecuteCommandHandler {
   private readonly generatorCommandExecutor: GeneratorCommandExecutor
@@ -14,6 +15,7 @@ export class ContextMapperCommandHandler extends AbstractExecuteCommandHandler {
 
   override registerCommands (acceptor: ExecuteCommandAcceptor): void {
     acceptor('org.contextmapper.GeneratePlantUML', this.wrapCommand(new PlantUMLGenerator()))
+    acceptor('org.contextmapper.Dummy', this.wrapCommand(new DummyGenerator()))
   }
 
 
