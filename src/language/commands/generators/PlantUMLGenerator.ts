@@ -10,7 +10,6 @@ export class PlantUMLGenerator implements ContextMapperGenerator {
     // there must not be any extra spaces especially at the start, since the path will be treated as relative otherwise
     const destination = (args[0] as string)?.trim()
     if (destination == null || destination === '') {
-      console.log('Destination must be specified')
       throw Error('Destination must be specified')
     }
 

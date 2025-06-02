@@ -14,8 +14,6 @@ export class ContextMapperDslSemanticTokenProvider extends AbstractSemanticToken
     const semanticTokenProvider = this.semanticTokenProviderRegistry.get(node)
     if (semanticTokenProvider) {
       semanticTokenProvider.highlight(node, acceptor)
-    } else {
-      console.error('Node type with no token provider', node.$type)
     }
   }
 }
