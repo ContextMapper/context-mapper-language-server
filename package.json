@@ -1,6 +1,6 @@
 {
     "name": "@lstreckeisen/context-mapper-language-server",
-    "description": "Langium language server for the ContextMapper DSL",
+    "description": "Langium language server for the Context Mapper DSL",
     "version": "0.4.1",
     "license": "Apache-2.0",
     "publishConfig": {
