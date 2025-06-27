@@ -1,5 +1,5 @@
 {
-    "name": "@lstreckeisen/context-mapper-language-server",
+    "name": "@contextmapper/context-mapper-language-server",
     "description": "Langium language server for the Context Mapper DSL",
     "version": "0.4.2-final-poc",
     "license": "Apache-2.0",
@@ -13,7 +13,7 @@
     ],
     "repository": {
         "type": "url",
-        "url": "https://github.com/lstreckeisen/context-mapper-language-server.git"
+        "url": "https://github.com/ContextMapper/context-mapper-language-server.git"
     },
     "scripts": {
         "build": "tsc -b tsconfig.src.json",
