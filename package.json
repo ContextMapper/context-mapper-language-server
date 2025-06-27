@@ -1,7 +1,7 @@
 {
     "name": "@contextmapper/context-mapper-language-server",
     "description": "Langium language server for the Context Mapper DSL",
-    "version": "0.4.2-final-poc",
+    "version": "0.4.2",
     "license": "Apache-2.0",
     "publishConfig": {
         "registry": "https://npm.pkg.github.com"
